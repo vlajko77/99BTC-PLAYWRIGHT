@@ -1,65 +1,100 @@
-# Tests directory
+# Tests Directory
 
-This folder contains Playwright specs, page objects (POMs), and small helpers used to drive UI tests for 99Bitcoins.
+This folder contains Playwright specs, page objects (POMs), and helpers used to drive UI tests for 99Bitcoins.
 
-Structure
-- `specs/` — Playwright test files (grouped by purpose: regression, general smoke)
-- `pages/` — Page Object Models used by tests
-- `helpers/` — small helpers and default credential constants
-
-Specs overview
-- `specs/login.spec.ts` — WP admin login smoke test (uses `tests/pages/loginPage.ts`).
-- `specs/createPage.spec.ts` — Create a WP Page and verify published content on the public permalink.
-- `specs/createPost.spec.ts` — Create a WP Post, assign category, publish, and verify the post content.
-- `specs/createShortcode.spec.ts` — Create a Page containing the `key_takeaways` shortcode and verify its output. Runs under iPhone 12 emulation.
-- `specs/regression/headerSection.spec.ts` — Header/Navigation regression (menu open, link navigation, header search).
-- `specs/regression/headerSection.spec.ts` — Header/Navigation regression (menu open, link navigation, header search).
-- `specs/regression/headerLogo.spec.ts` — Sanity test: clicking the site logo navigates to the homepage and shows the site heading.
-- `specs/regression/headerSearchResults.spec.ts` — Verifies header search returns results for common queries (example: 'bitcoin').
-- `specs/regression/bitcoinMenuNavigation.spec.ts` — Verifies the Bitcoin menu opens and the Historical Price page is reachable.
-
-Page objects
-- `tests/pages/loginPage.ts` — encapsulates WordPress admin login.
-- `tests/pages/CreatePage.ts`, `CreatePost.ts`, `CreateShortcodePage.ts` — helpers for creating content via WP admin.
-- `tests/pages/regression/HeaderSectionPage.ts` — header interactions (menu, search).
-
-Running tests
-- Full suite:
+## Structure
 
 ```
+tests/
+├── specs/                  # Playwright test files
+│   ├── regression/         # Regression tests (header, navigation, search)
+│   └── *.spec.ts           # Smoke tests (login, create content)
+├── pages/                  # Page Object Models
+│   ├── regression/         # Regression page objects
+│   └── *.ts                # Core page objects
+└── helpers/                # Utilities and constants
+    ├── login.ts            # Credentials and URLs
+    ├── SessionManager.ts   # Session storage management
+    └── shortcode.ts        # Shortcode rendering helpers
+```
+
+## Specs Overview
+
+### Smoke Tests
+| Spec | Description |
+|------|-------------|
+| `login.spec.ts` | WP admin login smoke test |
+| `createPage.spec.ts` | Create a WP Page and verify published content |
+| `createPost.spec.ts` | Create a WP Post, assign category, publish, and verify |
+| `createShortcode.spec.ts` | Create a Page with `key_takeaways` shortcode (iPhone 12 emulation) |
+| `keyTakeawaysShortcode.spec.ts` | Tests for key_takeaways shortcode with various configurations |
+
+### Regression Tests
+| Spec | Description |
+|------|-------------|
+| `regression/headerLogo.spec.ts` | Site logo navigation to homepage |
+| `regression/headerSection.spec.ts` | Header navigation, menu interactions, Bitcoin menu |
+| `regression/headerSearchResults.spec.ts` | Header search returns results for queries |
+
+## Page Objects
+
+| Page Object | Description |
+|-------------|-------------|
+| `BasePage.ts` | Base class with shared functionality (publish, permalink, waitForElement) |
+| `loginPage.ts` | WordPress admin login with session caching |
+| `CreatePage.ts` | WordPressPageEditor for creating pages |
+| `CreatePost.ts` | WordPressPostEditor for creating posts with categories |
+| `CreateShortcodePage.ts` | ShortcodePage for shortcode content |
+| `KeyTakeawaysPage.ts` | Key takeaways shortcode testing |
+| `regression/HeaderSectionPage.ts` | Header interactions (menu, search, navigation) |
+
+## Helpers
+
+| Helper | Description |
+|--------|-------------|
+| `login.ts` | WP credentials and staging URL constants |
+| `SessionManager.ts` | Manages session storage for login caching |
+| `shortcode.ts` | Renders shortcode content (renderKeyTakeaways) |
+
+## Running Tests
+
+Full suite:
+```bash
 npx playwright test
 ```
 
-- Single spec:
-
+Single spec:
+```bash
+npx playwright test tests/specs/login.spec.ts
 ```
-npx playwright test tests/specs/regression/headerSection.spec.ts
-```
 
-- Headed debugging:
-
-```
+Headed debugging:
+```bash
 npx playwright test --headed --project=chromium
 ```
 
-Staging and Cloudflare notes
-Some staging environments are protected by Cloudflare's JS challenge which blocks automated runs. To reliably run tests against staging:
-
-1. Run the helper to open a headed browser and manually solve the Cloudflare challenge + login:
-
-```
-node scripts/saveStorageState.mjs
+Run with HTML report:
+```bash
+npx playwright test --reporter=html
+npx playwright show-report
 ```
 
-2. The script will save `auth/storageState.json`. Playwright is configured to auto-use this file when present. You can also set `PLAYWRIGHT_STORAGE_STATE=auth/storageState.json` to explicitly define it.
+## Session Management
 
-Environment variables
-- `STAGING_HTTP_USER` / `STAGING_HTTP_PASS` — HTTP Basic Auth credentials (if required)
-- `WP_USERNAME` / `WP_PASSWORD` — WordPress admin credentials
-- `STAGING_WP_LOGIN_URL` — Override the URL used by the save-storage script
-- `PLAYWRIGHT_STORAGE_STATE` — Explicit storage state file
+Tests use `SessionManager` for login session caching:
+- Sessions are stored in `.auth/` directory
+- Sessions expire after 24 hours
+- `loginPage.loginWithSession()` handles login with automatic caching
 
-Security
-- `auth/storageState.json` contains cookies and local/session storage and should not be committed. `auth/` is ignored in `.gitignore`.
+## Environment Variables
 
-- Add unit tests or additional regression specs.
+| Variable | Description |
+|----------|-------------|
+| `WP_USERNAME` | WordPress admin username |
+| `WP_PASSWORD` | WordPress admin password |
+| `STAGING_URL` | Staging environment URL |
+
+## Security
+
+- `.auth/` directory contains session cookies and is ignored in `.gitignore`
+- Never commit credentials or session files
