@@ -18,7 +18,26 @@ test.describe('header search', () => {
   });
 
   test('search returns results for bitcoin', async ({ page }) => {
+    // Search icon is visible
+    await expect(header.searchIcon).toBeVisible();
+
+    // Perform search
     await header.search('bitcoin');
+
+    // URL contains search query
+    await expect(page).toHaveURL(/[?&]s=bitcoin/i);
+
+    // Search results message is visible
     await expect(page.getByText(/You searched for bitcoin/i)).toBeVisible();
+
+    // Results section is displayed (page has content beyond search message)
+    await expect(page.locator('main, #content, .content')).toBeVisible();
+  });
+
+  test('search with no results shows appropriate message', async ({ page }) => {
+    await header.search('xyznonexistent123');
+
+    await expect(page).toHaveURL(/[?&]s=xyznonexistent123/i);
+    await expect(page.getByText(/no results|nothing found|not found/i)).toBeVisible();
   });
 });
