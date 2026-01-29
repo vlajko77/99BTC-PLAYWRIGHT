@@ -1,12 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { HeaderSectionPage } from '../../pages/regression/HeaderSectionPage';
+import { STAGING_URL } from '../../helpers/login';
 
 test.describe('header search', () => {
   let header: HeaderSectionPage;
 
   test.beforeEach(async ({ page }) => {
     header = new HeaderSectionPage(page);
-    await header.goto('https://staging:staging@staging.99bitcoins.com/');
+    await header.goto(STAGING_URL);
   });
 
   test.afterEach(async ({ page }, testInfo) => {
