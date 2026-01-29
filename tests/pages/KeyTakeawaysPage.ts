@@ -1,7 +1,7 @@
-import { PagePage } from './CreatePage';
+import { WordPressPageEditor } from './CreatePage';
 import { renderKeyTakeaways, KeyTakeaways } from '../helpers/shortcode';
 
-export class KeyTakeawaysPage extends PagePage {
+export class KeyTakeawaysPage extends WordPressPageEditor {
   async createPageWithKeyTakeaways(pageTitle: string, data: KeyTakeaways) {
     await this.gotoNewPage();
     const shortcode = renderKeyTakeaways(data);
