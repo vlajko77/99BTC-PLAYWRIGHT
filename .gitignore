@@ -8,5 +8,8 @@ node_modules/
 /playwright/.auth/
 .auth/
 
-# storage state captured by scripts/saveStorageState.mjs
+# storage state
 auth/
+
+# VS Code workspace files
+*.code-workspace
