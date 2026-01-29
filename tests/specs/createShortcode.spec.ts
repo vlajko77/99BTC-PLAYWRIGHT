@@ -4,39 +4,49 @@ import { ShortcodePage } from '../pages/CreateShortcodePage';
 import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
 import { renderKeyTakeaways } from '../helpers/shortcode';
 
-// Run this spec using a mobile device emulation (iPhone 12)
+// Run tests using mobile device emulation (iPhone 12)
 test.use({ ...devices['iPhone 12'] });
 
-test('Add a new page with key_takeaways shortcode and verify it is visible', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  const shortcodePage = new ShortcodePage(page);
+test.describe('WordPress shortcode page creation', () => {
+  let loginPage: LoginPage;
+  let shortcodePage: ShortcodePage;
 
-  await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-  await shortcodePage.gotoNewPage();
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    shortcodePage = new ShortcodePage(page);
+    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
+  });
 
-  const randomTitle = 'Shortcode Page ' + Date.now();
-  const data = {
-    title: 'Title',
-    items: [
-      'Lorem ipsum odor amet, consectetuer adipiscing elit.',
-      'Lorem ipsum odor amet, consectetuer adipiscing elit.',
-      'Lorem ipsum odor amet, consectetuer adipiscing elit.',
-    ],
-  };
+  test.afterEach(async ({ page }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      const screenshot = await page.screenshot({ fullPage: true });
+      await testInfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
+    }
+  });
 
-  const shortcode = renderKeyTakeaways(data);
+  test('Add a new page with key_takeaways shortcode and verify it is visible', async ({ page }) => {
+    await shortcodePage.gotoNewPage();
 
-  // Fill in details and publish
-  await shortcodePage.fillShortcodeDetails(randomTitle, shortcode);
-  await shortcodePage.publishPage();
+    const randomTitle = 'Shortcode Page ' + Date.now();
+    const data = {
+      title: 'Title',
+      items: [
+        'Lorem ipsum odor amet, consectetuer adipiscing elit.',
+        'Lorem ipsum odor amet, consectetuer adipiscing elit.',
+        'Lorem ipsum odor amet, consectetuer adipiscing elit.',
+      ],
+    };
 
-  const permalink = await shortcodePage.getPermalink();
-  if (!permalink) throw new Error('Could not find permalink after publishing');
+    const shortcode = renderKeyTakeaways(data);
 
-  await shortcodePage.openPermalink(permalink);
-  // Verify at least one of the key takeaways text appears on the published page
-  await shortcodePage.expectContentVisible('Lorem ipsum odor amet, consectetuer adipiscing elit.');
+    await shortcodePage.fillShortcodeDetails(randomTitle, shortcode);
+    await shortcodePage.publishPage();
 
-  // Assert the combined title + takeaway text is visible as requested
-  await expect(page.getByText('Title Lorem ipsum odor amet,')).toBeVisible();
+    const permalink = await shortcodePage.getPermalink();
+    if (!permalink) throw new Error('Could not find permalink after publishing');
+
+    await shortcodePage.openPermalink(permalink);
+    await shortcodePage.expectContentVisible('Lorem ipsum odor amet, consectetuer adipiscing elit.');
+    await expect(page.getByText('Title Lorem ipsum odor amet,')).toBeVisible();
+  });
 });
