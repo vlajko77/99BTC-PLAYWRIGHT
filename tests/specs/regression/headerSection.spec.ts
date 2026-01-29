@@ -31,11 +31,7 @@ test.describe('header section', () => {
   test('verify submenu navigation works correctly', async ({ page }) => {
     await header.openBitcoinCasinosMenu();
     await header.clickBitcoinHistoricalPrice();
-
-    // URL changed to historical price page
     await expect(page).toHaveURL(/historical-price/i);
-
-    // Page heading is correct
     await expect(page.getByRole('heading', { name: 'Bitcoin Historical Price &' })).toBeVisible();
   });
 });

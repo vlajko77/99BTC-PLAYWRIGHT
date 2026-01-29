@@ -23,7 +23,6 @@ test.describe('WordPress page creation', () => {
   test('Add a new page and verify it is visible', async ({ page }) => {
     await pageEditor.gotoNewPage();
 
-    // Verify we're on the page editor
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
 
     const randomTitle = 'Test Page ' + Math.floor(Math.random() * 100000);
@@ -40,11 +39,7 @@ test.describe('WordPress page creation', () => {
 
     // Verify URL is the published page (slug or page_id)
     await expect(page).toHaveURL(/test-page|page_id=/i);
-
-    // Verify title visible on page
     await pageEditor.expectContentVisible(randomTitle);
-
-    // Verify content visible on page
     await pageEditor.expectContentVisible(randomContent);
   });
 });
