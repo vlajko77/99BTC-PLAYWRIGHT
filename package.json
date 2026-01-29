@@ -7,9 +7,7 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "lint": "eslint . --ext .ts,.js",
-    "demo": "playwright test tests/specs/demo --reporter=list",
-    "demo:headed": "playwright test tests/specs/demo --headed --reporter=list",
-    "demo:open-report": "playwright show-report"
+    "report": "playwright show-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
