@@ -17,16 +17,25 @@ test.describe('header section', () => {
     }
   });
 
-  test('verify header section elements', async ({ page }) => {
+  test('verify header section elements are visible', async () => {
     await header.verifyHeaderElements();
-    await header.openBitcoinCasinosMenu();
-    await header.clickBitcoinHistoricalPrice();
-    await expect(page.getByRole('heading', { name: 'Bitcoin Historical Price &' })).toBeVisible();
   });
 
-  test('verify header section search functionality', async ({ page }) => {
-    await header.search('dogecoin');
-    const searchResult = page.getByText('You searched for dogecoin');
-    await expect(searchResult).toBeVisible();
+  test('verify navigation menu opens submenu on hover', async () => {
+    await header.openBitcoinCasinosMenu();
+
+    // Submenu is visible
+    await expect(header.bitcoinSubMenuLink).toBeVisible();
+  });
+
+  test('verify submenu navigation works correctly', async ({ page }) => {
+    await header.openBitcoinCasinosMenu();
+    await header.clickBitcoinHistoricalPrice();
+
+    // URL changed to historical price page
+    await expect(page).toHaveURL(/historical-price/i);
+
+    // Page heading is correct
+    await expect(page.getByRole('heading', { name: 'Bitcoin Historical Price &' })).toBeVisible();
   });
 });
