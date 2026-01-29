@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { WordPressPostEditor } from '../pages/CreatePost';
 import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
@@ -20,8 +20,11 @@ test.describe('WordPress post creation', () => {
     }
   });
 
-  test('Add a new post to 99bitcoins', async () => {
+  test('Add a new post to 99bitcoins', async ({ page }) => {
     await postEditor.gotoNewPost();
+
+    // Verify we're on the post editor
+    await expect(page).toHaveURL(/post-new\.php/);
 
     const randomTitle = 'Test Post ' + Math.floor(Math.random() * 100000);
     const randomContent = 'This post is added by Playwright. Random value: ' + Math.random();
@@ -30,10 +33,22 @@ test.describe('WordPress post creation', () => {
     await postEditor.selectCategory('News');
     await postEditor.publishPost();
 
+    // Verify permalink exists (publish succeeded)
     const permalink = await postEditor.getPermalink();
-    if (!permalink) throw new Error('Could not find permalink after publishing');
+    expect(permalink).toBeTruthy();
 
-    await postEditor.openPermalink(permalink);
+    await postEditor.openPermalink(permalink!);
+
+    // Verify URL is the published post
+    await expect(page).toHaveURL(/test-post|p=/i);
+
+    // Verify title visible on page
+    await postEditor.expectContentVisible(randomTitle);
+
+    // Verify content visible on page
     await postEditor.expectContentVisible(randomContent);
+
+    // Verify category is displayed
+    await expect(page.getByRole('link', { name: 'News' }).first()).toBeVisible();
   });
 });
