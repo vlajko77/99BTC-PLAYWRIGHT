@@ -1,17 +1,26 @@
-import { test, devices } from '@playwright/test';
+import { test } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { KeyTakeawaysPage } from '../pages/KeyTakeawaysPage';
 import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
 
 test.describe('Key Takeaways Shortcode', () => {
-  //test.use({ ...devices['iPhone 12'] });
+  let loginPage: LoginPage;
+  let keyTakeawaysPage: KeyTakeawaysPage;
 
-  test('should render key_takeaways shortcode with h3 heading type', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const keyTakeawaysPage = new KeyTakeawaysPage(page);
-
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    keyTakeawaysPage = new KeyTakeawaysPage(page);
     await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
+  });
 
+  test.afterEach(async ({ page }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      const screenshot = await page.screenshot({ fullPage: true });
+      await testInfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
+    }
+  });
+
+  test('should render key_takeaways shortcode with h3 heading type', async () => {
     const data = {
       title: 'Key Takeaways',
       headingType: 'h3' as const,
@@ -23,12 +32,7 @@ test.describe('Key Takeaways Shortcode', () => {
     await keyTakeawaysPage.verifyKeyTakeaways(data);
   });
 
-  test('should render key_takeaways shortcode without heading type', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const keyTakeawaysPage = new KeyTakeawaysPage(page);
-
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-
+  test('should render key_takeaways shortcode without heading type', async () => {
     const data = {
       title: 'Important Points',
       items: ['First point', 'Second point'],
@@ -39,12 +43,7 @@ test.describe('Key Takeaways Shortcode', () => {
     await keyTakeawaysPage.verifyKeyTakeaways(data);
   });
 
-  test('should render key_takeaways shortcode with multiple items', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const keyTakeawaysPage = new KeyTakeawaysPage(page);
-
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-
+  test('should render key_takeaways shortcode with multiple items', async () => {
     const data = {
       title: 'Summary',
       headingType: 'h2' as const,
