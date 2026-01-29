@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { WordPressPageEditor } from '../pages/CreatePage';
 import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
@@ -20,8 +20,11 @@ test.describe('WordPress page creation', () => {
     }
   });
 
-  test('Add a new page and verify it is visible', async () => {
+  test('Add a new page and verify it is visible', async ({ page }) => {
     await pageEditor.gotoNewPage();
+
+    // Verify we're on the page editor
+    await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
 
     const randomTitle = 'Test Page ' + Math.floor(Math.random() * 100000);
     const randomContent = 'Playwright page content. Random: ' + Math.random();
@@ -29,10 +32,19 @@ test.describe('WordPress page creation', () => {
     await pageEditor.fillPageDetails(randomTitle, randomContent);
     await pageEditor.publishPage();
 
+    // Verify permalink exists (publish succeeded)
     const permalink = await pageEditor.getPermalink();
-    if (!permalink) throw new Error('Could not find permalink after publishing');
+    expect(permalink).toBeTruthy();
 
-    await pageEditor.openPermalink(permalink);
+    await pageEditor.openPermalink(permalink!);
+
+    // Verify URL is the published page (slug or page_id)
+    await expect(page).toHaveURL(/test-page|page_id=/i);
+
+    // Verify title visible on page
+    await pageEditor.expectContentVisible(randomTitle);
+
+    // Verify content visible on page
     await pageEditor.expectContentVisible(randomContent);
   });
 });
