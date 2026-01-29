@@ -7,10 +7,7 @@ test('Add a new post to 99bitcoins', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const postPage = new PostPage(page);
 
-  await loginPage.goto();
-  await loginPage.login(WP_USERNAME, WP_PASSWORD);
-  await loginPage.verifyLoginSuccess();
-
+  await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
   await postPage.navigateToPosts();
   await postPage.clickAddNewPost();
 
@@ -21,7 +18,8 @@ test('Add a new post to 99bitcoins', async ({ page }) => {
   await postPage.selectCategory('News');
   await postPage.publishPost();
 
-  const permalink = await (postPage as any).getPermalink();
+  const permalink = await postPage.getPermalink();
+  if (!permalink) throw new Error('Could not find permalink after publishing');
 
   await postPage.openPermalink(permalink);
   await postPage.expectContentVisible(randomContent);

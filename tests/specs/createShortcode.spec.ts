@@ -8,14 +8,10 @@ import { renderKeyTakeaways } from '../helpers/shortcode';
 test.use({ ...devices['iPhone 12'] });
 
 test('Add a new page with key_takeaways shortcode and verify it is visible', async ({ page }) => {
-
   const loginPage = new LoginPage(page);
   const shortcodePage = new ShortcodePage(page);
 
-  await loginPage.goto();
-  await loginPage.login(WP_USERNAME, WP_PASSWORD);
-  await loginPage.verifyLoginSuccess();
-
+  await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
   await shortcodePage.gotoNewPage();
 
   const randomTitle = 'Shortcode Page ' + Date.now();

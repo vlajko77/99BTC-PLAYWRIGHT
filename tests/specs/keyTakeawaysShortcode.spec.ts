@@ -10,9 +10,7 @@ test.describe('Key Takeaways Shortcode', () => {
     const loginPage = new LoginPage(page);
     const keyTakeawaysPage = new KeyTakeawaysPage(page);
 
-    await loginPage.goto();
-    await loginPage.login(WP_USERNAME, WP_PASSWORD);
-    await loginPage.verifyLoginSuccess();
+    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
 
     const data = {
       title: 'Key Takeaways',
@@ -29,9 +27,7 @@ test.describe('Key Takeaways Shortcode', () => {
     const loginPage = new LoginPage(page);
     const keyTakeawaysPage = new KeyTakeawaysPage(page);
 
-    await loginPage.goto();
-    await loginPage.login(WP_USERNAME, WP_PASSWORD);
-    await loginPage.verifyLoginSuccess();
+    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
 
     const data = {
       title: 'Important Points',
@@ -47,9 +43,7 @@ test.describe('Key Takeaways Shortcode', () => {
     const loginPage = new LoginPage(page);
     const keyTakeawaysPage = new KeyTakeawaysPage(page);
 
-    await loginPage.goto();
-    await loginPage.login(WP_USERNAME, WP_PASSWORD);
-    await loginPage.verifyLoginSuccess();
+    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
 
     const data = {
       title: 'Summary',

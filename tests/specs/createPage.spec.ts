@@ -4,14 +4,10 @@ import { PagePage } from '../pages/CreatePage';
 import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
 
 test('Add a new page and verify it is visible', async ({ page }) => {
-  
   const loginPage = new LoginPage(page);
   const pagePage = new PagePage(page);
 
-  await loginPage.goto();
-  await loginPage.login(WP_USERNAME, WP_PASSWORD);
-  await loginPage.verifyLoginSuccess();
-
+  await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
   await pagePage.gotoNewPage();
 
   const randomTitle = 'Test Page ' + Math.floor(Math.random() * 100000);

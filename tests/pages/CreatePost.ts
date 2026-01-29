@@ -1,8 +1,6 @@
-import { Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class PostPage extends BasePage {
-
   async navigateToPosts() {
     await this.page.getByRole('link', { name: 'Posts', exact: true }).click();
   }
@@ -12,8 +10,7 @@ export class PostPage extends BasePage {
   }
 
   async fillPostDetails(title: string, content: string) {
-    await this.page.getByRole('textbox', { name: 'Add title' }).fill(title);
-    await this.page.locator('#content').fill(content);
+    await this.fillTitleAndContent(title, content);
   }
 
   async selectCategory(categoryName: string) {
@@ -22,6 +19,5 @@ export class PostPage extends BasePage {
 
   async publishPost() {
     await this.publish();
-   }
+  }
 }
-

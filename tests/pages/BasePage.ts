@@ -84,6 +84,11 @@ export class BasePage {
     return this.verifyFrontendContent(contentSnippet);
   }
 
+  async fillTitleAndContent(title: string, content: string) {
+    await this.page.getByRole('textbox', { name: 'Add title' }).fill(title);
+    await this.page.locator('#content').fill(content);
+  }
+
   async publish() {
     const publishButton = this.page.locator('#publish, input#publish, button:has-text("Publish")');
     if (await publishButton.count() === 0) {

@@ -1,4 +1,3 @@
-import { Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class PagePage extends BasePage {
@@ -7,8 +6,7 @@ export class PagePage extends BasePage {
   }
 
   async fillPageDetails(title: string, content: string) {
-    await this.page.getByRole('textbox', { name: 'Add title' }).fill(title);
-    await this.page.locator('#content').fill(content);
+    await this.fillTitleAndContent(title, content);
   }
 
   async publishPage() {
