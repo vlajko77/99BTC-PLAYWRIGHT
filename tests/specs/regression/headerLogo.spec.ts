@@ -18,7 +18,14 @@ test.describe('header logo', () => {
   });
 
   test('clicking logo navigates to home and shows site title', async ({ page }) => {
-    await page.getByRole('link', { name: '99Bitcoins', exact: true }).click();
+    const logo = page.getByRole('link', { name: '99Bitcoins', exact: true });
+    await expect(logo).toBeVisible();
+    // Logo has correct href (homepage)
+    await expect(logo).toHaveAttribute('href', /^(\/|https?:\/\/[^/]+\/?$)/);
+    await logo.click();
+    // URL is homepage
+    await expect(page).toHaveURL(/99bitcoins\.(com|local)\/?$/);
+    await expect(page).toHaveTitle(/99Bitcoins/i);
     await expect(page.getByRole('heading', { name: /99Bitcoins/i }).first()).toBeVisible();
   });
 });
