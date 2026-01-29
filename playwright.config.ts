@@ -6,9 +6,6 @@ const storageStatePath = fs.existsSync('auth/storageState.json') ? 'auth/storage
 
 export default defineConfig({
   testDir: './tests',
-  /* Global setup and teardown */
-  globalSetup: './tests/global-setup.ts',
-  globalTeardown: './tests/global-teardown.ts',
   /* Increase per-test timeout to accommodate slower local environments */
   timeout: 120000,
   /* Run tests in files in parallel */
