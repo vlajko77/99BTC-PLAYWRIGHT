@@ -1,12 +1,8 @@
 import { BasePage } from './BasePage';
 
-export class PostPage extends BasePage {
-  async navigateToPosts() {
-    await this.page.getByRole('link', { name: 'Posts', exact: true }).click();
-  }
-
-  async clickAddNewPost() {
-    await this.page.getByLabel('Main menu', { exact: true }).getByRole('link', { name: 'Add Post' }).click();
+export class WordPressPostEditor extends BasePage {
+  async gotoNewPost() {
+    await this.page.goto('/wp-admin/post-new.php');
   }
 
   async fillPostDetails(title: string, content: string) {
