@@ -1,0 +1,22 @@
+{
+  "name": "99btc-playwright",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "lint": "eslint . --ext .ts,.js",
+    "demo": "playwright test tests/specs/demo --reporter=list",
+    "demo:headed": "playwright test tests/specs/demo --headed --reporter=list",
+    "demo:open-report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.1",
+    "dotenv": "^16.0.0",
+    "typescript": "^5.5.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0"
+  }
+}
