@@ -48,8 +48,6 @@ test.describe('Key Takeaways Shortcode', () => {
 
     await keyTakeawaysPage.createPageWithKeyTakeaways('Key Takeaways Default ' + Date.now(), data);
     await keyTakeawaysPage.navigateToPublishedPage();
-
-    // Verify URL is the published page
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
 
     // Verify shortcode content
@@ -72,7 +70,6 @@ test.describe('Key Takeaways Shortcode', () => {
     await keyTakeawaysPage.createPageWithKeyTakeaways('Key Takeaways Multi ' + Date.now(), data);
     await keyTakeawaysPage.navigateToPublishedPage();
 
-    // Verify URL is the published page
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
 
     // Verify shortcode content

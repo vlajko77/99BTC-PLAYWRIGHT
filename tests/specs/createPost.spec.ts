@@ -23,7 +23,6 @@ test.describe('WordPress post creation', () => {
   test('Add a new post to 99bitcoins', async ({ page }) => {
     await postEditor.gotoNewPost();
 
-    // Verify we're on the post editor
     await expect(page).toHaveURL(/post-new\.php/);
 
     const randomTitle = 'Test Post ' + Math.floor(Math.random() * 100000);
@@ -42,10 +41,7 @@ test.describe('WordPress post creation', () => {
     // Verify URL is the published post
     await expect(page).toHaveURL(/test-post|p=/i);
 
-    // Verify title visible on page
     await postEditor.expectContentVisible(randomTitle);
-
-    // Verify content visible on page
     await postEditor.expectContentVisible(randomContent);
 
     // Verify category is displayed

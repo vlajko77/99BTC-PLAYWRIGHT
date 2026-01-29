@@ -18,10 +18,7 @@ test.describe('header search', () => {
   });
 
   test('search returns results for bitcoin', async ({ page }) => {
-    // Search icon is visible
     await expect(header.searchIcon).toBeVisible();
-
-    // Perform search
     await header.search('bitcoin');
 
     // URL contains search query
@@ -30,7 +27,7 @@ test.describe('header search', () => {
     // Search results message is visible
     await expect(page.getByText(/You searched for bitcoin/i)).toBeVisible();
 
-    // Results section is displayed (page has content beyond search message)
+    // Results section is displayed 
     await expect(page.locator('main, #content, .content')).toBeVisible();
   });
 

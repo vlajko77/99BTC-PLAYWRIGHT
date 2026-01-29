@@ -27,7 +27,6 @@ test.describe('WordPress shortcode page creation', () => {
   test('Add a new page with key_takeaways shortcode and verify it is visible', async ({ page }) => {
     await shortcodePage.gotoNewPage();
 
-    // Verify we're on the page editor
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
 
     // Verify mobile viewport is active
@@ -49,10 +48,8 @@ test.describe('WordPress shortcode page creation', () => {
     await shortcodePage.fillShortcodeDetails(randomTitle, shortcode);
     await shortcodePage.publishPage();
 
-    // Verify permalink exists (publish succeeded)
     const permalink = await shortcodePage.getPermalink();
     expect(permalink).toBeTruthy();
-
     await shortcodePage.openPermalink(permalink!);
 
     // Verify URL is the published page

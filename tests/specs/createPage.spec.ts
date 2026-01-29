@@ -31,7 +31,7 @@ test.describe('WordPress page creation', () => {
     await pageEditor.fillPageDetails(randomTitle, randomContent);
     await pageEditor.publishPage();
 
-    // Verify permalink exists (publish succeeded)
+    // Verify permalink exists
     const permalink = await pageEditor.getPermalink();
     expect(permalink).toBeTruthy();
 
