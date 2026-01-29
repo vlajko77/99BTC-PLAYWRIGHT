@@ -32,9 +32,7 @@ tests/
 ### Regression Tests
 | Spec | Description |
 |------|-------------|
-| `regression/headerLogo.spec.ts` | Site logo navigation to homepage |
-| `regression/headerSection.spec.ts` | Header navigation, menu interactions, Bitcoin menu |
-| `regression/headerSearchResults.spec.ts` | Header search returns results for queries |
+| `regression/headerSection.spec.ts` | All header tests: logo, search, and navigation |
 
 ## Page Objects
 
