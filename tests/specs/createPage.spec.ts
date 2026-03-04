@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage';
-import { WordPressPageEditor } from '../pages/CreatePage';
-import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/loginPage";
+import { WordPressPageEditor } from "../pages/CreatePage";
+import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
 
-test.describe('WordPress page creation', () => {
+test.describe("WordPress page creation", () => {
   let loginPage: LoginPage;
   let pageEditor: WordPressPageEditor;
 
@@ -16,17 +16,20 @@ test.describe('WordPress page creation', () => {
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
+      await testInfo.attach("screenshot", {
+        body: screenshot,
+        contentType: "image/png",
+      });
     }
   });
 
-  test('Add a new page and verify it is visible', async ({ page }) => {
+  test("Add a new page and verify it is visible", async ({ page }) => {
     await pageEditor.gotoNewPage();
 
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
 
-    const randomTitle = 'Test Page ' + Math.floor(Math.random() * 100000);
-    const randomContent = 'Playwright page content. Random: ' + Math.random();
+    const randomTitle = "Test Page " + Math.floor(Math.random() * 100000);
+    const randomContent = "Playwright page content. Random: " + Math.random();
 
     await pageEditor.fillPageDetails(randomTitle, randomContent);
     await pageEditor.publishPage();

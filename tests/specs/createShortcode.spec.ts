@@ -1,13 +1,13 @@
-import { test, expect, devices } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage';
-import { ShortcodePage } from '../pages/CreateShortcodePage';
-import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
-import { renderKeyTakeaways } from '../helpers/shortcode';
+import { test, expect, devices } from "@playwright/test";
+import { LoginPage } from "../pages/loginPage";
+import { ShortcodePage } from "../pages/CreateShortcodePage";
+import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
+import { renderKeyTakeaways } from "../helpers/shortcode";
 
 // Run tests using mobile device emulation (iPhone 12)
-test.use({ ...devices['iPhone 12'] });
+test.use({ ...devices["iPhone 12"] });
 
-test.describe('WordPress shortcode page creation', () => {
+test.describe("WordPress shortcode page creation", () => {
   let loginPage: LoginPage;
   let shortcodePage: ShortcodePage;
 
@@ -20,11 +20,16 @@ test.describe('WordPress shortcode page creation', () => {
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
+      await testInfo.attach("screenshot", {
+        body: screenshot,
+        contentType: "image/png",
+      });
     }
   });
 
-  test('Add a new page with key_takeaways shortcode and verify it is visible', async ({ page }) => {
+  test("Add a new page with key_takeaways shortcode and verify it is visible", async ({
+    page,
+  }) => {
     await shortcodePage.gotoNewPage();
 
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
@@ -33,13 +38,13 @@ test.describe('WordPress shortcode page creation', () => {
     const viewport = page.viewportSize();
     expect(viewport?.width).toBeLessThan(500);
 
-    const randomTitle = 'Shortcode Page ' + Date.now();
+    const randomTitle = "Shortcode Page " + Date.now();
     const data = {
-      title: 'Key Takeaways',
+      title: "Key Takeaways",
       items: [
-        'First important point about the topic.',
-        'Second important point to remember.',
-        'Third key takeaway for readers.',
+        "First important point about the topic.",
+        "Second important point to remember.",
+        "Third key takeaway for readers.",
       ],
     };
 

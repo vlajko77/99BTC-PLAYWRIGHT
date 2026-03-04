@@ -1,9 +1,9 @@
-import { BrowserContext } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
+import { BrowserContext } from "@playwright/test";
+import * as fs from "fs";
+import * as path from "path";
 
 export class SessionManager {
-  private static readonly STORAGE_DIR = path.join(process.cwd(), '.auth');
+  private static readonly STORAGE_DIR = path.join(process.cwd(), ".auth");
   private static readonly SESSION_EXPIRY_HOURS = 24;
 
   static getStoragePath(username: string): string {
@@ -13,7 +13,10 @@ export class SessionManager {
     return path.join(SessionManager.STORAGE_DIR, `${username}-session.json`);
   }
 
-  static async loadSession(context: BrowserContext, username: string): Promise<boolean> {
+  static async loadSession(
+    context: BrowserContext,
+    username: string,
+  ): Promise<boolean> {
     const storagePath = SessionManager.getStoragePath(username);
 
     if (!fs.existsSync(storagePath)) {
@@ -21,7 +24,7 @@ export class SessionManager {
     }
 
     try {
-      const storageState = JSON.parse(fs.readFileSync(storagePath, 'utf-8'));
+      const storageState = JSON.parse(fs.readFileSync(storagePath, "utf-8"));
 
       const stats = fs.statSync(storagePath);
       const ageInHours = (Date.now() - stats.mtimeMs) / (1000 * 60 * 60);
@@ -37,7 +40,10 @@ export class SessionManager {
     }
   }
 
-  static async saveSession(context: BrowserContext, username: string): Promise<void> {
+  static async saveSession(
+    context: BrowserContext,
+    username: string,
+  ): Promise<void> {
     const storagePath = SessionManager.getStoragePath(username);
     const storageState = await context.storageState();
     fs.writeFileSync(storagePath, JSON.stringify(storageState, null, 2));
@@ -54,7 +60,7 @@ export class SessionManager {
     if (fs.existsSync(SessionManager.STORAGE_DIR)) {
       const files = fs.readdirSync(SessionManager.STORAGE_DIR);
       for (const file of files) {
-        if (file.endsWith('-session.json')) {
+        if (file.endsWith("-session.json")) {
           fs.unlinkSync(path.join(SessionManager.STORAGE_DIR, file));
         }
       }

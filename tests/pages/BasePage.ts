@@ -1,4 +1,4 @@
-import { Page, expect, Locator } from '@playwright/test';
+import { Page, expect, Locator } from "@playwright/test";
 
 export class BasePage {
   readonly page: Page;
@@ -8,7 +8,7 @@ export class BasePage {
   }
 
   private toLocator(selectorOrLocator: string | Locator): Locator {
-    return typeof selectorOrLocator === 'string'
+    return typeof selectorOrLocator === "string"
       ? this.page.locator(selectorOrLocator)
       : selectorOrLocator;
   }
@@ -35,16 +35,16 @@ export class BasePage {
 
   async getPermalink(): Promise<string | null> {
     const selectors = [
-      '#sample-permalink a',
-      '#message a',
+      "#sample-permalink a",
+      "#message a",
       'a:has-text("View post")',
       'a:has-text("View page")',
     ];
 
     for (const selector of selectors) {
       const locator = this.page.locator(selector);
-      if (await locator.count() > 0) {
-        const href = await locator.first().getAttribute('href');
+      if ((await locator.count()) > 0) {
+        const href = await locator.first().getAttribute("href");
         if (href) return href;
       }
     }
@@ -52,8 +52,11 @@ export class BasePage {
   }
 
   async openPermalink(urlOrLocator: string | Locator) {
-    if (typeof urlOrLocator === 'string') {
-      await this.page.goto(urlOrLocator.trim(), { waitUntil: 'load', timeout: 60000 });
+    if (typeof urlOrLocator === "string") {
+      await this.page.goto(urlOrLocator.trim(), {
+        waitUntil: "load",
+        timeout: 60000,
+      });
     } else {
       await urlOrLocator.first().click();
     }
@@ -64,19 +67,30 @@ export class BasePage {
   }
 
   async fillTitleAndContent(title: string, content: string) {
-    await this.page.getByRole('textbox', { name: 'Add title' }).fill(title);
-    await this.page.locator('#content').fill(content);
+    await this.page.getByRole("textbox", { name: "Add title" }).fill(title);
+    await this.page.locator("#content").fill(content);
+  }
+
+  async publishAndNavigate(): Promise<void> {
+    await this.publish();
+    const permalink = await this.getPermalink();
+    expect(permalink).not.toBeNull();
+    await this.openPermalink(permalink!);
   }
 
   async publish() {
-    const publishButton = this.page.locator('#publish, input#publish, button:has-text("Publish")');
-    if (await publishButton.count() === 0) return;
+    const publishButton = this.page.locator(
+      '#publish, input#publish, button:has-text("Publish")',
+    );
+    if ((await publishButton.count()) === 0) return;
 
     await publishButton.first().click();
 
     // Wait for either success indicator
-    const successIndicator = this.page.locator('#sample-permalink, #message');
-    await successIndicator.first().waitFor({ state: 'visible', timeout: 10000 })
-      .catch(() => this.page.waitForLoadState('networkidle'));
+    const successIndicator = this.page.locator("#sample-permalink, #message");
+    await successIndicator
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() => this.page.waitForLoadState("networkidle"));
   }
 }

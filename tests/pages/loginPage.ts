@@ -1,6 +1,6 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { SessionManager } from '../helpers/SessionManager';
+import { Page, expect, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
+import { SessionManager } from "../helpers/SessionManager";
 
 export class LoginPage extends BasePage {
   private readonly usernameInput: Locator;
@@ -10,14 +10,16 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.usernameInput = page.getByRole('textbox', { name: 'Username or Email Address' });
-    this.passwordInput = page.getByRole('textbox', { name: 'Password' });
-    this.loginButton = page.getByRole('button', { name: 'Log In' });
+    this.usernameInput = page.getByRole("textbox", {
+      name: "Username or Email Address",
+    });
+    this.passwordInput = page.getByRole("textbox", { name: "Password" });
+    this.loginButton = page.getByRole("button", { name: "Log In" });
     this.userGreeting = page.getByText(/Howdy\s*,?/i).first();
   }
 
   async goto() {
-    await this.page.goto('https://99bitcoins.local/wp-login.php');
+    await this.page.goto("https://99bitcoins.local/wp-login.php");
   }
 
   async login(username: string, password: string) {
@@ -30,7 +32,7 @@ export class LoginPage extends BasePage {
     // Check if valid session exists
     if (await SessionManager.loadSession(this.page.context(), username)) {
       // Verify session is still valid
-      await this.page.goto('https://99bitcoins.local/wp-admin/');
+      await this.page.goto("https://99bitcoins.local/wp-admin/");
       if (await this.isLoggedIn()) {
         return;
       }
@@ -47,7 +49,7 @@ export class LoginPage extends BasePage {
 
   private async isLoggedIn(): Promise<boolean> {
     try {
-      await this.userGreeting.waitFor({ state: 'visible', timeout: 5000 });
+      await this.userGreeting.waitFor({ state: "visible", timeout: 5000 });
       return true;
     } catch {
       return false;
@@ -59,7 +61,7 @@ export class LoginPage extends BasePage {
   }
 
   async verifyLoginFailure(errorMessage?: string) {
-    const error = this.page.locator('#login_error');
+    const error = this.page.locator("#login_error");
     await expect(error).toBeVisible();
     if (errorMessage) {
       await expect(error).toContainText(errorMessage);

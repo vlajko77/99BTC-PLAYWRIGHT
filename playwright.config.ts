@@ -1,11 +1,13 @@
-import { defineConfig, devices } from '@playwright/test';
-import fs from 'fs';
+import { defineConfig, devices } from "@playwright/test";
+import fs from "fs";
 
 // Use saved storageState if present (useful for staging sites protected by Cloudflare JS challenges)
-const storageStatePath = fs.existsSync('auth/storageState.json') ? 'auth/storageState.json' : undefined;
+const storageStatePath = fs.existsSync("auth/storageState.json")
+  ? "auth/storageState.json"
+  : undefined;
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   /* Increase per-test timeout to accommodate slower local environments */
   timeout: 120000,
   /* Run tests in files in parallel */
@@ -17,31 +19,29 @@ export default defineConfig({
   /* Run tests with a single worker locally to avoid overloading local dev servers. */
   workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://99bitcoins.local',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "https://99bitcoins.local",
     ignoreHTTPSErrors: true,
     // If a saved storage state exists, use it to run tests as an authenticated user
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE || storageStatePath,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    
-    
+    trace: "on-first-retry",
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: "chromium",
       // Launch Chromium maximized and let the browser window determine the viewport
       use: {
-        ...devices['Desktop Chrome'],
-  viewport: { width: 1920, height: 1080 },
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1920, height: 1080 },
         launchOptions: {
-          args: ['--start-maximized'],
+          args: ["--start-maximized"],
         },
         headless: true,
       },

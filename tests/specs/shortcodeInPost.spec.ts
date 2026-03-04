@@ -1,10 +1,10 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage';
-import { WordPressPostEditor } from '../pages/CreatePost';
-import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
-import { renderKeyTakeaways } from '../helpers/shortcode';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/loginPage";
+import { WordPressPostEditor } from "../pages/CreatePost";
+import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
+import { renderKeyTakeaways } from "../helpers/shortcode";
 
-test.describe('Shortcode rendering in WordPress posts', () => {
+test.describe("Shortcode rendering in WordPress posts", () => {
   let loginPage: LoginPage;
   let postEditor: WordPressPostEditor;
 
@@ -17,23 +17,26 @@ test.describe('Shortcode rendering in WordPress posts', () => {
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
+      await testInfo.attach("screenshot", {
+        body: screenshot,
+        contentType: "image/png",
+      });
     }
   });
 
-  test('Shortcode renders correctly in a post', async ({ page }) => {
+  test("Shortcode renders correctly in a post", async ({ page }) => {
     await postEditor.gotoNewPost();
 
     // Verify we're on the new post page
     await expect(page).toHaveURL(/post-new\.php/);
 
-    const randomTitle = 'Shortcode Post ' + Date.now();
+    const randomTitle = "Shortcode Post " + Date.now();
     const data = {
-      title: 'Key Takeaways',
+      title: "Key Takeaways",
       items: [
-        'First important point about the topic.',
-        'Second important point to remember.',
-        'Third key takeaway for readers.',
+        "First important point about the topic.",
+        "Second important point to remember.",
+        "Third key takeaway for readers.",
       ],
     };
 
@@ -62,7 +65,7 @@ test.describe('Shortcode rendering in WordPress posts', () => {
     }
 
     // Verify raw shortcode tags are NOT visible (properly rendered)
-    const rawShortcode = page.locator('text=[key_takeaways');
+    const rawShortcode = page.locator("text=[key_takeaways");
     await expect(rawShortcode).not.toBeVisible();
   });
 });

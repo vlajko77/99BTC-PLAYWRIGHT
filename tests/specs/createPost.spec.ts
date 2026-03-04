@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage';
-import { WordPressPostEditor } from '../pages/CreatePost';
-import { WP_USERNAME, WP_PASSWORD } from '../helpers/login';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/loginPage";
+import { WordPressPostEditor } from "../pages/CreatePost";
+import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
 
-test.describe('WordPress post creation', () => {
+test.describe("WordPress post creation", () => {
   let loginPage: LoginPage;
   let postEditor: WordPressPostEditor;
 
@@ -16,20 +16,24 @@ test.describe('WordPress post creation', () => {
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
+      await testInfo.attach("screenshot", {
+        body: screenshot,
+        contentType: "image/png",
+      });
     }
   });
 
-  test('Add a new post to 99bitcoins', async ({ page }) => {
+  test("Add a new post to 99bitcoins", async ({ page }) => {
     await postEditor.gotoNewPost();
 
     await expect(page).toHaveURL(/post-new\.php/);
 
-    const randomTitle = 'Test Post ' + Math.floor(Math.random() * 100000);
-    const randomContent = 'This post is added by Playwright. Random value: ' + Math.random();
+    const randomTitle = "Test Post " + Math.floor(Math.random() * 100000);
+    const randomContent =
+      "This post is added by Playwright. Random value: " + Math.random();
 
     await postEditor.fillPostDetails(randomTitle, randomContent);
-    await postEditor.selectCategory('News');
+    await postEditor.selectCategory("News");
     await postEditor.publishPost();
 
     // Verify permalink exists (publish succeeded)
@@ -45,6 +49,8 @@ test.describe('WordPress post creation', () => {
     await postEditor.expectContentVisible(randomContent);
 
     // Verify category is displayed
-    await expect(page.getByRole('link', { name: 'News' }).first()).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "News" }).first(),
+    ).toBeVisible();
   });
 });

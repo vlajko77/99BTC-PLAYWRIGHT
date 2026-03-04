@@ -1,8 +1,8 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, expect, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 export class DashboardPage extends BasePage {
-  private readonly dashboardUrl = 'https://99bitcoins.local/wp-admin/';
+  private readonly dashboardUrl = "https://99bitcoins.local/wp-admin/";
 
   // Admin bar elements
   private readonly adminBar: Locator;
@@ -29,37 +29,50 @@ export class DashboardPage extends BasePage {
     super(page);
 
     // Admin bar
-    this.adminBar = page.locator('#wpadminbar');
-    this.mySitesLink = page.locator('#wp-admin-bar-my-sites');
-    this.newContentButton = page.locator('#wp-admin-bar-new-content');
-    this.userGreeting = page.locator('#wp-admin-bar-my-account');
+    this.adminBar = page.locator("#wpadminbar");
+    this.mySitesLink = page.locator("#wp-admin-bar-my-sites");
+    this.newContentButton = page.locator("#wp-admin-bar-new-content");
+    this.userGreeting = page.locator("#wp-admin-bar-my-account");
 
     // Screen Options & Help
-    this.screenOptionsButton = page.locator('#screen-options-link-wrap button, #show-settings-link');
-    this.helpButton = page.locator('#contextual-help-link-wrap button, #contextual-help-link');
+    this.screenOptionsButton = page.locator(
+      "#screen-options-link-wrap button, #show-settings-link",
+    );
+    this.helpButton = page.locator(
+      "#contextual-help-link-wrap button, #contextual-help-link",
+    );
 
     // Widgets
-    this.quickDraftWidget = page.locator('#dashboard_quick_press');
-    this.atAGlanceWidget = page.locator('#dashboard_right_now');
-    this.activityWidget = page.locator('#dashboard_activity');
-    this.siteHealthWidget = page.locator('#dashboard_site_health');
-    this.quizMakerWidget = page.locator('#quiz-maker');
+    this.quickDraftWidget = page.locator("#dashboard_quick_press");
+    this.atAGlanceWidget = page.locator("#dashboard_right_now");
+    this.activityWidget = page.locator("#dashboard_activity");
+    this.siteHealthWidget = page.locator("#dashboard_site_health");
+    this.quizMakerWidget = page.locator("#quiz-maker");
     // Quick Draft form
-    this.quickDraftTitle = page.locator('#dashboard_quick_press input[name="post_title"]');
-    this.quickDraftContent = page.locator('#dashboard_quick_press textarea[name="content"]');
-    this.quickDraftSaveButton = page.locator('#dashboard_quick_press #save-post');
+    this.quickDraftTitle = page.locator(
+      '#dashboard_quick_press input[name="post_title"]',
+    );
+    this.quickDraftContent = page.locator(
+      '#dashboard_quick_press textarea[name="content"]',
+    );
+    this.quickDraftSaveButton = page.locator(
+      "#dashboard_quick_press #save-post",
+    );
   }
 
   // Navigation
   async navigateToDashboard(): Promise<void> {
     await this.page.goto(this.dashboardUrl);
-    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState("domcontentloaded");
   }
 
   // Verification methods
   async verifyDashboardLoaded(): Promise<void> {
     await expect(this.page).toHaveURL(/wp-admin\/?$/);
-    const heading = this.page.locator('h1').filter({ hasText: 'Dashboard' }).first();
+    const heading = this.page
+      .locator("h1")
+      .filter({ hasText: "Dashboard" })
+      .first();
     await expect(heading).toBeVisible();
   }
 
@@ -77,20 +90,23 @@ export class DashboardPage extends BasePage {
 
   async verifySidebarMenu(): Promise<void> {
     const menuItems = [
-      'Dashboard',
-      'Posts',
-      'Media',
-      'Pages',
-      'Comments',
-      'Appearance',
-      'Plugins',
-      'Users',
-      'Tools',
-      'Settings',
+      "Dashboard",
+      "Posts",
+      "Media",
+      "Pages",
+      "Comments",
+      "Appearance",
+      "Plugins",
+      "Users",
+      "Tools",
+      "Settings",
     ];
 
     for (const item of menuItems) {
-      const menuLink = this.page.locator('#adminmenu .wp-menu-name').filter({ hasText: item }).first();
+      const menuLink = this.page
+        .locator("#adminmenu .wp-menu-name")
+        .filter({ hasText: item })
+        .first();
       await expect(menuLink).toBeVisible();
     }
   }
@@ -105,8 +121,14 @@ export class DashboardPage extends BasePage {
   async verifyAtAGlanceWidget(): Promise<void> {
     await expect(this.atAGlanceWidget).toBeVisible();
     // Check for posts and pages counts
-    const postsLink = this.atAGlanceWidget.locator('a[href*="edit.php"]').filter({ hasText: /Post/ }).first();
-    const pagesLink = this.atAGlanceWidget.locator('a[href*="edit.php"]').filter({ hasText: /Page/ }).first();
+    const postsLink = this.atAGlanceWidget
+      .locator('a[href*="edit.php"]')
+      .filter({ hasText: /Post/ })
+      .first();
+    const pagesLink = this.atAGlanceWidget
+      .locator('a[href*="edit.php"]')
+      .filter({ hasText: /Page/ })
+      .first();
     await expect(postsLink).toBeVisible();
     await expect(pagesLink).toBeVisible();
     // WordPress version - check general text
@@ -128,13 +150,17 @@ export class DashboardPage extends BasePage {
     await expect(this.activityWidget).toBeVisible();
     const widgetText = await this.activityWidget.textContent();
     // Should have either "Recently Published" or "Publishing Soon"
-    const hasPublishing = /Recently Published|Publishing Soon/i.test(widgetText || '');
+    const hasPublishing = /Recently Published|Publishing Soon/i.test(
+      widgetText || "",
+    );
     expect(hasPublishing).toBeTruthy();
   }
 
   async verifyRecentComments(): Promise<void> {
     // Recent Comments are inside the Activity widget
-    const recentComments = this.activityWidget.locator('h3').filter({ hasText: 'Recent Comments' });
+    const recentComments = this.activityWidget
+      .locator("h3")
+      .filter({ hasText: "Recent Comments" });
     await expect(recentComments).toBeVisible();
   }
 
@@ -143,19 +169,25 @@ export class DashboardPage extends BasePage {
     await this.quickDraftTitle.fill(title);
     await this.quickDraftContent.fill(content);
     await this.quickDraftSaveButton.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   // Data extraction
   async getPostCount(): Promise<number> {
-    const postsLink = this.atAGlanceWidget.locator('a[href*="edit.php"]').filter({ hasText: /Post/ }).first();
+    const postsLink = this.atAGlanceWidget
+      .locator('a[href*="edit.php"]')
+      .filter({ hasText: /Post/ })
+      .first();
     const text = await postsLink.textContent();
     const match = text?.match(/(\d+)/);
     return match ? parseInt(match[1], 10) : 0;
   }
 
   async getPageCount(): Promise<number> {
-    const pagesLink = this.atAGlanceWidget.locator('a[href*="edit.php"]').filter({ hasText: /Page/ }).first();
+    const pagesLink = this.atAGlanceWidget
+      .locator('a[href*="edit.php"]')
+      .filter({ hasText: /Page/ })
+      .first();
     const text = await pagesLink.textContent();
     const match = text?.match(/(\d+)/);
     return match ? parseInt(match[1], 10) : 0;

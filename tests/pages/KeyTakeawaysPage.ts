@@ -1,5 +1,5 @@
-import { WordPressPageEditor } from './CreatePage';
-import { renderKeyTakeaways, KeyTakeaways } from '../helpers/shortcode';
+import { WordPressPageEditor } from "./CreatePage";
+import { renderKeyTakeaways, KeyTakeaways } from "../helpers/shortcode";
 
 export class KeyTakeawaysPage extends WordPressPageEditor {
   async createPageWithKeyTakeaways(pageTitle: string, data: KeyTakeaways) {
@@ -12,7 +12,7 @@ export class KeyTakeawaysPage extends WordPressPageEditor {
   async navigateToPublishedPage() {
     const permalink = await this.getPermalink();
     if (!permalink) {
-      throw new Error('Could not find permalink after publishing');
+      throw new Error("Could not find permalink after publishing");
     }
     await this.openPermalink(permalink);
     return permalink;

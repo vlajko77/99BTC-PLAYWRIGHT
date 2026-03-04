@@ -1,8 +1,8 @@
-import { BasePage } from './BasePage';
+import { BasePage } from "./BasePage";
 
 export class WordPressPostEditor extends BasePage {
   async gotoNewPost() {
-    await this.page.goto('/wp-admin/post-new.php');
+    await this.page.goto("/wp-admin/post-new.php");
   }
 
   async fillPostDetails(title: string, content: string) {
@@ -10,7 +10,9 @@ export class WordPressPostEditor extends BasePage {
   }
 
   async selectCategory(categoryName: string) {
-    await this.page.getByRole('checkbox', { name: categoryName, exact: true }).check();
+    await this.page
+      .getByRole("checkbox", { name: categoryName, exact: true })
+      .check();
   }
 
   async publishPost() {
