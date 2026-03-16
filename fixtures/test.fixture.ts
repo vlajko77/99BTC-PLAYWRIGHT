@@ -5,12 +5,11 @@ import { WordPressPageEditor } from "../pages/CreatePage";
 import { WordPressPostEditor } from "../pages/CreatePost";
 import { KeyTakeawaysPage } from "../pages/KeyTakeawaysPage";
 import { PluginManagementPage } from "../pages/PluginManagementPage";
-import { HeaderSectionPage } from "../pages/regression/HeaderSectionPage";
 import {
-  LanguageSelectorPage,
+  HeaderSectionPage,
   SUPPORTED_LANGUAGES,
   LanguageConfig,
-} from "../pages/regression/LanguageSelectorPage";
+} from "../pages/regression/HeaderSectionPage";
 import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
 
 type Fixtures = {
@@ -21,7 +20,7 @@ type Fixtures = {
   keyTakeawaysPage: KeyTakeawaysPage;
   pluginPage: PluginManagementPage;
   header: HeaderSectionPage;
-  languagePage: LanguageSelectorPage;
+  languagePage: HeaderSectionPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -36,7 +35,7 @@ export const test = base.extend<Fixtures>({
   keyTakeawaysPage: async ({ page }, use) => use(new KeyTakeawaysPage(page)),
   pluginPage: async ({ page }, use) => use(new PluginManagementPage(page)),
   header: async ({ page }, use) => use(new HeaderSectionPage(page)),
-  languagePage: async ({ page }, use) => use(new LanguageSelectorPage(page)),
+  languagePage: async ({ page }, use) => use(new HeaderSectionPage(page)),
 });
 
 export { expect, SUPPORTED_LANGUAGES };
