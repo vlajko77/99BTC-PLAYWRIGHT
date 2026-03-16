@@ -17,9 +17,7 @@ export class HeaderSectionPage extends BasePage {
       )
       .first();
     this.bitcoinMenuLink = this.page.locator("#menu-item-25946");
-    this.bitcoinSubMenuLink = this.page
-      .locator("li#menu-item-25946 ul.sub-menu")
-      .locator('a:has-text("Bitcoin Historical Price")');
+    this.bitcoinSubMenuLink = this.page.locator("#menu-item-180726 a");
   }
 
   async verifyHeaderElements() {
@@ -34,15 +32,14 @@ export class HeaderSectionPage extends BasePage {
   }
 
   async openBitcoinCasinosMenu() {
-    await this.page
-      .getByRole("link", { name: "Bitcoin Casinos", exact: true })
-      .click();
     await this.bitcoinMenuLink.hover();
     await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: 5000 });
   }
 
   async clickBitcoinHistoricalPrice() {
-    await this.bitcoinSubMenuLink.click();
+    await this.bitcoinMenuLink.hover();
+    await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: 5000 });
+    await this.bitcoinSubMenuLink.dispatchEvent("click");
   }
 
   async search(query: string) {

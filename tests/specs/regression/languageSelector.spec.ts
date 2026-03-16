@@ -207,25 +207,25 @@ test.describe("Language Selector", () => {
       await expect(searchIcon).toBeEnabled();
     });
   });
-});
 
-// Parameterized tests for all languages
-const testLanguages: LanguageConfig[] = [
-  { code: "de", name: "Deutsch", urlPath: "/de/", sampleText: "Bitcoin" },
-  { code: "fr", name: "Français", urlPath: "/fr/", sampleText: "Bitcoin" },
-  { code: "es", name: "Español", urlPath: "/es/", sampleText: "Bitcoin" },
-  { code: "it", name: "Italiano", urlPath: "/it/", sampleText: "Bitcoin" },
-  { code: "br", name: "Português", urlPath: "/br/", sampleText: "Bitcoin" },
-];
+  test.describe("Parameterized Language Switching", () => {
+    const testLanguages: LanguageConfig[] = [
+      { code: "de", name: "Deutsch", urlPath: "/de/", sampleText: "Bitcoin" },
+      { code: "fr", name: "Français", urlPath: "/fr/", sampleText: "Bitcoin" },
+      { code: "es", name: "Español", urlPath: "/es/", sampleText: "Bitcoin" },
+      { code: "it", name: "Italiano", urlPath: "/it/", sampleText: "Bitcoin" },
+      { code: "br", name: "Português", urlPath: "/br/", sampleText: "Bitcoin" },
+    ];
 
-for (const lang of testLanguages) {
-  test(`switch to ${lang.name} (${lang.code}) and verify URL`, async ({
-    languagePage,
-    page,
-  }) => {
-    await languagePage.goto(STAGING_URL);
-    await languagePage.selectLanguage(lang.name);
-    await expect(page).toHaveURL(new RegExp(lang.urlPath));
-    await expect(page).toHaveTitle(/99Bitcoins/);
+    for (const lang of testLanguages) {
+      test(`switch to ${lang.name} (${lang.code}) and verify URL`, async ({
+        languagePage,
+        page,
+      }) => {
+        await languagePage.selectLanguage(lang.name);
+        await expect(page).toHaveURL(new RegExp(lang.urlPath));
+        await expect(page).toHaveTitle(/99Bitcoins/);
+      });
+    }
   });
-}
+});
