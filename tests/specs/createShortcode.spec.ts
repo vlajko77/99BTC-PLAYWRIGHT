@@ -1,8 +1,8 @@
 import { test, expect, devices } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { ShortcodePage } from "../pages/CreateShortcodePage";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
-import { renderKeyTakeaways } from "../helpers/shortcode";
+import { LoginPage } from "../../pages/loginPage";
+import { ShortcodePage } from "../../pages/CreateShortcodePage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { renderKeyTakeaways } from "../../utils/shortcode";
 
 // Run tests using mobile device emulation (iPhone 12)
 test.use({ ...devices["iPhone 12"] });

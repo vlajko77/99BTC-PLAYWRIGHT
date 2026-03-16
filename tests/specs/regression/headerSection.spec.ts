@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { HeaderSectionPage } from "../../pages/regression/HeaderSectionPage";
-import { STAGING_URL } from "../../helpers/login";
+import { HeaderSectionPage } from "../../../pages/regression/HeaderSectionPage";
+import { STAGING_URL } from "../../../utils/login";
 
 test.describe("Header", () => {
   let header: HeaderSectionPage;

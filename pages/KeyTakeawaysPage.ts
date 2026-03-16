@@ -1,5 +1,5 @@
 import { WordPressPageEditor } from "./CreatePage";
-import { renderKeyTakeaways, KeyTakeaways } from "../helpers/shortcode";
+import { renderKeyTakeaways, KeyTakeaways } from "../utils/shortcode";
 
 export class KeyTakeawaysPage extends WordPressPageEditor {
   async createPageWithKeyTakeaways(pageTitle: string, data: KeyTakeaways) {

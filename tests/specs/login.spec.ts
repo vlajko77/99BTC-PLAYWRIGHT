@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
+import { LoginPage } from "../../pages/loginPage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
 
 test.describe("WordPress login", () => {
   let loginPage: LoginPage;

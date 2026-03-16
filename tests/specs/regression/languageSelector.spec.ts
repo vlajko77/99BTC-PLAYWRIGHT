@@ -3,8 +3,8 @@ import {
   LanguageSelectorPage,
   SUPPORTED_LANGUAGES,
   LanguageConfig,
-} from "../../pages/regression/LanguageSelectorPage";
-import { STAGING_URL } from "../../helpers/login";
+} from "../../../pages/regression/LanguageSelectorPage";
+import { STAGING_URL } from "../../../utils/login";
 
 test.describe("Language Selector", () => {
   let languagePage: LanguageSelectorPage;

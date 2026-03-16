@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { WordPressPageEditor } from "../pages/CreatePage";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
-import { renderKeyTakeaways, KeyTakeaways } from "../helpers/shortcode";
+import { LoginPage } from "../../pages/loginPage";
+import { WordPressPageEditor } from "../../pages/CreatePage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { renderKeyTakeaways, KeyTakeaways } from "../../utils/shortcode";
 
 test.describe("Multiple shortcodes in WordPress pages", () => {
   let loginPage: LoginPage;

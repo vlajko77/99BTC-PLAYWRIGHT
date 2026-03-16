@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { KeyTakeawaysPage } from "../pages/KeyTakeawaysPage";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
+import { LoginPage } from "../../pages/loginPage";
+import { KeyTakeawaysPage } from "../../pages/KeyTakeawaysPage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
 
 test.describe("Key Takeaways Shortcode", () => {
   let loginPage: LoginPage;

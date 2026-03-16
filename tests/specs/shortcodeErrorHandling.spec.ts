@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { WordPressPageEditor } from "../pages/CreatePage";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
+import { LoginPage } from "../../pages/loginPage";
+import { WordPressPageEditor } from "../../pages/CreatePage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
 
 test.describe("Shortcode error handling in WordPress", () => {
   let loginPage: LoginPage;

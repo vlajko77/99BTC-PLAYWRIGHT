@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { PluginManagementPage } from "../pages/PluginManagementPage";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
+import { LoginPage } from "../../pages/loginPage";
+import { PluginManagementPage } from "../../pages/PluginManagementPage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
 
 test.describe("WordPress Plugin Management", () => {
   let loginPage: LoginPage;

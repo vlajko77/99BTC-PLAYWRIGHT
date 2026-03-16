@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { WordPressPostEditor } from "../pages/CreatePost";
-import { WP_USERNAME, WP_PASSWORD } from "../helpers/login";
-import { renderKeyTakeaways } from "../helpers/shortcode";
+import { LoginPage } from "../../pages/loginPage";
+import { WordPressPostEditor } from "../../pages/CreatePost";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { renderKeyTakeaways } from "../../utils/shortcode";
 
 test.describe("Shortcode rendering in WordPress posts", () => {
   let loginPage: LoginPage;
