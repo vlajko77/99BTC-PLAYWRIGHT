@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 import fs from "fs";
+import { config } from "dotenv";
+
+config();
 
 // Use saved storageState if present (useful for staging sites protected by Cloudflare JS challenges)
 const storageStatePath = fs.existsSync("auth/storageState.json")

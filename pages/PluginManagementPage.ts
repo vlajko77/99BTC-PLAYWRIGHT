@@ -210,31 +210,22 @@ export class PluginManagementPage extends BasePage {
   }
 
   // Verification methods
-  async expectPluginActivatedMessage(): Promise<void> {
-    const successMessage = this.page
-      .locator(
-        "#message.updated, .notice-success, .notice.is-dismissible.updated",
-      )
+  private getNoticeMessage(): Locator {
+    return this.page
+      .locator("#message.updated, .notice-success, .notice.is-dismissible.updated")
       .first();
-    await expect(successMessage).toContainText(/plugin activated/i);
+  }
+
+  async expectPluginActivatedMessage(): Promise<void> {
+    await expect(this.getNoticeMessage()).toContainText(/plugin activated/i);
   }
 
   async expectPluginDeactivatedMessage(): Promise<void> {
-    const successMessage = this.page
-      .locator(
-        "#message.updated, .notice-success, .notice.is-dismissible.updated",
-      )
-      .first();
-    await expect(successMessage).toContainText(/plugin deactivated/i);
+    await expect(this.getNoticeMessage()).toContainText(/plugin deactivated/i);
   }
 
   async expectPluginDeletedMessage(): Promise<void> {
-    const successMessage = this.page
-      .locator(
-        "#message.updated, .notice-success, .notice.is-dismissible.updated",
-      )
-      .first();
-    await expect(successMessage).toContainText(/deleted/i);
+    await expect(this.getNoticeMessage()).toContainText(/deleted/i);
   }
 
   async expectPluginInList(pluginSlug: string): Promise<void> {

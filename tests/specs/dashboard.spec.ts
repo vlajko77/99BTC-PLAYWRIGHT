@@ -1,16 +1,7 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
-import { DashboardPage } from "../../pages/DashboardPage";
-import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("WordPress Admin Dashboard", () => {
-  let loginPage: LoginPage;
-  let dashboardPage: DashboardPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    dashboardPage = new DashboardPage(page);
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
+  test.beforeEach(async ({ loginPage: _, dashboardPage }) => {
     await dashboardPage.navigateToDashboard();
   });
 
@@ -25,45 +16,49 @@ test.describe("WordPress Admin Dashboard", () => {
   });
 
   test.describe("Dashboard Load", () => {
-    test("should load dashboard and display heading", async () => {
+    test("should load dashboard and display heading", async ({
+      dashboardPage,
+    }) => {
       await dashboardPage.verifyDashboardLoaded();
     });
   });
 
   test.describe("Admin Bar", () => {
-    test("should display admin bar with key elements", async () => {
+    test("should display admin bar with key elements", async ({
+      dashboardPage,
+    }) => {
       await dashboardPage.verifyAdminBar();
       await dashboardPage.verifyScreenOptionsAndHelp();
     });
   });
 
   test.describe("Sidebar Menu", () => {
-    test("should display all main sidebar menu items", async () => {
+    test("should display all main sidebar menu items", async ({
+      dashboardPage,
+    }) => {
       await dashboardPage.verifySidebarMenu();
     });
   });
 
   test.describe("Quick Draft Widget", () => {
-    test("should display Quick Draft widget with form elements", async () => {
+    test("should display Quick Draft widget with form elements", async ({
+      dashboardPage,
+    }) => {
       await dashboardPage.verifyQuickDraftWidget();
     });
 
-    test("should save a quick draft successfully", async ({ page }) => {
+    test("should save a quick draft successfully", async ({ dashboardPage }) => {
       const timestamp = Date.now();
       const title = `Test Draft ${timestamp}`;
       const content = `Draft content for testing ${timestamp}`;
 
       await dashboardPage.createQuickDraft(title, content);
-
-      // After saving, the page reloads and the draft should appear in Recent Drafts
-      const recentDrafts = page.locator("#dashboard_quick_press .drafts");
-      await expect(recentDrafts).toBeVisible();
-      await expect(recentDrafts.getByText(title)).toBeVisible();
+      await dashboardPage.verifyRecentDrafts(title);
     });
   });
 
   test.describe("At a Glance Widget", () => {
-    test("should display content statistics", async () => {
+    test("should display content statistics", async ({ dashboardPage }) => {
       await dashboardPage.verifyAtAGlanceWidget();
 
       const postCount = await dashboardPage.getPostCount();
@@ -75,28 +70,23 @@ test.describe("WordPress Admin Dashboard", () => {
   });
 
   test.describe("Quiz Maker Status Widget", () => {
-    test("should display quiz statistics", async ({ page }) => {
+    test("should display quiz statistics", async ({ dashboardPage }) => {
       await dashboardPage.verifyQuizMakerWidget();
-
-      // Verify the widget shows quiz-related statistics
-      const widget = page.locator("#quiz-maker");
-      const widgetText = await widget.textContent();
-      expect(widgetText).toMatch(/Quiz|Question|Result/i);
     });
   });
 
   test.describe("Activity Widget", () => {
-    test("should display recent activity", async () => {
+    test("should display recent activity", async ({ dashboardPage }) => {
       await dashboardPage.verifyActivityWidget();
     });
 
-    test("should display recent comments", async () => {
+    test("should display recent comments", async ({ dashboardPage }) => {
       await dashboardPage.verifyRecentComments();
     });
   });
 
   test.describe("Site Health Widget", () => {
-    test("should display site health status", async () => {
+    test("should display site health status", async ({ dashboardPage }) => {
       await dashboardPage.verifySiteHealthWidget();
     });
   });

@@ -5,8 +5,8 @@ export class KeyTakeawaysPage extends WordPressPageEditor {
   async createPageWithKeyTakeaways(pageTitle: string, data: KeyTakeaways) {
     await this.gotoNewPage();
     const shortcode = renderKeyTakeaways(data);
-    await this.fillPageDetails(pageTitle, shortcode);
-    await this.publishPage();
+    await this.fillTitleAndContent(pageTitle, shortcode);
+    await this.publish();
   }
 
   async navigateToPublishedPage() {
@@ -18,18 +18,10 @@ export class KeyTakeawaysPage extends WordPressPageEditor {
     return permalink;
   }
 
-  async verifyKeyTakeawaysTitle(title: string) {
-    await this.expectContentVisible(title);
-  }
-
-  async verifyKeyTakeawayItems(items: string[]) {
-    for (const item of items) {
+  async verifyKeyTakeaways(data: KeyTakeaways) {
+    await this.expectContentVisible(data.title);
+    for (const item of data.items) {
       await this.expectContentVisible(item);
     }
-  }
-
-  async verifyKeyTakeaways(data: KeyTakeaways) {
-    await this.verifyKeyTakeawaysTitle(data.title);
-    await this.verifyKeyTakeawayItems(data.items);
   }
 }

@@ -1,17 +1,17 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
+import { test, expect } from "../../fixtures/test.fixture";
 import { WordPressPostEditor } from "../../pages/CreatePost";
-import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
 
 test.describe("Aesthetic Shortcodes", () => {
-  let loginPage: LoginPage;
-  let postEditor: WordPressPostEditor;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    postEditor = new WordPressPostEditor(page);
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-  });
+  async function createPostWithShortcode(
+    postEditor: WordPressPostEditor,
+    title: string,
+    content: string,
+  ) {
+    await postEditor.gotoNewPost();
+    await postEditor.fillTitleAndContent(title, content);
+    await postEditor.selectCategory("News");
+    await postEditor.publishAndNavigate();
+  }
 
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
@@ -23,15 +23,12 @@ test.describe("Aesthetic Shortcodes", () => {
     }
   });
 
-  test("CTA Button shortcode renders correctly", async ({ page }) => {
+  test("CTA Button shortcode renders correctly", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "CTA Button Test " + crypto.randomUUID();
     const buttonContent =
       '[button link="https://99bitcoins.com/visit/margex"]Visit Margex[/button]';
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, buttonContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, buttonContent);
 
     await expect(
       page.getByRole("link", { name: "Visit Margex" }),
@@ -39,6 +36,8 @@ test.describe("Aesthetic Shortcodes", () => {
   });
 
   test("Step by step guide shortcode renders with multiple items", async ({
+    loginPage: _,
+    postEditor,
     page,
   }) => {
     const randomTitle = "Step by Step Guide Test " + crypto.randomUUID();
@@ -66,10 +65,7 @@ Check your email inbox for a verification email and click the verification link.
 [/step_by_step_guide]
     `;
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, guideContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, guideContent);
 
     await expect(page.getByText("Visit the Website")).toBeVisible();
     await expect(page.getByText("Register Your Account")).toBeVisible();
@@ -77,22 +73,21 @@ Check your email inbox for a verification email and click the verification link.
   });
 
   test("Countdown shortcode renders expired message when date has passed", async ({
+    loginPage: _,
+    postEditor,
     page,
   }) => {
     const randomTitle = "Countdown Test " + crypto.randomUUID();
     const countdownContent =
       '[countdown date="15/12/2025 18:00:00" expired_message="The offer is expired."]';
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, countdownContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, countdownContent);
 
     // Date is in the past, so the expired message should be shown
     await expect(page.getByText("The offer is expired.")).toBeVisible();
   });
 
-  test("Checklist with green checkmarks shortcode", async ({ page }) => {
+  test("Checklist with green checkmarks shortcode", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Checklist Test " + crypto.randomUUID();
     const checklistContent = `
 [green_checkmarks_list]
@@ -112,17 +107,14 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/green_checkmarks_list]
     `;
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, checklistContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, checklistContent);
 
     await expect(page.getByText("User-Friendly Interface")).toBeVisible();
     await expect(page.getByText("Trading Fees")).toBeVisible();
     await expect(page.getByText("Customer Support")).toBeVisible();
   });
 
-  test("Pros and Cons shortcode renders sections", async ({ page }) => {
+  test("Pros and Cons shortcode renders sections", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Pros & Cons Test " + crypto.randomUUID();
     const prosConsContent = `
 [pros_and_cons background="#f1f2f4"]
@@ -141,10 +133,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/pros_and_cons]
     `;
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, prosConsContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, prosConsContent);
 
     await expect(
       page.getByText("Innovative social trading features"),
@@ -152,7 +141,7 @@ Look for multiple support channels such as live chat, email, and phone support.
     await expect(page.getByText("Limited payment options")).toBeVisible();
   });
 
-  test("Verdict shortcode with rating and items", async ({ page }) => {
+  test("Verdict shortcode with rating and items", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Verdict Test " + crypto.randomUUID();
     const verdictContent = `
 [verdict logo_url="" title="Our Verdict" rating="9.8" button_link="#" button_text="Visit CoinCasino"]
@@ -163,37 +152,28 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/verdict]
     `;
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, verdictContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, verdictContent);
 
     await expect(page.getByText("Our Verdict")).toBeVisible();
     await expect(page.getByText("Visit CoinCasino")).toBeVisible();
     await expect(page.getByText("Accepted Cryptocurrencies")).toBeVisible();
   });
 
-  test("Star rating shortcode renders with label", async ({ page }) => {
+  test("Star rating shortcode renders with label", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Star Rating Test " + crypto.randomUUID();
     const starRatingContent = '[star-rating label="Review" stars="4.5"]';
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, starRatingContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, starRatingContent);
 
     await expect(page.getByText("Review")).toBeVisible();
   });
 
-  test("Highlighted paragraph shortcode renders", async ({ page }) => {
+  test("Highlighted paragraph shortcode renders", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Highlighted Section Test " + crypto.randomUUID();
     const highlightedContent =
       '[highlighted_paragraph heading="Key Point"]This is important information that should stand out to readers.[/highlighted_paragraph]';
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, highlightedContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, highlightedContent);
 
     await expect(page.getByText("Key Point")).toBeVisible();
     await expect(
@@ -203,7 +183,7 @@ Look for multiple support channels such as live chat, email, and phone support.
     ).toBeVisible();
   });
 
-  test("Key Takeaways shortcode with multiple items", async ({ page }) => {
+  test("Key Takeaways shortcode with multiple items", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Key Takeaways Test " + crypto.randomUUID();
     const keyTakeawaysContent = `
 [key_takeaways title="Key Takeaways" heading_type="h3"]
@@ -221,10 +201,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/key_takeaways]
     `;
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, keyTakeawaysContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, keyTakeawaysContent);
 
     await expect(page.getByText("Key Takeaways")).toBeVisible();
     await expect(
@@ -237,7 +214,7 @@ Look for multiple support channels such as live chat, email, and phone support.
     ).toBeVisible();
   });
 
-  test("Multiple shortcodes combined in one post", async ({ page }) => {
+  test("Multiple shortcodes combined in one post", async ({ loginPage: _, postEditor, page }) => {
     const randomTitle = "Combined Shortcodes Test " + crypto.randomUUID();
     const combinedContent = `
 <h2>Overview</h2>
@@ -259,10 +236,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/verdict]
     `;
 
-    await postEditor.gotoNewPost();
-    await postEditor.fillPostDetails(randomTitle, combinedContent);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
+    await createPostWithShortcode(postEditor, randomTitle, combinedContent);
 
     await expect(page.getByText("Important Overview")).toBeVisible();
     await expect(page.getByText("Benefit 1")).toBeVisible();

@@ -1,18 +1,6 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
-import { WordPressPageEditor } from "../../pages/CreatePage";
-import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("WordPress page creation", () => {
-  let loginPage: LoginPage;
-  let pageEditor: WordPressPageEditor;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    pageEditor = new WordPressPageEditor(page);
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-  });
-
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
@@ -23,7 +11,11 @@ test.describe("WordPress page creation", () => {
     }
   });
 
-  test("Add a new page and verify it is visible", async ({ page }) => {
+  test("Add a new page and verify it is visible", async ({
+    loginPage: _,
+    pageEditor,
+    page,
+  }) => {
     await pageEditor.gotoNewPage();
 
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
@@ -31,16 +23,14 @@ test.describe("WordPress page creation", () => {
     const randomTitle = "Test Page " + Math.floor(Math.random() * 100000);
     const randomContent = "Playwright page content. Random: " + Math.random();
 
-    await pageEditor.fillPageDetails(randomTitle, randomContent);
-    await pageEditor.publishPage();
+    await pageEditor.fillTitleAndContent(randomTitle, randomContent);
+    await pageEditor.publish();
 
-    // Verify permalink exists
     const permalink = await pageEditor.getPermalink();
     expect(permalink).toBeTruthy();
 
     await pageEditor.openPermalink(permalink!);
 
-    // Verify URL is the published page (slug or page_id)
     await expect(page).toHaveURL(/test-page|page_id=/i);
     await pageEditor.expectContentVisible(randomTitle);
     await pageEditor.expectContentVisible(randomContent);

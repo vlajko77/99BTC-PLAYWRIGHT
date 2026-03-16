@@ -1,14 +1,6 @@
-import { test } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
-import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { test } from "../../fixtures/test.fixture";
 
 test.describe("WordPress login", () => {
-  let loginPage: LoginPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-  });
-
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
@@ -19,7 +11,5 @@ test.describe("WordPress login", () => {
     }
   });
 
-  test("Login to 99Bitcoins", async () => {
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-  });
+  test("Login to 99Bitcoins", async ({ loginPage: _ }) => {});
 });

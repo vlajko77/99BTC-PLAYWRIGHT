@@ -1,22 +1,11 @@
-import { test, expect, devices } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
-import { ShortcodePage } from "../../pages/CreateShortcodePage";
-import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
 import { renderKeyTakeaways } from "../../utils/shortcode";
+import { devices } from "@playwright/test";
 
 // Run tests using mobile device emulation (iPhone 12)
 test.use({ ...devices["iPhone 12"] });
 
 test.describe("WordPress shortcode page creation", () => {
-  let loginPage: LoginPage;
-  let shortcodePage: ShortcodePage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    shortcodePage = new ShortcodePage(page);
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-  });
-
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
@@ -28,13 +17,14 @@ test.describe("WordPress shortcode page creation", () => {
   });
 
   test("Add a new page with key_takeaways shortcode and verify it is visible", async ({
+    loginPage: _,
+    pageEditor,
     page,
   }) => {
-    await shortcodePage.gotoNewPage();
+    await pageEditor.gotoNewPage();
 
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
 
-    // Verify mobile viewport is active
     const viewport = page.viewportSize();
     expect(viewport?.width).toBeLessThan(500);
 
@@ -50,22 +40,19 @@ test.describe("WordPress shortcode page creation", () => {
 
     const shortcode = renderKeyTakeaways(data);
 
-    await shortcodePage.fillShortcodeDetails(randomTitle, shortcode);
-    await shortcodePage.publishPage();
+    await pageEditor.fillTitleAndContent(randomTitle, shortcode);
+    await pageEditor.publish();
 
-    const permalink = await shortcodePage.getPermalink();
+    const permalink = await pageEditor.getPermalink();
     expect(permalink).toBeTruthy();
-    await shortcodePage.openPermalink(permalink!);
+    await pageEditor.openPermalink(permalink!);
 
-    // Verify URL is the published page
     await expect(page).toHaveURL(/shortcode-page|page_id=/i);
 
-    // Verify shortcode title is visible
-    await shortcodePage.expectContentVisible(data.title);
+    await pageEditor.expectContentVisible(data.title);
 
-    // Verify all shortcode items are visible
     for (const item of data.items) {
-      await shortcodePage.expectContentVisible(item);
+      await pageEditor.expectContentVisible(item);
     }
   });
 });

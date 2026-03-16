@@ -1,12 +1,8 @@
-import { test, expect } from "@playwright/test";
-import { HeaderSectionPage } from "../../../pages/regression/HeaderSectionPage";
+import { test, expect } from "../../../fixtures/test.fixture";
 import { STAGING_URL } from "../../../utils/login";
 
 test.describe("Header", () => {
-  let header: HeaderSectionPage;
-
-  test.beforeEach(async ({ page }) => {
-    header = new HeaderSectionPage(page);
+  test.beforeEach(async ({ header }) => {
     await header.goto(STAGING_URL);
   });
 
@@ -37,7 +33,7 @@ test.describe("Header", () => {
   });
 
   test.describe("Search", () => {
-    test("search returns results for bitcoin", async ({ page }) => {
+    test("search returns results for bitcoin", async ({ header, page }) => {
       await expect(header.searchIcon).toBeVisible();
       await header.search("bitcoin");
 
@@ -47,6 +43,7 @@ test.describe("Header", () => {
     });
 
     test("search with no results shows appropriate message", async ({
+      header,
       page,
     }) => {
       await header.search("xyznonexistent123");
@@ -59,16 +56,19 @@ test.describe("Header", () => {
   });
 
   test.describe("Navigation", () => {
-    test("verify header section elements are visible", async () => {
+    test("verify header section elements are visible", async ({ header }) => {
       await header.verifyHeaderElements();
     });
 
-    test("verify navigation menu opens submenu on hover", async () => {
+    test("verify navigation menu opens submenu on hover", async ({ header }) => {
       await header.openBitcoinCasinosMenu();
       await expect(header.bitcoinSubMenuLink).toBeVisible();
     });
 
-    test("verify submenu navigation works correctly", async ({ page }) => {
+    test("verify submenu navigation works correctly", async ({
+      header,
+      page,
+    }) => {
       await header.openBitcoinCasinosMenu();
       await header.clickBitcoinHistoricalPrice();
       await expect(page).toHaveURL(/historical-price/i);

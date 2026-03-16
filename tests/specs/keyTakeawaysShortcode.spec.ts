@@ -1,18 +1,6 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
-import { KeyTakeawaysPage } from "../../pages/KeyTakeawaysPage";
-import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("Key Takeaways Shortcode", () => {
-  let loginPage: LoginPage;
-  let keyTakeawaysPage: KeyTakeawaysPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    keyTakeawaysPage = new KeyTakeawaysPage(page);
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-  });
-
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
@@ -24,6 +12,8 @@ test.describe("Key Takeaways Shortcode", () => {
   });
 
   test("should render key_takeaways shortcode with h3 heading type", async ({
+    loginPage: _,
+    keyTakeawaysPage,
     page,
   }) => {
     const data = {
@@ -38,17 +28,14 @@ test.describe("Key Takeaways Shortcode", () => {
     );
     await keyTakeawaysPage.navigateToPublishedPage();
 
-    // Verify URL is the published page
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
-
-    // Verify shortcode content
     await keyTakeawaysPage.verifyKeyTakeaways(data);
-
-    // Verify heading is rendered as h3
     await expect(page.locator("h3", { hasText: data.title })).toBeVisible();
   });
 
   test("should render key_takeaways shortcode without heading type", async ({
+    loginPage: _,
+    keyTakeawaysPage,
     page,
   }) => {
     const data = {
@@ -61,13 +48,14 @@ test.describe("Key Takeaways Shortcode", () => {
       data,
     );
     await keyTakeawaysPage.navigateToPublishedPage();
-    await expect(page).toHaveURL(/key-takeaways|page_id=/i);
 
-    // Verify shortcode content
+    await expect(page).toHaveURL(/key-takeaways|page_id=/i);
     await keyTakeawaysPage.verifyKeyTakeaways(data);
   });
 
   test("should render key_takeaways shortcode with multiple items", async ({
+    loginPage: _,
+    keyTakeawaysPage,
     page,
   }) => {
     const data = {
@@ -89,14 +77,8 @@ test.describe("Key Takeaways Shortcode", () => {
     await keyTakeawaysPage.navigateToPublishedPage();
 
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
-
-    // Verify shortcode content
     await keyTakeawaysPage.verifyKeyTakeaways(data);
-
-    // Verify heading is rendered as h2
     await expect(page.locator("h2", { hasText: data.title })).toBeVisible();
-
-    // Verify correct number of items (5)
     expect(data.items.length).toBe(5);
   });
 });

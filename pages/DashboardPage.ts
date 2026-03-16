@@ -139,7 +139,13 @@ export class DashboardPage extends BasePage {
   async verifyQuizMakerWidget(): Promise<void> {
     await expect(this.quizMakerWidget).toBeVisible();
     const widgetText = await this.quizMakerWidget.textContent();
-    expect(widgetText).toMatch(/Quiz|Quizzes/i);
+    expect(widgetText).toMatch(/Quiz|Question|Result/i);
+  }
+
+  async verifyRecentDrafts(title: string): Promise<void> {
+    const recentDrafts = this.quickDraftWidget.locator(".drafts");
+    await expect(recentDrafts).toBeVisible();
+    await expect(recentDrafts.getByText(title)).toBeVisible();
   }
 
   async verifySiteHealthWidget(): Promise<void> {

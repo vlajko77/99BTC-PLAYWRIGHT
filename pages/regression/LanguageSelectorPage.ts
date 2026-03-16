@@ -78,15 +78,10 @@ export class LanguageSelectorPage extends BasePage {
 
   async getAvailableLanguages(): Promise<string[]> {
     await this.openLanguageDropdown();
-    const languageLinks = this.page
-      .locator("a")
-      .filter({
-        has: this.page.locator(":scope"),
-      })
-      .filter({
-        hasText:
-          /^(English|Deutsch|Français|Español|한국어|Türkiye|日本語|Italiano|Português|Nederlands|Norsk|Suomi|Русский|العربية)$/,
-      });
+    const languageLinks = this.page.locator("a").filter({
+      hasText:
+        /^(English|Deutsch|Français|Español|한국어|Türkiye|日本語|Italiano|Português|Nederlands|Norsk|Suomi|Русский|العربية)$/,
+    });
     return await languageLinks.allTextContents();
   }
 
@@ -100,19 +95,11 @@ export class LanguageSelectorPage extends BasePage {
   async verifyLanguageDropdownVisible(): Promise<void> {
     await this.openLanguageDropdown();
 
-    // Verify at least some key languages are visible
-    await expect(
-      this.page.getByRole("link", { name: "English", exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", { name: "Deutsch", exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", { name: "Français", exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", { name: "Español", exact: true }),
-    ).toBeVisible();
+    for (const lang of SUPPORTED_LANGUAGES.slice(0, 4)) {
+      await expect(
+        this.page.getByRole("link", { name: lang.name, exact: true }),
+      ).toBeVisible();
+    }
   }
 
   async verifyAllLanguagesPresent(): Promise<void> {

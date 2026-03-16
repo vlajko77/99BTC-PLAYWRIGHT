@@ -14,3 +14,7 @@ auth/
 
 # VS Code workspace files
 *.code-workspace
+
+# Environment variables
+.env
+.env.local
