@@ -1,18 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { WordPressPostEditor } from "../../pages/CreatePost";
 
 test.describe("Aesthetic Shortcodes", () => {
-  async function createPostWithShortcode(
-    postEditor: WordPressPostEditor,
-    title: string,
-    content: string,
-  ) {
-    await postEditor.gotoNewPost();
-    await postEditor.fillTitleAndContent(title, content);
-    await postEditor.selectCategory("News");
-    await postEditor.publishAndNavigate();
-  }
-
   test.afterEach(async ({ page }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       const screenshot = await page.screenshot({ fullPage: true });
@@ -28,7 +16,7 @@ test.describe("Aesthetic Shortcodes", () => {
     const buttonContent =
       '[button link="https://99bitcoins.com/visit/margex"]Visit Margex[/button]';
 
-    await createPostWithShortcode(postEditor, randomTitle, buttonContent);
+    await postEditor.createPostWithShortcode(randomTitle, buttonContent);
 
     await expect(
       page.getByRole("link", { name: "Visit Margex" }),
@@ -65,7 +53,7 @@ Check your email inbox for a verification email and click the verification link.
 [/step_by_step_guide]
     `;
 
-    await createPostWithShortcode(postEditor, randomTitle, guideContent);
+    await postEditor.createPostWithShortcode(randomTitle, guideContent);
 
     await expect(page.getByText("Visit the Website")).toBeVisible();
     await expect(page.getByText("Register Your Account")).toBeVisible();
@@ -81,7 +69,7 @@ Check your email inbox for a verification email and click the verification link.
     const countdownContent =
       '[countdown date="15/12/2025 18:00:00" expired_message="The offer is expired."]';
 
-    await createPostWithShortcode(postEditor, randomTitle, countdownContent);
+    await postEditor.createPostWithShortcode(randomTitle, countdownContent);
 
     // Date is in the past, so the expired message should be shown
     await expect(page.getByText("The offer is expired.")).toBeVisible();
@@ -107,7 +95,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/green_checkmarks_list]
     `;
 
-    await createPostWithShortcode(postEditor, randomTitle, checklistContent);
+    await postEditor.createPostWithShortcode(randomTitle, checklistContent);
 
     await expect(page.getByText("User-Friendly Interface")).toBeVisible();
     await expect(page.getByText("Trading Fees")).toBeVisible();
@@ -133,7 +121,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/pros_and_cons]
     `;
 
-    await createPostWithShortcode(postEditor, randomTitle, prosConsContent);
+    await postEditor.createPostWithShortcode(randomTitle, prosConsContent);
 
     await expect(
       page.getByText("Innovative social trading features"),
@@ -152,7 +140,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/verdict]
     `;
 
-    await createPostWithShortcode(postEditor, randomTitle, verdictContent);
+    await postEditor.createPostWithShortcode(randomTitle, verdictContent);
 
     await expect(page.getByText("Our Verdict")).toBeVisible();
     await expect(page.getByText("Visit CoinCasino")).toBeVisible();
@@ -163,9 +151,9 @@ Look for multiple support channels such as live chat, email, and phone support.
     const randomTitle = "Star Rating Test " + crypto.randomUUID();
     const starRatingContent = '[star-rating label="Review" stars="4.5"]';
 
-    await createPostWithShortcode(postEditor, randomTitle, starRatingContent);
+    await postEditor.createPostWithShortcode(randomTitle, starRatingContent);
 
-    await expect(page.getByText("Review")).toBeVisible();
+    await expect(page.getByText("Review", { exact: true }).first()).toBeVisible();
   });
 
   test("Highlighted paragraph shortcode renders", async ({ loginPage: _, postEditor, page }) => {
@@ -173,7 +161,7 @@ Look for multiple support channels such as live chat, email, and phone support.
     const highlightedContent =
       '[highlighted_paragraph heading="Key Point"]This is important information that should stand out to readers.[/highlighted_paragraph]';
 
-    await createPostWithShortcode(postEditor, randomTitle, highlightedContent);
+    await postEditor.createPostWithShortcode(randomTitle, highlightedContent);
 
     await expect(page.getByText("Key Point")).toBeVisible();
     await expect(
@@ -201,9 +189,9 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/key_takeaways]
     `;
 
-    await createPostWithShortcode(postEditor, randomTitle, keyTakeawaysContent);
+    await postEditor.createPostWithShortcode(randomTitle, keyTakeawaysContent);
 
-    await expect(page.getByText("Key Takeaways")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Key Takeaways", exact: true })).toBeVisible();
     await expect(
       page.getByText(
         "User-friendly interfaces designed for both beginners and experienced traders",
@@ -236,7 +224,7 @@ Look for multiple support channels such as live chat, email, and phone support.
 [/verdict]
     `;
 
-    await createPostWithShortcode(postEditor, randomTitle, combinedContent);
+    await postEditor.createPostWithShortcode(randomTitle, combinedContent);
 
     await expect(page.getByText("Important Overview")).toBeVisible();
     await expect(page.getByText("Benefit 1")).toBeVisible();

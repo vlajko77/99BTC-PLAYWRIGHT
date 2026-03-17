@@ -11,4 +11,10 @@ export class WordPressPostEditor extends BasePage {
       .check();
   }
 
+  async createPostWithShortcode(title: string, content: string): Promise<void> {
+    await this.gotoNewPost();
+    await this.fillTitleAndContent(title, content);
+    await this.selectCategory("News");
+    await this.publishAndNavigate();
+  }
 }

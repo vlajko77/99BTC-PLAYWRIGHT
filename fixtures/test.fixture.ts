@@ -10,6 +10,7 @@ import {
   SUPPORTED_LANGUAGES,
   LanguageConfig,
 } from "../pages/regression/HeaderSectionPage";
+import { HomePageSectionsPage } from "../pages/regression/HomePageSectionsPage";
 import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
 
 type Fixtures = {
@@ -21,6 +22,7 @@ type Fixtures = {
   pluginPage: PluginManagementPage;
   header: HeaderSectionPage;
   languagePage: HeaderSectionPage;
+  homePage: HomePageSectionsPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -36,6 +38,7 @@ export const test = base.extend<Fixtures>({
   pluginPage: async ({ page }, use) => use(new PluginManagementPage(page)),
   header: async ({ page }, use) => use(new HeaderSectionPage(page)),
   languagePage: async ({ page }, use) => use(new HeaderSectionPage(page)),
+  homePage: async ({ page }, use) => use(new HomePageSectionsPage(page)),
 });
 
 export { expect, SUPPORTED_LANGUAGES };
