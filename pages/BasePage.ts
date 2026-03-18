@@ -63,7 +63,9 @@ export class BasePage {
   }
 
   async expectContentVisible(contentSnippet: string) {
-    await expect(this.page.getByText(contentSnippet).first()).toBeVisible();
+    await expect(
+      this.page.locator("main").getByText(contentSnippet).first(),
+    ).toBeVisible();
   }
 
   async fillTitleAndContent(title: string, content: string) {
