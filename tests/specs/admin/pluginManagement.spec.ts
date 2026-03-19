@@ -1,6 +1,6 @@
-import { test, expect } from "../../fixtures/test.fixture";
-import { PluginManagementPage } from "../../pages/PluginManagementPage";
-import { CLASSIC_WIDGETS, HEALTH_CHECK } from "../../data/plugins";
+import { test, expect } from "../../../fixtures/test.fixture";
+import { PluginManagementPage } from "../../../pages/admin/PluginManagementPage";
+import { CLASSIC_WIDGETS, HEALTH_CHECK } from "../../../data/plugins";
 
 test.describe("WordPress Plugin Management", () => {
   async function ensurePluginInstalled(

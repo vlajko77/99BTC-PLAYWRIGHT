@@ -1,10 +1,10 @@
 import { test as base, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { DashboardPage } from "../pages/DashboardPage";
-import { WordPressPageEditor } from "../pages/CreatePage";
-import { WordPressPostEditor } from "../pages/CreatePost";
-import { ShortcodePage } from "../pages/ShortcodePage";
-import { PluginManagementPage } from "../pages/PluginManagementPage";
+import { LoginPage } from "../pages/admin/loginPage";
+import { DashboardPage } from "../pages/admin/DashboardPage";
+import { WordPressPageEditor } from "../pages/admin/CreatePage";
+import { WordPressPostEditor } from "../pages/admin/CreatePost";
+import { ShortcodePage } from "../pages/frontend/ShortcodePage";
+import { PluginManagementPage } from "../pages/admin/PluginManagementPage";
 import {
   HeaderSectionPage,
   SUPPORTED_LANGUAGES,

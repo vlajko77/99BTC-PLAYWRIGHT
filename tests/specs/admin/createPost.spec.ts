@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/test.fixture";
+import { test, expect } from "../../../fixtures/test.fixture";
 
 test.describe("WordPress post creation", () => {
   test("Add a new post to 99bitcoins", async ({

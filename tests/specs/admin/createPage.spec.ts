@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/test.fixture";
+import { test, expect } from "../../../fixtures/test.fixture";
 
 test.describe("WordPress page creation", () => {
   test("Add a new page and verify it is visible", async ({

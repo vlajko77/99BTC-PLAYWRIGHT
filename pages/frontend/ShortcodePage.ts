@@ -1,6 +1,6 @@
 import { Page, expect } from "@playwright/test";
-import { WordPressPostEditor } from "./CreatePost";
-import { renderKeyTakeaways, KeyTakeaways } from "../utils/shortcode";
+import { WordPressPostEditor } from "../admin/CreatePost";
+import { renderKeyTakeaways, KeyTakeaways } from "../../utils/shortcode";
 
 export class ShortcodePage extends WordPressPostEditor {
   constructor(page: Page) {

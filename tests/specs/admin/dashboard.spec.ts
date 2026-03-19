@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/test.fixture";
+import { test, expect } from "../../../fixtures/test.fixture";
 
 test.describe("WordPress Admin Dashboard", () => {
   test.beforeEach(async ({ loginPage: _, dashboardPage }) => {

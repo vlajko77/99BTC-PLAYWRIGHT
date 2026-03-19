@@ -12,16 +12,20 @@ This repository contains E2E tests for the 99Bitcoins WordPress site written in 
 # Project Structure
 
 ```
-tests/specs/           → test specs (organized by feature)
-tests/specs/regression/→ regression test specs
-pages/                 → page objects
-pages/components/      → reusable UI components
-pages/regression/      → page objects for regression tests
+tests/specs/
+  admin/               → WP admin tests (login, dashboard, post/page creation, plugins)
+  frontend/            → frontend rendering tests (shortcodes in posts & pages)
+  regression/          → regression tests (homepage sections, header)
+pages/
+  admin/               → POMs for WP admin (LoginPage, DashboardPage, CreatePost, CreatePage, PluginManagementPage)
+  frontend/            → POMs for frontend (ShortcodePage)
+  regression/          → POMs for regression (HeaderSectionPage, HomePageSectionsPage)
+  BasePage.ts          → shared base class (stays at root)
 fixtures/              → shared test setup (test.fixture.ts)
-data/                  → static test data
-  data/shortcodes.ts   → all shortcode strings, test cases, and Key Takeaways data
-  data/plugins.ts      → plugin configs (slug + name)
-  data/languages.ts    → language configs for header regression tests
+data/
+  shortcodes.ts        → all shortcode strings, test cases, and Key Takeaways data
+  plugins.ts           → plugin configs (slug + name)
+  languages.ts         → language configs for header regression tests
 utils/                 → helpers (login, shortcode rendering, session management)
 docs/                  → manual test plans and documentation
 ```

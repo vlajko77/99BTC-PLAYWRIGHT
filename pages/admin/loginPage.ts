@@ -1,6 +1,6 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "./BasePage";
-import { SessionManager } from "../utils/SessionManager";
+import { BasePage } from "../BasePage";
+import { SessionManager } from "../../utils/SessionManager";
 
 export class LoginPage extends BasePage {
   private readonly usernameInput: Locator;

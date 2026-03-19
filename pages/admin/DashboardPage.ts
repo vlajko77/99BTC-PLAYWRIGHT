@@ -1,5 +1,5 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "./BasePage";
+import { BasePage } from "../BasePage";
 
 export class DashboardPage extends BasePage {
   private readonly dashboardUrl = "https://99bitcoins.local/wp-admin/";

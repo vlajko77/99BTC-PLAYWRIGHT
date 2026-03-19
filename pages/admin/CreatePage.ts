@@ -1,4 +1,4 @@
-import { BasePage } from "./BasePage";
+import { BasePage } from "../BasePage";
 
 export class WordPressPageEditor extends BasePage {
   async gotoNewPage() {
