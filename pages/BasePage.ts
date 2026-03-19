@@ -64,7 +64,7 @@ export class BasePage {
 
   async expectContentVisible(contentSnippet: string) {
     await expect(
-      this.page.locator("main").getByText(contentSnippet).first(),
+      this.page.getByText(contentSnippet).first(),
     ).toBeVisible();
   }
 

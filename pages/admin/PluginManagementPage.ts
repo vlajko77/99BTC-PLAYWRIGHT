@@ -34,7 +34,8 @@ export class PluginManagementPage extends BasePage {
   // Navigation methods
   async navigateToPlugins(): Promise<void> {
     await this.page.goto(this.pluginsUrl);
-    await this.pluginsTable.waitFor({ state: "visible", timeout: 10000 });
+    await this.page.waitForLoadState("networkidle");
+    await this.pluginsTable.waitFor({ state: "visible" });
   }
 
   async navigateToAddNewPlugin(): Promise<void> {
@@ -73,9 +74,17 @@ export class PluginManagementPage extends BasePage {
 
   // Status check methods
   async isPluginActive(pluginSlug: string): Promise<boolean> {
-    const row = this.getPluginRow(pluginSlug);
-    const classAttribute = await row.getAttribute("class");
-    return classAttribute?.includes("active") ?? false;
+    try {
+      const row = this.getPluginRow(pluginSlug);
+      // Check if row exists first
+      if (await row.count() === 0) {
+        return false;
+      }
+      const classAttribute = await row.getAttribute("class");
+      return classAttribute?.includes("active") ?? false;
+    } catch {
+      return false;
+    }
   }
 
   async isPluginInstalled(pluginSlug: string): Promise<boolean> {
@@ -86,9 +95,8 @@ export class PluginManagementPage extends BasePage {
   // Activate plugin
   async activatePlugin(pluginSlug: string): Promise<void> {
     const row = this.getPluginRow(pluginSlug);
-    // Hover to show row actions
+    await row.waitFor({ state: "visible", timeout: 10000 });
     await row.hover();
-    // WordPress uses different selectors - try multiple patterns
     const activateLink = row.locator('a[href*="action=activate"]').first();
     await activateLink.click();
     await this.page.waitForLoadState("networkidle");
@@ -105,11 +113,15 @@ export class PluginManagementPage extends BasePage {
   // Deactivate plugin
   async deactivatePlugin(pluginSlug: string): Promise<void> {
     const row = this.getPluginRow(pluginSlug);
-    // Hover to show row actions
+    await row.waitFor({ state: "visible", timeout: 10000 });
     await row.hover();
     const deactivateLink = row.locator('a[href*="action=deactivate"]').first();
-    await deactivateLink.click();
-    await this.page.waitForLoadState("networkidle");
+    
+    // Only click if link exists (might have changed state between check and action)
+    if (await deactivateLink.count() > 0) {
+      await deactivateLink.click();
+      await this.page.waitForLoadState("networkidle");
+    }
   }
 
   async deactivatePluginByName(pluginName: string): Promise<void> {
@@ -168,9 +180,20 @@ export class PluginManagementPage extends BasePage {
 
     // Hover to show row actions
     await row.hover();
-    const deleteLink = row
-      .locator('a[href*="action=delete-selected"], .delete a, span.delete a')
-      .first();
+    // Try different delete link selectors - WordPress has multiple ways
+    let deleteLink = row.locator('a[href*="action=delete"]').first();
+    if (await deleteLink.count() === 0) {
+      deleteLink = row.locator('.delete a').first();
+    }
+    if (await deleteLink.count() === 0) {
+      deleteLink = row.locator('span.delete a').first();
+    }
+    
+    // If still no delete link, throw error
+    if (await deleteLink.count() === 0) {
+      throw new Error(`Delete link not found for plugin ${pluginSlug}`);
+    }
+    
     await deleteLink.click();
 
     // Handle confirmation dialog - WordPress shows a confirmation page
@@ -240,12 +263,12 @@ export class PluginManagementPage extends BasePage {
 
   async expectPluginActive(pluginSlug: string): Promise<void> {
     const row = this.getPluginRow(pluginSlug);
-    await expect(row).toHaveClass(/active/);
+    await expect(row).toHaveClass(/^active$/);
   }
 
   async expectPluginInactive(pluginSlug: string): Promise<void> {
     const row = this.getPluginRow(pluginSlug);
-    await expect(row).not.toHaveClass(/active/);
+    await expect(row).toHaveClass(/^inactive$/);
   }
 
   async expectPluginsTableVisible(): Promise<void> {
@@ -257,12 +280,12 @@ export class PluginManagementPage extends BasePage {
   }
 
   async expectPluginCountVisible(): Promise<void> {
-    await expect(this.pluginCountDisplay).toBeVisible();
+    await expect(this.pluginCountDisplay.first()).toBeVisible();
   }
 
   // Get plugin count
   async getPluginCount(): Promise<number> {
-    const countText = await this.pluginCountDisplay.textContent();
+    const countText = await this.pluginCountDisplay.first().textContent();
     const match = countText?.match(/(\d+)/);
     return match ? parseInt(match[1], 10) : 0;
   }

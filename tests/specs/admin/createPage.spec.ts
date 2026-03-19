@@ -2,6 +2,7 @@ import { test, expect } from "../../../fixtures/test.fixture";
 
 test.describe("WordPress page creation", () => {
   test("Add a new page and verify it is visible", async ({
+    loginPage: _,
     pageEditor,
     page,
   }) => {
@@ -12,7 +13,12 @@ test.describe("WordPress page creation", () => {
     const randomContent = "Playwright page content. Random: " + Math.random();
 
     await pageEditor.fillTitleAndContent(randomTitle, randomContent);
-    await pageEditor.publishAndNavigate();
+    await pageEditor.publish();
+
+    const permalink = await pageEditor.getPermalink();
+    expect(permalink).toBeTruthy();
+
+    await pageEditor.openPermalink(permalink!);
 
     await expect(page).toHaveURL(/test-page|page_id=/i);
     await pageEditor.expectContentVisible(randomTitle);
