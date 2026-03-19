@@ -82,10 +82,6 @@ export class WordPressAPI {
   }): Promise<WPPost> {
     const requestedStatus = data.status ?? "publish";
 
-    // The theme's save_post hook (nnbtc_prevent_forbidden_category_publish) fires
-    // before the REST API assigns categories. To publish with a valid category, we
-    // first create as draft (so the hook is skipped), then update to the requested
-    // status once categories are persisted in the DB.
     const needsTwoStep = requestedStatus === "publish" && data.categories?.length;
     const createStatus = needsTwoStep ? "draft" : requestedStatus;
 
