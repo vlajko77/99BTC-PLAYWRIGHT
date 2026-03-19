@@ -4,7 +4,10 @@
       "Bash(mysql -u root -proot -h 127.0.0.1 -P 10018 local -e \"SELECT user_id, meta_key, meta_value FROM nuj_usermeta WHERE user_id = 135901 AND meta_key IN \\(''nuj_capabilities'', ''nuj_user_level''\\);\")",
       "Bash(mysql -u root -proot local -e \"SELECT user_id, meta_key, meta_value FROM nuj_usermeta WHERE user_id = 135901 AND meta_key IN \\(''nuj_capabilities'', ''nuj_user_level''\\);\")",
       "Bash(\"/Users/vladimirsimsic/Library/Application Support/Local/lightning-services/mysql-8.0.35+4/bin/darwin-arm64/bin/mysql\" -u root -proot -S \"/Users/vladimirsimsic/Library/Application Support/Local/run/_ofthwFsg/mysql/mysqld.sock\" local -e \"SELECT user_id, meta_key, meta_value FROM nuj_usermeta WHERE user_id = 135901 AND meta_key IN \\(''nuj_capabilities'', ''nuj_user_level''\\);\")",
-      "Bash(\"/Users/vladimirsimsic/Library/Application Support/Local/lightning-services/mysql-8.0.35+4/bin/darwin-arm64/bin/mysql\" -u root -proot -S \"/Users/vladimirsimsic/Library/Application Support/Local/run/_ofthwFsg/mysql/mysqld.sock\" local -e \"SELECT option_name, SUBSTRING\\(option_value, 1, 500\\) FROM nuj_options WHERE option_name LIKE ''%ure%'' OR option_name LIKE ''%user_role%'';\")"
+      "Bash(\"/Users/vladimirsimsic/Library/Application Support/Local/lightning-services/mysql-8.0.35+4/bin/darwin-arm64/bin/mysql\" -u root -proot -S \"/Users/vladimirsimsic/Library/Application Support/Local/run/_ofthwFsg/mysql/mysqld.sock\" local -e \"SELECT option_name, SUBSTRING\\(option_value, 1, 500\\) FROM nuj_options WHERE option_name LIKE ''%ure%'' OR option_name LIKE ''%user_role%'';\")",
+      "mcp__playwright__browser_snapshot",
+      "Read(//private/tmp/**)",
+      "Bash(grep -n \"createPostWithShortcode\" /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/**/*.ts)"
     ]
   }
 }

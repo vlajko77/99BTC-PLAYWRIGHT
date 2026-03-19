@@ -260,7 +260,8 @@ test.describe("Shortcode error handling in WordPress pages", () => {
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 
 test.describe("Shortcode creation on mobile", () => {
-  test.use({ ...devices["iPhone 12"] });
+  const { defaultBrowserType: _, ...iphone12 } = devices["iPhone 12"];
+  test.use(iphone12);
 
   test("Key Takeaways shortcode renders correctly on mobile", async ({
     loginPage: _,

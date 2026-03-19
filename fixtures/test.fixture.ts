@@ -13,6 +13,11 @@ import {
 import { HomePageSectionsPage } from "../pages/regression/HomePageSectionsPage";
 import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
 import { WordPressAPI } from "../utils/WordPressAPI";
+import { QuizzesPage } from "../pages/admin/quizMaker/QuizzesPage";
+import { QuestionsPage } from "../pages/admin/quizMaker/QuestionsPage";
+import { QuizCategoriesPage } from "../pages/admin/quizMaker/QuizCategoriesPage";
+import { ResultsPage } from "../pages/admin/quizMaker/ResultsPage";
+import { GeneralSettingsPage } from "../pages/admin/quizMaker/GeneralSettingsPage";
 
 type Fixtures = {
   screenshotOnFailure: void;
@@ -26,6 +31,11 @@ type Fixtures = {
   languagePage: HeaderSectionPage;
   homePage: HomePageSectionsPage;
   api: WordPressAPI;
+  quizzesPage: QuizzesPage;
+  questionsPage: QuestionsPage;
+  quizCategoriesPage: QuizCategoriesPage;
+  resultsPage: ResultsPage;
+  generalSettingsPage: GeneralSettingsPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -55,6 +65,11 @@ export const test = base.extend<Fixtures>({
   header: async ({ page }, use) => use(new HeaderSectionPage(page)),
   languagePage: async ({ page }, use) => use(new HeaderSectionPage(page)),
   homePage: async ({ page }, use) => use(new HomePageSectionsPage(page)),
+  quizzesPage: async ({ page }, use) => use(new QuizzesPage(page)),
+  questionsPage: async ({ page }, use) => use(new QuestionsPage(page)),
+  quizCategoriesPage: async ({ page }, use) => use(new QuizCategoriesPage(page)),
+  resultsPage: async ({ page }, use) => use(new ResultsPage(page)),
+  generalSettingsPage: async ({ page }, use) => use(new GeneralSettingsPage(page)),
   api: async ({ page, playwright, loginPage: _ }, use) => {
     await page.goto("/wp-admin/");
     await page.waitForLoadState("networkidle");
