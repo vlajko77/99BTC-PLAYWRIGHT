@@ -3,8 +3,7 @@ import { LoginPage } from "../pages/loginPage";
 import { DashboardPage } from "../pages/DashboardPage";
 import { WordPressPageEditor } from "../pages/CreatePage";
 import { WordPressPostEditor } from "../pages/CreatePost";
-import { ShortcodePostPage } from "../pages/ShortcodePostPage";
-import { KeyTakeawaysPage } from "../pages/KeyTakeawaysPage";
+import { ShortcodePage } from "../pages/ShortcodePage";
 import { PluginManagementPage } from "../pages/PluginManagementPage";
 import {
   HeaderSectionPage,
@@ -20,8 +19,7 @@ type Fixtures = {
   dashboardPage: DashboardPage;
   pageEditor: WordPressPageEditor;
   postEditor: WordPressPostEditor;
-  shortcodePostPage: ShortcodePostPage;
-  keyTakeawaysPage: KeyTakeawaysPage;
+  shortcodePage: ShortcodePage;
   pluginPage: PluginManagementPage;
   header: HeaderSectionPage;
   languagePage: HeaderSectionPage;
@@ -50,8 +48,7 @@ export const test = base.extend<Fixtures>({
   dashboardPage: async ({ page }, use) => use(new DashboardPage(page)),
   pageEditor: async ({ page }, use) => use(new WordPressPageEditor(page)),
   postEditor: async ({ page }, use) => use(new WordPressPostEditor(page)),
-  shortcodePostPage: async ({ page }, use) => use(new ShortcodePostPage(page)),
-  keyTakeawaysPage: async ({ page }, use) => use(new KeyTakeawaysPage(page)),
+  shortcodePage: async ({ page }, use) => use(new ShortcodePage(page)),
   pluginPage: async ({ page }, use) => use(new PluginManagementPage(page)),
   header: async ({ page }, use) => use(new HeaderSectionPage(page)),
   languagePage: async ({ page }, use) => use(new HeaderSectionPage(page)),
