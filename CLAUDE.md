@@ -16,6 +16,7 @@ tests/specs/
   admin/               → WP admin tests (login, dashboard, post/page creation, plugins)
   frontend/            → frontend rendering tests (shortcodes in posts & pages)
   regression/          → regression tests (homepage sections, header)
+  api/                 → REST API tests (auth, CRUD, API setup + UI assertion)
 pages/
   admin/               → POMs for WP admin (LoginPage, DashboardPage, CreatePost, CreatePage, PluginManagementPage)
   frontend/            → POMs for frontend (ShortcodePage)
@@ -32,10 +33,11 @@ docs/                  → manual test plans and documentation
 
 # Key Files
 
-- `fixtures/test.fixture.ts` — all fixtures, including `screenshotOnFailure` (auto), `loginPage`, `shortcodePage`, `pluginPage`, `header`, `homePage`
+- `fixtures/test.fixture.ts` — all fixtures, including `screenshotOnFailure` (auto), `loginPage`, `shortcodePage`, `pluginPage`, `header`, `homePage`, `api`
 - `pages/ShortcodePage.ts` — unified POM for shortcode tests (posts + pages + Key Takeaways)
 - `data/shortcodes.ts` — single source of truth for all shortcode test data
 - `utils/shortcode.ts` — `renderKeyTakeaways()` helper and `KeyTakeaways` type
+- `utils/WordPressAPI.ts` — REST API client (`WordPressAPI` class); auth via session cookies + `X-WP-Nonce`
 - `utils/login.ts` — `WP_USERNAME`, `WP_PASSWORD` from env vars
 
 # Testing Principles — Follow AAA pattern

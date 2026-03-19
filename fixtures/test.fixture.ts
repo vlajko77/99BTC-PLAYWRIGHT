@@ -12,6 +12,7 @@ import {
 } from "../pages/regression/HeaderSectionPage";
 import { HomePageSectionsPage } from "../pages/regression/HomePageSectionsPage";
 import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
+import { WordPressAPI } from "../utils/WordPressAPI";
 
 type Fixtures = {
   screenshotOnFailure: void;
@@ -24,6 +25,7 @@ type Fixtures = {
   header: HeaderSectionPage;
   languagePage: HeaderSectionPage;
   homePage: HomePageSectionsPage;
+  api: WordPressAPI;
 };
 
 export const test = base.extend<Fixtures>({
@@ -53,6 +55,23 @@ export const test = base.extend<Fixtures>({
   header: async ({ page }, use) => use(new HeaderSectionPage(page)),
   languagePage: async ({ page }, use) => use(new HeaderSectionPage(page)),
   homePage: async ({ page }, use) => use(new HomePageSectionsPage(page)),
+  api: async ({ page, playwright, loginPage: _ }, use) => {
+    await page.goto("/wp-admin/");
+    await page.waitForLoadState("networkidle");
+    const nonce = await page.evaluate(
+      () => (window as any).wpApiSettings?.nonce ?? "",
+    );
+    if (!nonce) throw new Error("Could not obtain WP REST API nonce from wp-admin — is the user logged in?");
+    const storageState = await page.context().storageState();
+    const apiContext = await playwright.request.newContext({
+      baseURL: process.env.PLAYWRIGHT_BASE_URL || "https://99bitcoins.local",
+      ignoreHTTPSErrors: true,
+      storageState,
+      extraHTTPHeaders: { "X-WP-Nonce": nonce },
+    });
+    await use(new WordPressAPI(apiContext, nonce));
+    await apiContext.dispose();
+  },
 });
 
 export { expect, SUPPORTED_LANGUAGES };
