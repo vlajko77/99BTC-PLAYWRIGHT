@@ -1,5 +1,9 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { WordPressPageEditor } from "../../pages/CreatePage";
+import {
+  MALFORMED_SHORTCODE_CONTENT,
+  MISSING_PARAMS_CONTENT,
+} from "../../data/shortcodeErrors";
 
 test.describe("Shortcode error handling in WordPress", () => {
   async function createPageAndNavigate(
@@ -15,37 +19,14 @@ test.describe("Shortcode error handling in WordPress", () => {
     await pageEditor.openPermalink(permalink!);
   }
 
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test("Page with malformed shortcode handles errors gracefully", async ({
     loginPage: _,
     pageEditor,
     page,
   }) => {
     const randomTitle = "Malformed Shortcode Page " + Date.now();
-    const malformedContent = `
-<p>Valid content at the start of the page.</p>
 
-[key_takeaways]
-Missing title attribute
-[/key_takeaways]
-
-<p>Valid content at the end of the page.</p>
-
-[nonexistent_shortcode_xyz]
-This shortcode does not exist
-[/nonexistent_shortcode_xyz]
-    `.trim();
-
-    await createPageAndNavigate(pageEditor, randomTitle, malformedContent);
+    await createPageAndNavigate(pageEditor, randomTitle, MALFORMED_SHORTCODE_CONTENT);
 
     await page.waitForLoadState("domcontentloaded");
 
@@ -67,18 +48,8 @@ This shortcode does not exist
     page,
   }) => {
     const randomTitle = "Missing Params Page " + Date.now();
-    const content = `
-<p>Introduction paragraph with valid content.</p>
 
-[key_takeaways title="Topics Without Items"]
-  [key_takeaways_list]
-  [/key_takeaways_list]
-[/key_takeaways]
-
-<p>Conclusion paragraph with valid content.</p>
-    `.trim();
-
-    await createPageAndNavigate(pageEditor, randomTitle, content);
+    await createPageAndNavigate(pageEditor, randomTitle, MISSING_PARAMS_CONTENT);
 
     await expect(page).not.toHaveURL(/error|500/i);
 

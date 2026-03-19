@@ -1,5 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { PluginManagementPage } from "../../pages/PluginManagementPage";
+import { CLASSIC_WIDGETS, HEALTH_CHECK } from "../../data/plugins";
 
 test.describe("WordPress Plugin Management", () => {
   async function ensurePluginInstalled(
@@ -15,16 +16,6 @@ test.describe("WordPress Plugin Management", () => {
       await pluginPage.navigateToPlugins();
     }
   }
-
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
 
   test("Navigate to plugins page and verify it loads correctly", async ({
     loginPage: _,
@@ -42,37 +33,31 @@ test.describe("WordPress Plugin Management", () => {
   });
 
   test("Activate a deactivated plugin", async ({ loginPage: _, pluginPage }) => {
-    const testPluginSlug = "classic-widgets";
-    const testPluginName = "Classic Widgets";
+    await ensurePluginInstalled(pluginPage, CLASSIC_WIDGETS.slug, CLASSIC_WIDGETS.name);
 
-    await ensurePluginInstalled(pluginPage, testPluginSlug, testPluginName);
-
-    if (await pluginPage.isPluginActive(testPluginSlug)) {
-      await pluginPage.deactivatePlugin(testPluginSlug);
+    if (await pluginPage.isPluginActive(CLASSIC_WIDGETS.slug)) {
+      await pluginPage.deactivatePlugin(CLASSIC_WIDGETS.slug);
       await pluginPage.navigateToPlugins();
     }
 
-    await pluginPage.expectPluginInactive(testPluginSlug);
-    await pluginPage.activatePlugin(testPluginSlug);
+    await pluginPage.expectPluginInactive(CLASSIC_WIDGETS.slug);
+    await pluginPage.activatePlugin(CLASSIC_WIDGETS.slug);
     await pluginPage.expectPluginActivatedMessage();
-    await pluginPage.expectPluginActive(testPluginSlug);
+    await pluginPage.expectPluginActive(CLASSIC_WIDGETS.slug);
   });
 
   test("Deactivate an active plugin", async ({ loginPage: _, pluginPage }) => {
-    const testPluginSlug = "classic-widgets";
-    const testPluginName = "Classic Widgets";
+    await ensurePluginInstalled(pluginPage, CLASSIC_WIDGETS.slug, CLASSIC_WIDGETS.name);
 
-    await ensurePluginInstalled(pluginPage, testPluginSlug, testPluginName);
-
-    if (!(await pluginPage.isPluginActive(testPluginSlug))) {
-      await pluginPage.activatePlugin(testPluginSlug);
+    if (!(await pluginPage.isPluginActive(CLASSIC_WIDGETS.slug))) {
+      await pluginPage.activatePlugin(CLASSIC_WIDGETS.slug);
       await pluginPage.navigateToPlugins();
     }
 
-    await pluginPage.expectPluginActive(testPluginSlug);
-    await pluginPage.deactivatePlugin(testPluginSlug);
+    await pluginPage.expectPluginActive(CLASSIC_WIDGETS.slug);
+    await pluginPage.deactivatePlugin(CLASSIC_WIDGETS.slug);
     await pluginPage.expectPluginDeactivatedMessage();
-    await pluginPage.expectPluginInactive(testPluginSlug);
+    await pluginPage.expectPluginInactive(CLASSIC_WIDGETS.slug);
   });
 
   test("Install a plugin from WordPress repository", async ({
@@ -80,35 +65,29 @@ test.describe("WordPress Plugin Management", () => {
     pluginPage,
     page,
   }) => {
-    const testPluginSlug = "health-check";
-    const testPluginName = "Health Check";
-
     await pluginPage.navigateToPlugins();
 
-    if (await pluginPage.isPluginInstalled(testPluginSlug)) {
-      await pluginPage.expectPluginInList(testPluginSlug);
+    if (await pluginPage.isPluginInstalled(HEALTH_CHECK.slug)) {
+      await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
       return;
     }
 
     await pluginPage.navigateToAddNewPlugin();
     await expect(page).toHaveURL(/plugin-install\.php/);
 
-    await pluginPage.searchPluginRepository(testPluginName);
-    await pluginPage.installPlugin(testPluginSlug);
+    await pluginPage.searchPluginRepository(HEALTH_CHECK.name);
+    await pluginPage.installPlugin(HEALTH_CHECK.slug);
 
     await pluginPage.navigateToPlugins();
-    await pluginPage.expectPluginInList(testPluginSlug);
+    await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
   });
 
   test("Delete a plugin", async ({ loginPage: _, pluginPage }) => {
-    const testPluginSlug = "health-check";
-    const testPluginName = "Health Check";
+    await ensurePluginInstalled(pluginPage, HEALTH_CHECK.slug, HEALTH_CHECK.name);
 
-    await ensurePluginInstalled(pluginPage, testPluginSlug, testPluginName);
-
-    await pluginPage.expectPluginInList(testPluginSlug);
-    await pluginPage.deletePlugin(testPluginSlug);
+    await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
+    await pluginPage.deletePlugin(HEALTH_CHECK.slug);
     await pluginPage.expectPluginDeletedMessage();
-    await pluginPage.expectPluginNotInList(testPluginSlug);
+    await pluginPage.expectPluginNotInList(HEALTH_CHECK.slug);
   });
 });

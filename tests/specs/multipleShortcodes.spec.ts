@@ -1,17 +1,8 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { renderKeyTakeaways, KeyTakeaways } from "../../utils/shortcode";
+import { renderKeyTakeaways } from "../../utils/shortcode";
+import { multipleShortcodeBlocks } from "../../data/keyTakeaways";
 
 test.describe("Multiple shortcodes in WordPress pages", () => {
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test("Multiple shortcodes render correctly in a single page", async ({
     loginPage: _,
     pageEditor,
@@ -21,32 +12,8 @@ test.describe("Multiple shortcodes in WordPress pages", () => {
 
     await expect(page).toHaveURL(/post-new\.php\?post_type=page/);
 
+    const [firstBlock, secondBlock, thirdBlock] = multipleShortcodeBlocks;
     const randomTitle = "Multiple Shortcodes Page " + Date.now();
-
-    const firstBlock: KeyTakeaways = {
-      title: "Introduction Highlights",
-      items: [
-        "Welcome to our comprehensive guide.",
-        "This section covers the basics.",
-        "Read on for detailed information.",
-      ],
-    };
-
-    const secondBlock: KeyTakeaways = {
-      title: "Advanced Topics",
-      items: [
-        "Deep dive into advanced concepts.",
-        "Expert tips and best practices.",
-        "Common pitfalls to avoid.",
-      ],
-      headingType: "h3",
-    };
-
-    const thirdBlock: KeyTakeaways = {
-      title: "Summary Points",
-      items: ["Key conclusion from this article.", "Next steps for readers."],
-      headingType: "h4",
-    };
 
     const content = `
 ${renderKeyTakeaways(firstBlock)}
@@ -73,7 +40,7 @@ ${renderKeyTakeaways(thirdBlock)}
     await pageEditor.expectContentVisible(secondBlock.title);
     await pageEditor.expectContentVisible(thirdBlock.title);
 
-    for (const block of [firstBlock, secondBlock, thirdBlock]) {
+    for (const block of multipleShortcodeBlocks) {
       for (const item of block.items) {
         await pageEditor.expectContentVisible(item);
       }

@@ -3,22 +3,13 @@ import {
   expect,
   SUPPORTED_LANGUAGES,
 } from "../../../fixtures/test.fixture";
-import type { LanguageConfig } from "../../../fixtures/test.fixture";
+
 import { STAGING_URL } from "../../../utils/login";
+import { TEST_LANGUAGES } from "../../../data/languages";
 
 test.describe("Header", () => {
   test.beforeEach(async ({ header }) => {
     await header.goto(STAGING_URL);
-  });
-
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
   });
 
   test.describe("Logo", () => {
@@ -303,15 +294,7 @@ test.describe("Header", () => {
     });
 
     test.describe("Parameterized Language Switching", () => {
-      const testLanguages: LanguageConfig[] = [
-        { code: "de", name: "Deutsch", urlPath: "/de/", sampleText: "Bitcoin" },
-        { code: "fr", name: "Français", urlPath: "/fr/", sampleText: "Bitcoin" },
-        { code: "es", name: "Español", urlPath: "/es/", sampleText: "Bitcoin" },
-        { code: "it", name: "Italiano", urlPath: "/it/", sampleText: "Bitcoin" },
-        { code: "br", name: "Português", urlPath: "/br/", sampleText: "Bitcoin" },
-      ];
-
-      for (const lang of testLanguages) {
+      for (const lang of TEST_LANGUAGES) {
         test(`switch to ${lang.name} (${lang.code}) and verify URL`, async ({
           languagePage,
           page,

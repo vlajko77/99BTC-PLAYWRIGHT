@@ -1,21 +1,12 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { renderKeyTakeaways } from "../../utils/shortcode";
+import { keyTakeawaysBasic } from "../../data/keyTakeaways";
 import { devices } from "@playwright/test";
 
 // Run tests using mobile device emulation (iPhone 12)
 test.use({ ...devices["iPhone 12"] });
 
 test.describe("WordPress shortcode page creation", () => {
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test("Add a new page with key_takeaways shortcode and verify it is visible", async ({
     loginPage: _,
     pageEditor,
@@ -28,19 +19,9 @@ test.describe("WordPress shortcode page creation", () => {
     const viewport = page.viewportSize();
     expect(viewport?.width).toBeLessThan(500);
 
-    const randomTitle = "Shortcode Page " + Date.now();
-    const data = {
-      title: "Key Takeaways",
-      items: [
-        "First important point about the topic.",
-        "Second important point to remember.",
-        "Third key takeaway for readers.",
-      ],
-    };
+    const shortcode = renderKeyTakeaways(keyTakeawaysBasic);
 
-    const shortcode = renderKeyTakeaways(data);
-
-    await pageEditor.fillTitleAndContent(randomTitle, shortcode);
+    await pageEditor.fillTitleAndContent("Shortcode Page " + Date.now(), shortcode);
     await pageEditor.publish();
 
     const permalink = await pageEditor.getPermalink();
@@ -49,9 +30,9 @@ test.describe("WordPress shortcode page creation", () => {
 
     await expect(page).toHaveURL(/shortcode-page|page_id=/i);
 
-    await pageEditor.expectContentVisible(data.title);
+    await pageEditor.expectContentVisible(keyTakeawaysBasic.title);
 
-    for (const item of data.items) {
+    for (const item of keyTakeawaysBasic.items) {
       await pageEditor.expectContentVisible(item);
     }
   });

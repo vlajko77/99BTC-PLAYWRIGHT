@@ -6,16 +6,6 @@ test.describe("Homepage Sections", () => {
     await homePage.goto(STAGING_URL);
   });
 
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test.describe("Featured Articles", () => {
     test("shows 3 article cards", async ({ homePage }) => {
       await expect(homePage.featuredArticles).toHaveCount(3);

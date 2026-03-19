@@ -1,16 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("WordPress post creation", () => {
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test("Add a new post to 99bitcoins", async ({
     loginPage: _,
     postEditor,

@@ -5,16 +5,6 @@ test.describe("WordPress Admin Dashboard", () => {
     await dashboardPage.navigateToDashboard();
   });
 
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test.describe("Dashboard Load", () => {
     test("should load dashboard and display heading", async ({
       dashboardPage,

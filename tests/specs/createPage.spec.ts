@@ -1,18 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("WordPress page creation", () => {
-  test.beforeEach(async ({ loginPage: _ }) => {});
-
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      const screenshot = await page.screenshot({ fullPage: true });
-      await testInfo.attach("screenshot", {
-        body: screenshot,
-        contentType: "image/png",
-      });
-    }
-  });
-
   test("Add a new page and verify it is visible", async ({
     pageEditor,
     page,
