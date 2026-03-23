@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { MediaLibraryPage } from "../../../pages/admin/MediaLibraryPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { MediaLibraryPage } from "../../pages/admin/MediaLibraryPage";
 
 test.describe("WordPress Media Library", () => {
   let mediaPage: MediaLibraryPage;

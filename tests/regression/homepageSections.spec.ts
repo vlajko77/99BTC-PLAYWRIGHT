@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { STAGING_URL } from "../../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
+import { STAGING_URL } from "../../utils/login";
 
 test.describe("Homepage Sections", () => {
   test.beforeEach(async ({ homePage }) => {

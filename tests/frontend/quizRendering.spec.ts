@@ -1,4 +1,4 @@
-import { test, expect } from "../../../fixtures/test.fixture";
+import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("Frontend — Quiz Rendering", () => {
   test.describe("Quiz shortcode in a post", () => {

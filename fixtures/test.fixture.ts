@@ -1,5 +1,5 @@
 import { test as base, expect } from "@playwright/test";
-import { LoginPage } from "../pages/admin/loginPage";
+import { LoginPage } from "../pages/admin/LoginPage";
 import { DashboardPage } from "../pages/admin/DashboardPage";
 import { WordPressPageEditor } from "../pages/admin/CreatePage";
 import { WordPressPostEditor } from "../pages/admin/CreatePost";

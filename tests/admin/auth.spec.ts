@@ -1,4 +1,4 @@
-import { test, expect } from "../../../fixtures/test.fixture";
+import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("WordPress Authentication & Authorization", () => {
   test.describe("Unauthorized access", () => {

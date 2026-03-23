@@ -37,6 +37,7 @@ export class MediaLibraryPage extends BasePage {
   }
 
   async verifyMediaItemsExist(): Promise<void> {
+    await this.page.waitForLoadState("networkidle");
     const count = await this.getMediaCount();
     expect(count).toBeGreaterThan(0);
   }
@@ -54,6 +55,6 @@ export class MediaLibraryPage extends BasePage {
   }
 
   async verifyFileInputPresent(): Promise<void> {
-    await expect(this.page.locator("input[type='file'], #plupload-upload-ui, .drag-drop")).toBeVisible();
+    await expect(this.page.locator("input[type='file'], #plupload-upload-ui, .drag-drop").first()).toBeVisible();
   }
 }

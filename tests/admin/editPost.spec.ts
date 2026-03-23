@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { EditPostPage } from "../../../pages/admin/EditPostPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { EditPostPage } from "../../pages/admin/EditPostPage";
 
 test.describe("WordPress Post Editing", () => {
   let editPostPage: EditPostPage;
@@ -24,16 +24,12 @@ test.describe("WordPress Post Editing", () => {
   });
 
   test.describe("Post editing", () => {
-    test("can edit a post title and update successfully", async ({ page }) => {
-      // Arrange — create a post first so we have something stable to edit
-      await editPostPage.gotoNewPost();
+    test("can edit a post title and update successfully", async ({ page, api }) => {
+      // Arrange — create a post via API
       const originalTitle = `Edit Me ${Date.now()}`;
-      await editPostPage.fillTitleAndContent(originalTitle, "Original content.");
-      await editPostPage.publish();
-
-      // Navigate to posts list and open for edit
-      await editPostPage.navigateToPostsList();
-      await editPostPage.openPostForEdit(originalTitle);
+      const post = await api.createPost({ title: originalTitle, content: "Original content.", status: "publish" });
+      await page.goto(`/wp-admin/post.php?post=${post.id}&action=edit`);
+      await page.waitForLoadState("domcontentloaded");
 
       // Act — change the title
       const updatedTitle = `Updated ${Date.now()}`;
@@ -42,32 +38,30 @@ test.describe("WordPress Post Editing", () => {
 
       // Assert
       await editPostPage.verifyUpdateSuccess();
+
+      await api.deletePost(post.id);
     });
   });
 
   test.describe("Post status transitions", () => {
-    test("newly created post appears in post list with Published status", async ({ page }) => {
-      await editPostPage.gotoNewPost();
+    test("newly created post appears in post list with Published status", async ({ api }) => {
       const title = `Status Test ${Date.now()}`;
-      await editPostPage.fillTitleAndContent(title, "Status test content.");
-      await editPostPage.publish();
+      const post = await api.createPost({ title, content: "Status test content.", status: "publish" });
 
       await editPostPage.navigateToPostsList();
       await editPostPage.verifyPostInList(title);
+
+      await api.deletePost(post.id);
     });
   });
 
   test.describe("Post deletion", () => {
-    test("can move a post to trash", async ({ page }) => {
-      // Arrange — create a post to delete
-      await editPostPage.gotoNewPost();
+    test("can move a post to trash", async ({ page, api }) => {
+      // Arrange — create a post via API
       const title = `Trash Me ${Date.now()}`;
-      await editPostPage.fillTitleAndContent(title, "This will be trashed.");
-      await editPostPage.publish();
-
-      // Open the post for edit
-      await editPostPage.navigateToPostsList();
-      await editPostPage.openPostForEdit(title);
+      const post = await api.createPost({ title, content: "This will be trashed.", status: "publish" });
+      await page.goto(`/wp-admin/post.php?post=${post.id}&action=edit`);
+      await page.waitForLoadState("domcontentloaded");
 
       // Act — trash it
       await editPostPage.trashCurrentPost();

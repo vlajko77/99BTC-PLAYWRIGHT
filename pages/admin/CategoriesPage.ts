@@ -48,7 +48,11 @@ export class CategoriesPage extends BasePage {
 
   async deleteCategory(name: string): Promise<void> {
     const row = this.categoriesList.locator("tr").filter({ hasText: name });
-    await row.getByRole("link", { name: /delete/i }).click();
+    await row.hover();
+    const deleteLink = row.locator("a.delete-tag");
+    const href = await deleteLink.getAttribute("href");
+    if (!href) throw new Error(`Delete link not found for category: ${name}`);
+    await this.page.goto(href);
     await this.page.waitForLoadState("domcontentloaded");
   }
 

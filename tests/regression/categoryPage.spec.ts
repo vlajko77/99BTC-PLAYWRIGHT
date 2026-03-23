@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { CategoryPage } from "../../../pages/frontend/CategoryPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { CategoryPage } from "../../pages/frontend/CategoryPage";
 
 test.describe("Category Page", () => {
   let categoryPage: CategoryPage;
@@ -18,22 +18,23 @@ test.describe("Category Page", () => {
   });
 
   test("category page shows article cards", async ({ page }) => {
-    const cards = page.locator("article, .nnbtc-card, .post-card");
+    const cards = page.locator(".nnbtc-card");
     const count = await cards.count();
     expect(count).toBeGreaterThan(0);
   });
 
   test("article cards have links", async ({ page }) => {
-    const firstCard = page.locator("article, .nnbtc-card").first();
+    // .nnbtc-card elements are <a> tags — the card itself is the link
+    const firstCard = page.locator(".nnbtc-card").first();
     await expect(firstCard).toBeVisible();
-    const link = firstCard.getByRole("link").first();
-    await expect(link).toBeVisible();
+    const href = await firstCard.getAttribute("href");
+    expect(href).not.toBeNull();
+    expect(href).not.toBe("");
   });
 
   test("each article card link has valid href", async ({ page }) => {
-    const cards = page.locator("article, .nnbtc-card").first();
-    const link = cards.getByRole("link").first();
-    const href = await link.getAttribute("href");
+    const firstCard = page.locator(".nnbtc-card").first();
+    const href = await firstCard.getAttribute("href");
     expect(href).not.toBeNull();
     expect(href).not.toBe("");
   });

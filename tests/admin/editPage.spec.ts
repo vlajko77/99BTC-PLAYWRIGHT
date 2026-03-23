@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { EditPostPage } from "../../../pages/admin/EditPostPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { EditPostPage } from "../../pages/admin/EditPostPage";
 
 test.describe("WordPress Page Editing", () => {
   let editPageHelper: EditPostPage;

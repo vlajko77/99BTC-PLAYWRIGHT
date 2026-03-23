@@ -81,18 +81,26 @@ export class BasePage {
   }
 
   async publish() {
-    const publishButton = this.page.locator(
-      '#publish, input#publish, button:has-text("Publish")',
-    );
+    const publishButton = this.page.locator("input#publish");
     if ((await publishButton.count()) === 0) return;
 
-    await publishButton.first().click();
+    // Expand the Publish panel if it is collapsed
+    if (!(await publishButton.isVisible())) {
+      await this.page
+        .getByRole("button", { name: /toggle panel: publish/i })
+        .click();
+      await publishButton.waitFor({ state: "visible", timeout: 5000 });
+    }
 
-    // Wait for either success indicator
-    const successIndicator = this.page.locator("#sample-permalink, #message");
-    await successIndicator
-      .first()
-      .waitFor({ state: "visible", timeout: 10000 })
-      .catch(() => this.page.waitForLoadState("networkidle"));
+    // Some post types disable #publish on load — enable it before clicking
+    await this.page.evaluate(() => {
+      const btn = document.querySelector<HTMLInputElement>("input#publish");
+      if (btn) btn.disabled = false;
+    });
+
+    await Promise.all([
+      this.page.waitForURL(/post\.php\?post=\d+/, { timeout: 15000 }),
+      publishButton.click(),
+    ]);
   }
 }

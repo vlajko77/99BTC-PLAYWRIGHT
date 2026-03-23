@@ -2,14 +2,12 @@ import { Page, expect, Locator } from "@playwright/test";
 import { WordPressPostEditor } from "./CreatePost";
 
 export class EditPostPage extends WordPressPostEditor {
-  private readonly postsList: Locator;
   private readonly updateButton: Locator;
   private readonly trashLink: Locator;
   private readonly updateNotice: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.postsList = page.locator("#the-list tr.type-post");
     this.updateButton = page.locator("#publish");
     this.trashLink = page.locator("#delete-action a");
     this.updateNotice = page.locator("#message");
@@ -32,8 +30,15 @@ export class EditPostPage extends WordPressPostEditor {
   }
 
   async openPostForEdit(title: string): Promise<void> {
-    const row = this.page.locator("#the-list tr").filter({ hasText: title });
-    await row.getByRole("link", { name: "Edit" }).click();
+    const currentUrl = new URL(this.page.url());
+    const postType = currentUrl.searchParams.get("post_type") || "post";
+    await this.page.goto(
+      `/wp-admin/edit.php?post_type=${postType}&s=${encodeURIComponent(title)}`
+    );
+    await this.page.waitForLoadState("domcontentloaded");
+    const row = this.page.locator("#the-list tr").filter({ hasText: title }).first();
+    await row.hover();
+    await row.locator("a.row-title").click();
     await this.page.waitForLoadState("domcontentloaded");
   }
 
@@ -58,8 +63,14 @@ export class EditPostPage extends WordPressPostEditor {
   }
 
   async verifyPostInList(title: string): Promise<void> {
+    const currentUrl = new URL(this.page.url());
+    const postType = currentUrl.searchParams.get("post_type") || "post";
+    await this.page.goto(
+      `/wp-admin/edit.php?post_type=${postType}&s=${encodeURIComponent(title)}`
+    );
+    await this.page.waitForLoadState("domcontentloaded");
     await expect(
-      this.page.locator("#the-list").getByText(title)
+      this.page.locator("#the-list tr").filter({ hasText: title }).first()
     ).toBeVisible();
   }
 

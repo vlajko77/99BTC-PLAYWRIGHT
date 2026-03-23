@@ -1,6 +1,6 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { FooterPage } from "../../../pages/frontend/FooterPage";
-import { STAGING_URL } from "../../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
+import { FooterPage } from "../../pages/frontend/FooterPage";
+import { STAGING_URL } from "../../utils/login";
 
 test.describe("Footer", () => {
   let footerPage: FooterPage;

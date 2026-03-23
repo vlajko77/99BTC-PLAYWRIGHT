@@ -1,9 +1,9 @@
-import { test, expect } from "../../../fixtures/test.fixture";
+import { test, expect } from "../../fixtures/test.fixture";
 import {
   KEY_TAKEAWAYS_SHORTCODE,
   GREEN_CHECKMARKS_SHORTCODE,
   PROS_AND_CONS_SHORTCODE,
-} from "../../../data/shortcodes";
+} from "../../data/shortcodes";
 
 // ─── Authentication ───────────────────────────────────────────────────────────
 

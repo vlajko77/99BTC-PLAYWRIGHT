@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { MobileNavPage } from "../../../pages/frontend/MobileNavPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { MobileNavPage } from "../../pages/frontend/MobileNavPage";
 
 test.describe("Mobile Navigation", () => {
   let mobileNav: MobileNavPage;
@@ -22,7 +22,7 @@ test.describe("Mobile Navigation", () => {
 
   test("hamburger menu button is visible on mobile", async ({ page }) => {
     const hamburger = page.locator(
-      "button[aria-label*='menu' i], button[class*='hamburger'], button[class*='mobile-menu'], button[class*='nav-toggle']"
+      "img[alt*='menu' i], button[aria-label*='menu' i], button[class*='hamburger'], button[class*='mobile-menu'], button[class*='nav-toggle']"
     ).first();
     // If no hamburger exists, at least verify the nav is accessible
     const isVisible = await hamburger.isVisible().catch(() => false);

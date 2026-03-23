@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { CategoriesPage } from "../../../pages/admin/CategoriesPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { CategoriesPage } from "../../pages/admin/CategoriesPage";
 
 test.describe("WordPress Categories", () => {
   let categoriesPage: CategoriesPage;

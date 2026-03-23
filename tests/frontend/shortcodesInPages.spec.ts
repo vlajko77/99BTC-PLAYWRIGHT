@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { renderKeyTakeaways } from "../../../utils/shortcode";
+import { test, expect } from "../../fixtures/test.fixture";
+import { renderKeyTakeaways } from "../../utils/shortcode";
 import { devices } from "@playwright/test";
 import {
   SHORTCODE_TEST_CASES,
@@ -20,7 +20,7 @@ import {
   keyTakeawaysDefault,
   keyTakeawaysH2,
   keyTakeawaysBasic,
-} from "../../../data/shortcodes";
+} from "../../data/shortcodes";
 
 // ─── Shortcode rendering in pages ─────────────────────────────────────────────
 

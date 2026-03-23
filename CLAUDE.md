@@ -12,7 +12,7 @@ This repository contains E2E tests for the 99Bitcoins WordPress site written in 
 # Project Structure
 
 ```
-tests/specs/
+tests/
   admin/               → WP admin tests (login, dashboard, post/page creation, plugins)
   frontend/            → frontend rendering tests (shortcodes in posts & pages)
   regression/          → regression tests (homepage sections, header)

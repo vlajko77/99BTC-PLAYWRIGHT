@@ -12,7 +12,18 @@
       "Bash(cp /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HeaderSectionPage.ts /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/frontend/HeaderSectionPage.ts)",
       "Bash(cp /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HomePageSectionsPage.ts /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/frontend/HomePageSectionsPage.ts)",
       "Bash(rm /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HeaderSectionPage.ts /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HomePageSectionsPage.ts)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/**)",
+      "Bash(git mv:*)",
+      "Bash(while read:*)",
+      "Bash(do sed:*)",
+      "Bash(git -C /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT status --short)",
+      "Bash(grep -rn STAGING_URL /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/.env*)"
+    ],
+    "additionalDirectories": [
+      "/private/tmp"
     ]
   }
 }

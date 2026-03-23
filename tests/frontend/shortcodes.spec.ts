@@ -1,4 +1,4 @@
-import { test, expect } from "../../../fixtures/test.fixture";
+import { test, expect } from "../../fixtures/test.fixture";
 import {
   SHORTCODE_TEST_CASES,
   CTA_BUTTON_SHORTCODE,
@@ -11,7 +11,7 @@ import {
   HIGHLIGHTED_PARAGRAPH_SHORTCODE,
   KEY_TAKEAWAYS_SHORTCODE,
   COMBINED_SHORTCODES_CONTENT,
-} from "../../../data/shortcodes";
+} from "../../data/shortcodes";
 
 // ─── Shortcode rendering in posts ─────────────────────────────────────────────
 

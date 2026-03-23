@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { SiteSettingsPage } from "../../../pages/admin/SiteSettingsPage";
+import { test, expect } from "../../fixtures/test.fixture";
+import { SiteSettingsPage } from "../../pages/admin/SiteSettingsPage";
 
 test.describe("WordPress Site Settings", () => {
   let settingsPage: SiteSettingsPage;

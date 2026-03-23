@@ -1,4 +1,4 @@
-import { test, expect } from "../../../../fixtures/test.fixture";
+import { test, expect } from "../../../fixtures/test.fixture";
 
 test.describe("Quiz Maker — Results", () => {
   test.beforeEach(async ({ loginPage: _, resultsPage }) => {

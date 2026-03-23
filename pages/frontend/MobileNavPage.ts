@@ -10,7 +10,7 @@ export class MobileNavPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.hamburgerButton = page.locator(
-      "button[aria-label*='menu' i], button[class*='hamburger'], button[class*='mobile-menu'], button[class*='nav-toggle']"
+      "img[alt*='menu' i], button[aria-label*='menu' i], button[class*='hamburger'], button[class*='mobile-menu'], button[class*='nav-toggle']"
     ).first();
     this.mobileMenu = page.locator(
       "[class*='mobile-menu'], [class*='mobile-nav'], nav[class*='mobile']"

@@ -2,10 +2,10 @@ import {
   test,
   expect,
   SUPPORTED_LANGUAGES,
-} from "../../../fixtures/test.fixture";
+} from "../../fixtures/test.fixture";
 
-import { STAGING_URL } from "../../../utils/login";
-import { TEST_LANGUAGES } from "../../../data/languages";
+import { STAGING_URL } from "../../utils/login";
+import { TEST_LANGUAGES } from "../../data/languages";
 
 test.describe("Header", () => {
   test.beforeEach(async ({ header }) => {

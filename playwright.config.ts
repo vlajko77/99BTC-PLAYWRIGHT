@@ -19,8 +19,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Run tests with a single worker locally to avoid overloading local dev servers. */
-  workers: process.env.CI ? 1 : 1,
+  /* Use multiple workers locally; keep CI sequential to avoid resource contention. */
+  workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -50,15 +50,15 @@ export default defineConfig({
       },
     },
 
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
 
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
 
     /* Test against mobile viewports. */
     // {

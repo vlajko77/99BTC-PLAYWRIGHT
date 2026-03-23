@@ -1,5 +1,5 @@
-import { test, expect } from "../../../fixtures/test.fixture";
-import { STAGING_URL } from "../../../utils/login";
+import { test, expect } from "../../fixtures/test.fixture";
+import { STAGING_URL } from "../../utils/login";
 
 test.describe("Article Page", () => {
   test.beforeEach(async ({ page }) => {
@@ -25,7 +25,7 @@ test.describe("Article Page", () => {
   });
 
   test("article page has readable content", async ({ page }) => {
-    const content = page.locator(".entry-content, .post-content, article").first();
+    const content = page.locator(".nnbtc-article-content, main.site-main").first();
     await expect(content).toBeVisible();
     const text = await content.textContent();
     expect(text?.length).toBeGreaterThan(100);
