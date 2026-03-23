@@ -1,4 +1,4 @@
-import { LanguageConfig } from "../pages/regression/HeaderSectionPage";
+import { LanguageConfig } from "../pages/frontend/HeaderSectionPage";
 
 export const TEST_LANGUAGES: LanguageConfig[] = [
   { code: "de", name: "Deutsch", urlPath: "/de/", sampleText: "Bitcoin" },

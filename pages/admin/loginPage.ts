@@ -19,7 +19,7 @@ export class LoginPage extends BasePage {
   }
 
   async goto() {
-    await this.page.goto("https://99bitcoins.local/wp-login.php");
+    await this.page.goto("/wp-login.php");
   }
 
   async login(username: string, password: string) {
@@ -32,7 +32,7 @@ export class LoginPage extends BasePage {
     // Check if valid session exists
     if (await SessionManager.loadSession(this.page.context(), username)) {
       // Verify session is still valid
-      await this.page.goto("https://99bitcoins.local/wp-admin/");
+      await this.page.goto("/wp-admin/");
       if (await this.isLoggedIn()) {
         return;
       }

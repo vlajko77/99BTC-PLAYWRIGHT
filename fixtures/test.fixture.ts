@@ -9,8 +9,8 @@ import {
   HeaderSectionPage,
   SUPPORTED_LANGUAGES,
   LanguageConfig,
-} from "../pages/regression/HeaderSectionPage";
-import { HomePageSectionsPage } from "../pages/regression/HomePageSectionsPage";
+} from "../pages/frontend/HeaderSectionPage";
+import { HomePageSectionsPage } from "../pages/frontend/HomePageSectionsPage";
 import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
 import { WordPressAPI } from "../utils/WordPressAPI";
 import { QuizzesPage } from "../pages/admin/quizMaker/QuizzesPage";
@@ -18,6 +18,15 @@ import { QuestionsPage } from "../pages/admin/quizMaker/QuestionsPage";
 import { QuizCategoriesPage } from "../pages/admin/quizMaker/QuizCategoriesPage";
 import { ResultsPage } from "../pages/admin/quizMaker/ResultsPage";
 import { GeneralSettingsPage } from "../pages/admin/quizMaker/GeneralSettingsPage";
+import { EditPostPage } from "../pages/admin/EditPostPage";
+import { MediaLibraryPage } from "../pages/admin/MediaLibraryPage";
+import { CategoriesPage } from "../pages/admin/CategoriesPage";
+import { SiteSettingsPage } from "../pages/admin/SiteSettingsPage";
+import { FooterPage } from "../pages/frontend/FooterPage";
+import { ArticlePage } from "../pages/frontend/ArticlePage";
+import { SearchPage } from "../pages/frontend/SearchPage";
+import { CategoryPage } from "../pages/frontend/CategoryPage";
+import { MobileNavPage } from "../pages/frontend/MobileNavPage";
 
 type Fixtures = {
   screenshotOnFailure: void;
@@ -36,6 +45,15 @@ type Fixtures = {
   quizCategoriesPage: QuizCategoriesPage;
   resultsPage: ResultsPage;
   generalSettingsPage: GeneralSettingsPage;
+  editPostPage: EditPostPage;
+  mediaLibraryPage: MediaLibraryPage;
+  categoriesPage: CategoriesPage;
+  siteSettingsPage: SiteSettingsPage;
+  footerPage: FooterPage;
+  articlePage: ArticlePage;
+  searchPage: SearchPage;
+  categoryPage: CategoryPage;
+  mobileNavPage: MobileNavPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -70,6 +88,15 @@ export const test = base.extend<Fixtures>({
   quizCategoriesPage: async ({ page }, use) => use(new QuizCategoriesPage(page)),
   resultsPage: async ({ page }, use) => use(new ResultsPage(page)),
   generalSettingsPage: async ({ page }, use) => use(new GeneralSettingsPage(page)),
+  editPostPage: async ({ page }, use) => use(new EditPostPage(page)),
+  mediaLibraryPage: async ({ page }, use) => use(new MediaLibraryPage(page)),
+  categoriesPage: async ({ page }, use) => use(new CategoriesPage(page)),
+  siteSettingsPage: async ({ page }, use) => use(new SiteSettingsPage(page)),
+  footerPage: async ({ page }, use) => use(new FooterPage(page)),
+  articlePage: async ({ page }, use) => use(new ArticlePage(page)),
+  searchPage: async ({ page }, use) => use(new SearchPage(page)),
+  categoryPage: async ({ page }, use) => use(new CategoryPage(page)),
+  mobileNavPage: async ({ page }, use) => use(new MobileNavPage(page)),
   api: async ({ page, playwright, loginPage: _ }, use) => {
     await page.goto("/wp-admin/");
     await page.waitForLoadState("networkidle");

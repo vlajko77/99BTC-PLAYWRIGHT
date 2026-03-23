@@ -2,7 +2,7 @@ import { Page, expect, Locator } from "@playwright/test";
 import { BasePage } from "../BasePage";
 
 export class DashboardPage extends BasePage {
-  private readonly dashboardUrl = "https://99bitcoins.local/wp-admin/";
+  private readonly dashboardUrl = "/wp-admin/";
 
   // Admin bar elements
   private readonly adminBar: Locator;

@@ -7,7 +7,12 @@
       "Bash(\"/Users/vladimirsimsic/Library/Application Support/Local/lightning-services/mysql-8.0.35+4/bin/darwin-arm64/bin/mysql\" -u root -proot -S \"/Users/vladimirsimsic/Library/Application Support/Local/run/_ofthwFsg/mysql/mysqld.sock\" local -e \"SELECT option_name, SUBSTRING\\(option_value, 1, 500\\) FROM nuj_options WHERE option_name LIKE ''%ure%'' OR option_name LIKE ''%user_role%'';\")",
       "mcp__playwright__browser_snapshot",
       "Read(//private/tmp/**)",
-      "Bash(grep -n \"createPostWithShortcode\" /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/**/*.ts)"
+      "Bash(grep -n \"createPostWithShortcode\" /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/**/*.ts)",
+      "Bash(find /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT -maxdepth 3 -type d ! -path */node_modules* ! -path */.git* ! -path */.playwright-mcp* ! -path */test-results* ! -path */playwright-report*)",
+      "Bash(cp /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HeaderSectionPage.ts /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/frontend/HeaderSectionPage.ts)",
+      "Bash(cp /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HomePageSectionsPage.ts /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/frontend/HomePageSectionsPage.ts)",
+      "Bash(rm /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HeaderSectionPage.ts /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/pages/regression/HomePageSectionsPage.ts)",
+      "Bash(done)"
     ]
   }
 }

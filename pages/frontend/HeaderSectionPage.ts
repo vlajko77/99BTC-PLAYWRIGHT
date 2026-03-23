@@ -98,7 +98,7 @@ export class HeaderSectionPage extends BasePage {
   async clickBitcoinHistoricalPrice() {
     await this.bitcoinMenuLink.hover();
     await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: 5000 });
-    await this.bitcoinSubMenuLink.dispatchEvent("click");
+    await this.bitcoinSubMenuLink.click();
   }
 
   async search(query: string) {
@@ -126,7 +126,7 @@ export class HeaderSectionPage extends BasePage {
     await this.openLanguageDropdown();
     await this.languageDropdown
       .getByRole("link", { name: languageName, exact: true })
-      .dispatchEvent("click");
+      .click();
   }
 
   async verifyLanguageDropdownVisible(): Promise<void> {
