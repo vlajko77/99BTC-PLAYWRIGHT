@@ -28,7 +28,11 @@
       "Bash(CI=true npx playwright test --project=chromium --list)",
       "Bash(CI=true npx playwright test --grep @smoke --project=chromium --list)",
       "Bash(gh workflow:*)",
-      "Bash(gh run:*)"
+      "Bash(gh run:*)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "additionalDirectories": [
       "/private/tmp",
