@@ -1,10 +1,8 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { STAGING_URL } from "../../utils/login";
 
 test.describe("Article Page", () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to a known article path
-    await page.goto(STAGING_URL);
+    await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
     const articleLink = page.locator(".nnbtc-news a, .nnbtc-topstories a").first();
     await articleLink.click();
