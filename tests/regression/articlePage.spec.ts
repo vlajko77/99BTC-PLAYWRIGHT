@@ -11,7 +11,7 @@ test.describe("Article Page", () => {
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("article page has main content area", async ({ page }) => {
+  test("article page has main content area", { tag: "@smoke" }, async ({ page }) => {
     await expect(page.locator("main.site-main")).toBeVisible();
   });
 

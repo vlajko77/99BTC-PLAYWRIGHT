@@ -23,7 +23,8 @@
       "Bash(grep -rn STAGING_URL /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/.env*)",
       "Bash(ls ~/Local/Sites/99bitcoins/app/public/wp-content/uploads/2026/03/test-upload*)",
       "Bash(find ~/Local/Sites/99bitcoins/app/public/wp-content/uploads -name test-upload*)",
-      "Bash(find ~/Local -name test-upload*)"
+      "Bash(find ~/Local -name test-upload*)",
+      "Bash(node -e \"const p = require\\(''./node_modules/@playwright/test/package.json''\\); console.log\\(p.version\\)\")"
     ],
     "additionalDirectories": [
       "/private/tmp",

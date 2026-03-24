@@ -12,7 +12,7 @@ test.describe("Header", () => {
     await header.goto(STAGING_URL);
   });
 
-  test.describe("Logo", () => {
+  test.describe("Logo", { tag: "@smoke" }, () => {
     test("clicking logo navigates to home and shows site title", async ({
       page,
     }) => {

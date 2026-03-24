@@ -10,7 +10,10 @@ export class HomePageSectionsPage extends BasePage {
   readonly topStoriesItems: Locator;
 
   readonly crashCourseSection: Locator;
+  readonly crashCourseSectionH1: Locator;
   readonly crashCourseHeading: Locator;
+  readonly crashCourseBenefits: Locator;
+  readonly crashCourseTrustpilot: Locator;
   readonly crashCourseName: Locator;
   readonly crashCourseEmail: Locator;
   readonly crashCourseSubmit: Locator;
@@ -51,9 +54,16 @@ export class HomePageSectionsPage extends BasePage {
     this.topStoriesItems = this.topStoriesSection.getByRole("link");
 
     this.crashCourseSection = page.locator(".crash-course");
+    this.crashCourseSectionH1 = page.getByRole("heading", {
+      name: /Improve Your Bitcoin Knowledge/i,
+    });
     this.crashCourseHeading = page.getByRole("heading", {
       name: "Free Bitcoin Crash Course",
     });
+    this.crashCourseBenefits = this.crashCourseSection.locator("li");
+    this.crashCourseTrustpilot = this.crashCourseSection.getByText(
+      /Rated Excellent on Trustpilot/i,
+    );
     this.crashCourseName = this.crashCourseSection.getByRole("textbox", {
       name: "Your name",
     });

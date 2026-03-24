@@ -5,7 +5,7 @@ import {
 } from "../../pages/frontend/PresalesToplistPage";
 
 test.describe("Crypto Presales Navigation", () => {
-  test("Crypto Presales nav item is visible", async ({ page }) => {
+  test("Crypto Presales nav item is visible", { tag: "@smoke" }, async ({ page }) => {
     const toplistPage = new PresalesToplistPage(page);
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");

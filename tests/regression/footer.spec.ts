@@ -11,7 +11,7 @@ test.describe("Footer", () => {
     await footerPage.scrollToFooter();
   });
 
-  test("footer is visible on homepage", async ({ page }) => {
+  test("footer is visible on homepage", { tag: "@smoke" }, async ({ page }) => {
     const footer = page.locator("footer");
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
@@ -49,5 +49,47 @@ test.describe("Footer", () => {
     await footer.scrollIntoViewIfNeeded();
     const copyrightText = await footer.textContent();
     expect(copyrightText).toMatch(/99Bitcoins|\d{4}/);
+  });
+
+  test.describe("Newsletter", () => {
+    test.beforeEach(async ({ footerPage }) => {
+      await footerPage.scrollToFooter();
+    });
+
+    test("newsletter heading is visible", async ({ footerPage }) => {
+      await expect(footerPage.newsletterSection).toBeVisible();
+    });
+
+    test("email input is present", async ({ footerPage }) => {
+      await expect(footerPage.newsletterEmailInput).toBeVisible();
+    });
+
+    test("subscribe button is present", async ({ footerPage }) => {
+      await expect(footerPage.newsletterSubmitButton).toBeVisible();
+    });
+
+    test('"Sign up for bitcoin crash course" checkbox is present', async ({
+      footerPage,
+    }) => {
+      await expect(footerPage.newsletterCrashCourseCheckbox).toBeVisible();
+    });
+
+    test("email input accepts a valid email address", async ({ footerPage }) => {
+      await footerPage.newsletterEmailInput.fill("test@example.com");
+      await expect(footerPage.newsletterEmailInput).toHaveValue(
+        "test@example.com",
+      );
+    });
+
+    test("crash course checkbox is unchecked by default", async ({
+      footerPage,
+    }) => {
+      await expect(footerPage.newsletterCrashCourseCheckbox).not.toBeChecked();
+    });
+
+    test("crash course checkbox can be checked", async ({ footerPage }) => {
+      await footerPage.newsletterCrashCourseCheckbox.click({ force: true });
+      await expect(footerPage.newsletterCrashCourseCheckbox).toBeChecked();
+    });
   });
 });

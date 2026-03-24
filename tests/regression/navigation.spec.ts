@@ -7,7 +7,7 @@ test.describe("Site Navigation", () => {
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test.describe("Main Navigation", () => {
+  test.describe("Main Navigation", { tag: "@smoke" }, () => {
     test("primary navigation is visible", async ({ page }) => {
       const nav = page.locator("nav, header nav, .main-nav, .primary-navigation").first();
       await expect(nav).toBeVisible();

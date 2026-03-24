@@ -6,7 +6,7 @@ test.describe("Homepage Sections", () => {
     await homePage.goto(STAGING_URL);
   });
 
-  test.describe("Featured Articles", () => {
+  test.describe("Featured Articles", { tag: "@smoke" }, () => {
     test("shows 3 article cards", async ({ homePage }) => {
       await expect(homePage.featuredArticles).toHaveCount(3);
     });
@@ -45,8 +45,12 @@ test.describe("Homepage Sections", () => {
   });
 
   test.describe("Crash Course", () => {
-    test("section heading is visible", async ({ homePage }) => {
+    test("section heading is visible", { tag: "@smoke" }, async ({ homePage }) => {
       await expect(homePage.crashCourseHeading).toBeVisible();
+    });
+
+    test("section H1 title is visible", async ({ homePage }) => {
+      await expect(homePage.crashCourseSectionH1).toBeVisible();
     });
 
     test("name field, email field and submit button are visible", async ({
@@ -55,6 +59,31 @@ test.describe("Homepage Sections", () => {
       await expect(homePage.crashCourseName).toBeVisible();
       await expect(homePage.crashCourseEmail).toBeVisible();
       await expect(homePage.crashCourseSubmit).toBeVisible();
+    });
+
+    test("benefits list has 3 items", async ({ homePage }) => {
+      await expect(homePage.crashCourseBenefits).toHaveCount(3);
+    });
+
+    test("benefits list items contain expected text", async ({ homePage }) => {
+      const items = homePage.crashCourseBenefits;
+      await expect(items.nth(0)).toContainText("100,000");
+      await expect(items.nth(1)).toContainText("One email a day");
+      await expect(items.nth(2)).toContainText("Short and educational");
+    });
+
+    test("Trustpilot rating text is visible", async ({ homePage }) => {
+      await expect(homePage.crashCourseTrustpilot).toBeVisible();
+    });
+
+    test("name field accepts input", async ({ homePage }) => {
+      await homePage.crashCourseName.fill("Test User");
+      await expect(homePage.crashCourseName).toHaveValue("Test User");
+    });
+
+    test("email field accepts input", async ({ homePage }) => {
+      await homePage.crashCourseEmail.fill("test@example.com");
+      await expect(homePage.crashCourseEmail).toHaveValue("test@example.com");
     });
   });
 

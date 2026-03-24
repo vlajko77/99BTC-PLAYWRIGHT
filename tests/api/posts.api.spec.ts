@@ -7,7 +7,7 @@ import {
 
 // ─── Authentication ───────────────────────────────────────────────────────────
 
-test.describe("REST API — Authentication", () => {
+test.describe("REST API — Authentication", { tag: "@smoke" }, () => {
   test("session is valid and user is an administrator", async ({ api }) => {
     const user = await api.getCurrentUser();
 
@@ -19,7 +19,7 @@ test.describe("REST API — Authentication", () => {
 
 // ─── Posts — read ─────────────────────────────────────────────────────────────
 
-test.describe("REST API — Posts (read)", () => {
+test.describe("REST API — Posts (read)", { tag: "@smoke" }, () => {
   test("GET /posts returns published posts with required fields", async ({ api }) => {
     const posts = await api.getPosts({ status: "publish", per_page: "5" });
 

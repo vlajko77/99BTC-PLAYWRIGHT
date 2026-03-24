@@ -9,7 +9,7 @@ test.describe("Category Page", () => {
     await categoryPage.navigate("bitcoin");
   });
 
-  test("category page loads with main content area", async ({ page }) => {
+  test("category page loads with main content area", { tag: "@smoke" }, async ({ page }) => {
     await expect(page.locator("main")).toBeVisible();
   });
 
