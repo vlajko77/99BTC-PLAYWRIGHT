@@ -32,7 +32,8 @@
       "Bash(echo \"EXIT: $?\")",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(grep -v \"^$\")"
     ],
     "additionalDirectories": [
       "/private/tmp",
