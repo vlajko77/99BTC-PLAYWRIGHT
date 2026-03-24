@@ -13,6 +13,7 @@ test.describe("Homepage Sections", () => {
     test("each card has an image and title", async ({ homePage }) => {
       const articles = homePage.featuredArticles;
       const count = await articles.count();
+      expect(count).toBeGreaterThan(0);
 
       for (let i = 0; i < count; i++) {
         const card = articles.nth(i);
