@@ -14,8 +14,8 @@ export default defineConfig({
   /* Skip visual regression on CI — snapshots are platform-specific (darwin).
      To enable on CI: run npm run test:visual:update on Linux, commit the *-linux.png files. */
   testIgnore: process.env.CI ? ["**/visualRegression.spec.ts"] : [],
-  /* Increase per-test timeout to accommodate slower local environments */
-  timeout: 120000,
+  /* Per-test timeout: 60s on CI, 120s locally */
+  timeout: process.env.CI ? 60000 : 120000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
