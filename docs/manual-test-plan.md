@@ -3,7 +3,7 @@
 **Project:** 99Bitcoins WordPress Site
 **Environment:** Local (`https://99bitcoins.local`) / Staging (`https://staging.99bitcoins.com`)
 **Prepared by:** QA Team
-**Date:** 2026-03-19
+**Date:** 2026-03-24
 
 ---
 
@@ -22,6 +22,13 @@
    - [TS-07 Shortcodes in Pages](#ts-07-shortcodes-in-pages)
    - [TS-08 Homepage Sections (Regression)](#ts-08-homepage-sections-regression)
    - [TS-09 Header Section (Regression)](#ts-09-header-section-regression)
+   - [TS-10 Media Library](#ts-10-media-library)
+   - [TS-11 Crypto Presales Toplist](#ts-11-crypto-presales-toplist)
+   - [TS-12 Article Page (Regression)](#ts-12-article-page-regression)
+   - [TS-13 Category Page (Regression)](#ts-13-category-page-regression)
+   - [TS-14 Mobile Navigation](#ts-14-mobile-navigation)
+   - [TS-15 Search Results (Regression)](#ts-15-search-results-regression)
+   - [TS-16 Visual Regression](#ts-16-visual-regression)
 5. [Test Summary](#5-test-summary)
 
 ---
@@ -37,8 +44,15 @@ This document covers manual verification of the 99Bitcoins WordPress site across
 | Content Creation | Posts and pages |
 | Plugin Management | Install, activate, deactivate, delete |
 | Shortcodes | Rendering in posts and pages |
+| Media Library | Upload and manage media files |
 | Homepage (Regression) | All homepage sections |
 | Header (Regression) | Navigation, search, language switching |
+| Article Page (Regression) | Content, author info, trust section |
+| Category Page (Regression) | Article cards, links |
+| Mobile Navigation | Hamburger menu, mobile layout |
+| Search Results | Query results, article cards |
+| Crypto Presales Toplist | Navigation, submenu, per-page toplist |
+| Visual Regression | Full-page and component screenshots |
 
 ---
 
@@ -49,8 +63,8 @@ This document covers manual verification of the 99Bitcoins WordPress site across
 | Local | `https://99bitcoins.local` | Development testing |
 | Staging | `https://staging.99bitcoins.com` | Pre-release regression |
 
-**Browser:** Chrome (latest)
-**Additional device:** iPhone 12 (for mobile shortcode tests)
+**Browsers:** Chrome, Firefox, Safari (WebKit)
+**Additional device:** iPhone 12 (for mobile shortcode and navigation tests)
 
 ---
 
@@ -1256,6 +1270,403 @@ This document covers manual verification of the 99Bitcoins WordPress site across
 
 ---
 
+### TS-10 Media Library
+
+**Objective:** Verify the WordPress Media Library loads, displays existing media, and supports file uploads.
+
+**Spec:** `tests/admin/mediaLibrary.spec.ts`
+
+---
+
+#### TC-10-01 — Media Library Page Loads
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+| **Preconditions** | User is logged in |
+
+**Steps:**
+1. Navigate to `/wp-admin/upload.php`
+2. Observe the page
+
+**Expected Result:**
+- URL contains `upload.php`
+- "Media Library" heading is visible
+
+---
+
+#### TC-10-02 — Media Library Contains Existing Items
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | Medium |
+| **Preconditions** | User is logged in, at least one media item exists |
+
+**Steps:**
+1. Navigate to `/wp-admin/upload.php`
+2. Wait for page to load fully
+3. Count media items
+
+**Expected Result:**
+- At least one media item (`.attachments .attachment` or table row) is visible
+
+---
+
+#### TC-10-03 — Add New Media Page Loads
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | Medium |
+| **Preconditions** | User is logged in |
+
+**Steps:**
+1. Navigate to `/wp-admin/media-new.php`
+
+**Expected Result:**
+- URL contains `media-new.php`
+- "Upload New Media" heading is visible
+
+---
+
+#### TC-10-04 — File Upload Input is Present
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | Medium |
+| **Preconditions** | User is logged in |
+
+**Steps:**
+1. Navigate to `/wp-admin/media-new.php`
+2. Locate the file upload area
+
+**Expected Result:**
+- A file input (`input[type='file']`) or drag-drop area is visible
+
+---
+
+#### TC-10-05 — Upload a PNG File
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+| **Preconditions** | User is logged in; a test PNG file is available |
+
+**Steps:**
+1. Navigate to `/wp-admin/media-new.php`
+2. Upload a PNG file via the drag-drop area
+3. Wait for the upload to complete
+
+**Expected Result:**
+- The uploaded filename appears in the upload area (`.media-item .filename.new`)
+- Upload completes without error
+
+**Cleanup:**
+- Delete the uploaded media via the REST API (`DELETE /wp-json/wp/v2/media/{id}?force=true`) after the test
+
+---
+
+### TS-11 Crypto Presales Toplist
+
+**Objective:** Verify the Crypto Presales navigation and all six presales toplist pages work correctly.
+
+**Spec:** `tests/regression/presalesToplist.spec.ts`
+**POM:** `pages/frontend/PresalesToplistPage.ts`
+
+---
+
+#### TC-11-01 — Presales Nav Item Visible
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps:**
+1. Navigate to the homepage
+2. Look for "Crypto Presales" in the main navigation (`nav.btc-header__nav`)
+
+**Expected Result:**
+- "Crypto Presales" link is visible in the desktop navigation
+
+---
+
+#### TC-11-02 — Hover Reveals Submenu
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps:**
+1. Hover over "Crypto Presales" in the navigation
+2. Observe the submenu
+
+**Expected Result:**
+- All 6 submenu links are visible:
+  - Crypto Presales
+  - Next 1000x Crypto
+  - Best Crypto to Buy
+  - Best Solana Meme Coins
+  - Best Meme Coin ICOs
+  - Next Crypto to Hit $1
+
+---
+
+#### TC-11-03 — Submenu Navigation (All 6 Pages)
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps (repeat for each submenu link):**
+1. Hover over "Crypto Presales" nav item
+2. Click the submenu link
+3. Verify navigation and page content
+
+| Page | URL |
+|------|-----|
+| Crypto Presales | `/cryptocurrency/crypto-presales/` |
+| Next 1000x Crypto | `/cryptocurrency/next-1000x-crypto/` |
+| Best Crypto to Buy | `/cryptocurrency/best-crypto-to-buy/` |
+| Best Solana Meme Coins | `/cryptocurrency/best-solana-meme-coins/` |
+| Best Meme Coin ICOs | `/cryptocurrency/best-meme-coin-icos/` |
+| Next Crypto to Hit $1 | `/cryptocurrency/next-crypto-to-hit-1-dollar/` |
+
+**Expected Result (per page):**
+- URL matches the expected path
+- Page has an H1 heading
+- Toplist wrapper (`.cbm-presale-toplist__wrapper`) is visible
+- At least 1 offer (`.cbm-presale-toplist__offer`) is rendered
+- Each offer has: title link, logo image, CTA button
+- CTA button `href` is a non-empty valid URL
+- Offer title text is non-empty
+
+---
+
+### TS-12 Article Page (Regression)
+
+**Objective:** Verify that individual article pages render the expected content structure.
+
+**Spec:** `tests/regression/articlePage.spec.ts`
+
+---
+
+#### TC-12-01 — Article Page Structure
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps:**
+1. Navigate to any published article URL
+2. Observe page content
+
+**Expected Result:**
+- Main content area (`main.site-main` or `.nnbtc-article-content`) is visible
+- Page has an H1 title
+- Author information is present
+- Readable body content is visible
+- Trust section is visible on the page
+
+---
+
+### TS-13 Category Page (Regression)
+
+**Objective:** Verify that category archive pages display article cards with valid links.
+
+**Spec:** `tests/regression/categoryPage.spec.ts`
+
+---
+
+#### TC-13-01 — Category Page Structure
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps:**
+1. Navigate to `/category/bitcoin/`
+2. Observe the page content
+
+**Expected Result:**
+- Main content area is visible
+- Page has a heading
+- At least one article card (`.nnbtc-card`) is present
+- Article cards are `<a>` elements with non-empty `href` attributes linking to article pages
+
+---
+
+### TS-14 Mobile Navigation
+
+**Objective:** Verify that the site header, logo, and hamburger menu are accessible on a mobile viewport.
+
+**Spec:** `tests/regression/mobileNav.spec.ts`
+
+---
+
+#### TC-14-01 — Mobile Header Elements
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+| **Preconditions** | Viewport set to 375×812 (mobile) |
+
+**Steps:**
+1. Navigate to the homepage at mobile viewport
+2. Observe the header
+
+**Expected Result:**
+- Header is visible
+- 99Bitcoins logo is visible
+- Hamburger menu button (`img[alt*='menu' i]` or equivalent) is visible
+- Site title is present in the page
+
+---
+
+### TS-15 Search Results (Regression)
+
+**Objective:** Verify that the search results page returns relevant content and displays article cards.
+
+**Spec:** `tests/regression/searchResults.spec.ts`
+
+---
+
+#### TC-15-01 — Search Results Page
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps:**
+1. Navigate to `/?s=bitcoin`
+2. Wait for the page to fully load (AJAX results)
+
+**Expected Result:**
+- URL contains `?s=bitcoin`
+- Main content area is visible
+- At least one article card (`.nnbtc-card`) is rendered after AJAX loads
+
+---
+
+#### TC-15-02 — No Results Message
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | Medium |
+
+**Steps:**
+1. Navigate to `/?s=xyznonexistent123`
+
+**Expected Result:**
+- A "no results", "nothing found", or "not found" message is visible
+
+---
+
+### TS-16 Visual Regression
+
+**Objective:** Verify that key pages and components match their approved visual baseline screenshots.
+
+**Spec:** `tests/regression/visualRegression.spec.ts`
+**Snapshots:** `tests/regression/visualRegression.spec.ts-snapshots/`
+
+**Notes:**
+- Baselines are captured once with `--update-snapshots` and committed to the repo
+- Dynamic content (live prices, dates, ads, tickers, countdown timers) is masked before comparison
+- Tolerance: `threshold: 0.2` (per-pixel colour), `maxDiffPixelRatio: 0.05` (5 % of pixels)
+- Run with `npx playwright test tests/regression/visualRegression.spec.ts --update-snapshots` to regenerate baselines after intentional UI changes
+
+---
+
+#### TC-16-01 — Homepage Full Page
+
+| Field | Detail |
+|-------|--------|
+| **Priority** | High |
+
+**Steps:**
+1. Navigate to `/`
+2. Wait for `networkidle`
+3. Take a full-page screenshot
+
+**Expected Result:** Screenshot matches `homepage-full-chromium-darwin.png` within tolerance
+
+---
+
+#### TC-16-02 — Homepage Header
+
+**Steps:** Navigate to `/` → wait for `networkidle` → screenshot `.btc-header`
+**Expected Result:** Matches `homepage-header-chromium-darwin.png`
+
+---
+
+#### TC-16-03 — Homepage Footer
+
+**Steps:** Navigate to `/` → wait for `networkidle` → screenshot `footer`
+**Expected Result:** Matches `homepage-footer-chromium-darwin.png` (tolerance: 10 %)
+
+---
+
+#### TC-16-04 — Category Page — Bitcoin
+
+**Steps:** Navigate to `/category/bitcoin/` → full-page screenshot
+**Expected Result:** Matches `category-bitcoin-full-chromium-darwin.png`
+
+---
+
+#### TC-16-05 — Crypto Presales Toplist Full Page
+
+**Steps:** Navigate to `/cryptocurrency/crypto-presales/` → wait for first offer → full-page screenshot
+**Expected Result:** Matches `presales-toplist-full-chromium-darwin.png`
+
+---
+
+#### TC-16-06 — Presales Toplist Widget
+
+**Steps:** Navigate to `/cryptocurrency/crypto-presales/` → screenshot `.cbm-presale-toplist__wrapper`
+**Expected Result:** Matches `presales-toplist-widget-chromium-darwin.png`
+
+---
+
+#### TC-16-07 — Best Crypto to Buy Full Page
+
+**Steps:** Navigate to `/cryptocurrency/best-crypto-to-buy/` → wait for first offer → full-page screenshot
+**Expected Result:** Matches `best-crypto-to-buy-full-chromium-darwin.png`
+
+---
+
+#### TC-16-08 — Article Page Full Page
+
+**Steps:** Navigate via homepage news link → full-page screenshot
+**Expected Result:** Matches `article-page-full-chromium-darwin.png`
+
+---
+
+#### TC-16-09 — Search Results Full Page
+
+**Steps:** Navigate to `/?s=bitcoin` → full-page screenshot
+**Expected Result:** Matches `search-results-bitcoin-full-chromium-darwin.png`
+
+---
+
+#### TC-16-10 — 404 Page Full Page
+
+**Steps:** Navigate to `/this-page-does-not-exist-404-test/` → full-page screenshot
+**Expected Result:** Matches `404-full-chromium-darwin.png`
+
+---
+
+#### TC-16-11 — Homepage Mobile Full Page
+
+**Steps:** Set viewport to 375×812 → navigate to `/` → full-page screenshot
+**Expected Result:** Matches `homepage-mobile-full-chromium-darwin.png`
+
+---
+
+#### TC-16-12 — Homepage Mobile Header
+
+**Steps:** Set viewport to 375×812 → navigate to `/` → screenshot `header`
+**Expected Result:** Matches `homepage-mobile-header-chromium-darwin.png`
+
+---
+
 ## 5. Test Summary
 
 ### Test Count by Suite
@@ -1271,7 +1682,14 @@ This document covers manual verification of the 99Bitcoins WordPress site across
 | TS-07 Shortcodes in Pages | 23 | High–Medium |
 | TS-08 Homepage Sections | 7 | High–Medium |
 | TS-09 Header Section | 19 | High–Low |
-| **Total** | **82** | |
+| TS-10 Media Library | 5 | High–Medium |
+| TS-11 Crypto Presales Toplist | 8 (nav) + 36 (per-page) | High |
+| TS-12 Article Page | 1 | High |
+| TS-13 Category Page | 1 | High |
+| TS-14 Mobile Navigation | 1 | High |
+| TS-15 Search Results | 2 | High–Medium |
+| TS-16 Visual Regression | 12 | High–Medium |
+| **Total** | **142** | |
 
 ### Coverage Matrix
 
@@ -1288,3 +1706,12 @@ This document covers manual verification of the 99Bitcoins WordPress site across
 | Header / navigation | ✅ | ✅ |
 | Language switching | ✅ | ✅ |
 | Mobile rendering | ✅ | ✅ |
+| Media library | ✅ | ✅ |
+| Media file upload | ✅ | ✅ |
+| Crypto Presales toplist | ✅ | ✅ |
+| Article page | ✅ | ✅ |
+| Category page | ✅ | ✅ |
+| Mobile navigation | ✅ | ✅ |
+| Search results | ✅ | ✅ |
+| Visual regression | ✅ | ❌ |
+| Firefox / WebKit cross-browser | ✅ | ❌ |

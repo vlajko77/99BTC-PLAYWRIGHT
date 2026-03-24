@@ -1,23 +1,12 @@
 import { Page, expect, Locator } from "@playwright/test";
 import { BasePage } from "../BasePage";
-import path from "path";
 
 export class MediaLibraryPage extends BasePage {
-  private readonly addNewButton: Locator;
-  private readonly fileInput: Locator;
   private readonly mediaItems: Locator;
-  private readonly bulkSelectButton: Locator;
-  private readonly bulkActionSelect: Locator;
-  private readonly applyBulkAction: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.addNewButton = page.getByRole("link", { name: /add new/i }).first();
-    this.fileInput = page.locator("input[type='file']");
     this.mediaItems = page.locator(".attachments .attachment, .wp-list-table tbody tr");
-    this.bulkSelectButton = page.getByRole("link", { name: /bulk select/i });
-    this.bulkActionSelect = page.locator("#bulk-action-selector-top");
-    this.applyBulkAction = page.locator("#doaction");
   }
 
   async navigate(): Promise<void> {
@@ -56,5 +45,20 @@ export class MediaLibraryPage extends BasePage {
 
   async verifyFileInputPresent(): Promise<void> {
     await expect(this.page.locator("input[type='file'], #plupload-upload-ui, .drag-drop").first()).toBeVisible();
+  }
+
+  async uploadFile(filePath: string): Promise<void> {
+    // Plupload exposes a visible HTML5 file input inside the drag-drop zone
+    await this.page.locator(".drag-drop input[type='file']").setInputFiles(filePath);
+    // Wait for the upload to finish — plupload adds .filename.new once the server confirms
+    await this.page
+      .locator(".media-item .filename.new")
+      .waitFor({ state: "visible", timeout: 15000 });
+  }
+
+  async verifyUploadSuccess(filename: string): Promise<void> {
+    await expect(
+      this.page.locator(".media-item .filename.new", { hasText: filename })
+    ).toBeVisible();
   }
 }

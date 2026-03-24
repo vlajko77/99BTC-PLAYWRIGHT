@@ -20,6 +20,14 @@ export interface WPPage {
   slug: string;
 }
 
+export interface WPMedia {
+  id: number;
+  title: { rendered: string };
+  source_url: string;
+  media_type: string;
+  slug: string;
+}
+
 export interface WPPlugin {
   plugin: string;
   name: string;
@@ -134,6 +142,23 @@ export class WordPressAPI {
 
   async deletePage(id: number): Promise<void> {
     await this.request.delete(`/wp-json/wp/v2/pages/${id}?force=true`, {
+      headers: this.authHeaders,
+    });
+  }
+
+  // ─── Media ─────────────────────────────────────────────────────────────────
+
+  async findMedia(search: string): Promise<WPMedia[]> {
+    const res = await this.request.get(
+      `/wp-json/wp/v2/media?search=${encodeURIComponent(search)}&per_page=20`,
+      { headers: this.authHeaders }
+    );
+    if (!res.ok()) throw new Error(`GET /media failed: ${res.status()}`);
+    return res.json();
+  }
+
+  async deleteMedia(id: number): Promise<void> {
+    await this.request.delete(`/wp-json/wp/v2/media/${id}?force=true`, {
       headers: this.authHeaders,
     });
   }

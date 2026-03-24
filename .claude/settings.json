@@ -20,10 +20,14 @@
       "Bash(while read:*)",
       "Bash(do sed:*)",
       "Bash(git -C /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT status --short)",
-      "Bash(grep -rn STAGING_URL /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/.env*)"
+      "Bash(grep -rn STAGING_URL /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/.env*)",
+      "Bash(ls ~/Local/Sites/99bitcoins/app/public/wp-content/uploads/2026/03/test-upload*)",
+      "Bash(find ~/Local/Sites/99bitcoins/app/public/wp-content/uploads -name test-upload*)",
+      "Bash(find ~/Local -name test-upload*)"
     ],
     "additionalDirectories": [
-      "/private/tmp"
+      "/private/tmp",
+      "/Users/vladimirsimsic/Local/99bitcoins/app/public/wp-content/uploads/2026/03"
     ]
   }
 }
