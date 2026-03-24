@@ -26,7 +26,9 @@
       "Bash(find ~/Local -name test-upload*)",
       "Bash(node -e \"const p = require\\(''./node_modules/@playwright/test/package.json''\\); console.log\\(p.version\\)\")",
       "Bash(CI=true npx playwright test --project=chromium --list)",
-      "Bash(CI=true npx playwright test --grep @smoke --project=chromium --list)"
+      "Bash(CI=true npx playwright test --grep @smoke --project=chromium --list)",
+      "Bash(gh workflow:*)",
+      "Bash(gh run:*)"
     ],
     "additionalDirectories": [
       "/private/tmp",
