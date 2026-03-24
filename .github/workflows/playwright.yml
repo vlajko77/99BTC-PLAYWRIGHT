@@ -102,9 +102,9 @@ jobs:
         run: npx playwright install-deps chromium
 
       - name: Run full regression
+        # Runs only tests/regression — admin/api/frontend require a local WP instance
         # visualRegression.spec.ts is auto-excluded on CI via testIgnore in playwright.config.ts
-        # (snapshots are platform-specific; darwin baselines won't match Linux runner)
-        run: npm run test:full
+        run: npm run test:ci
 
       - name: Upload full report
         uses: actions/upload-artifact@v4

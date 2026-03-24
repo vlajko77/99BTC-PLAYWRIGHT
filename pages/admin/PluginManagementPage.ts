@@ -3,9 +3,8 @@ import { BasePage } from "../BasePage";
 
 export class PluginManagementPage extends BasePage {
   // URLs
-  private readonly pluginsUrl = "https://99bitcoins.local/wp-admin/plugins.php";
-  private readonly addNewPluginUrl =
-    "https://99bitcoins.local/wp-admin/plugin-install.php";
+  private readonly pluginsUrl = "/wp-admin/plugins.php";
+  private readonly addNewPluginUrl = "/wp-admin/plugin-install.php";
 
   // Selectors - Plugins List Page
   private readonly pluginsTable: Locator;

@@ -2,8 +2,8 @@ import { Page, expect, Locator } from "@playwright/test";
 import { BasePage } from "../../BasePage";
 
 export class QuestionsPage extends BasePage {
-  private readonly listUrl = "https://99bitcoins.local/wp-admin/admin.php?page=quiz-maker-questions";
-  private readonly addUrl = "https://99bitcoins.local/wp-admin/admin.php?page=quiz-maker-questions&action=add";
+  private readonly listUrl = "/wp-admin/admin.php?page=quiz-maker-questions";
+  private readonly addUrl = "/wp-admin/admin.php?page=quiz-maker-questions&action=add";
 
   // List page
   private readonly questionsTable: Locator;

@@ -2,7 +2,7 @@ import { Page, expect, Locator } from "@playwright/test";
 import { BasePage } from "../../BasePage";
 
 export class QuizzesPage extends BasePage {
-  private readonly url = "https://99bitcoins.local/wp-admin/admin.php?page=quiz-maker";
+  private readonly url = "/wp-admin/admin.php?page=quiz-maker";
 
   // List page
   private readonly addNewButton: Locator;

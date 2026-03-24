@@ -6,6 +6,7 @@
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke --project=chromium --retries=0",
     "test:full": "playwright test --project=chromium",
+    "test:ci": "playwright test tests/regression --project=chromium",
     "test:visual": "playwright test tests/regression/visualRegression.spec.ts --project=chromium",
     "test:visual:update": "playwright test tests/regression/visualRegression.spec.ts --project=chromium --update-snapshots",
     "test:headed": "playwright test --headed",
