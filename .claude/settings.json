@@ -24,7 +24,9 @@
       "Bash(ls ~/Local/Sites/99bitcoins/app/public/wp-content/uploads/2026/03/test-upload*)",
       "Bash(find ~/Local/Sites/99bitcoins/app/public/wp-content/uploads -name test-upload*)",
       "Bash(find ~/Local -name test-upload*)",
-      "Bash(node -e \"const p = require\\(''./node_modules/@playwright/test/package.json''\\); console.log\\(p.version\\)\")"
+      "Bash(node -e \"const p = require\\(''./node_modules/@playwright/test/package.json''\\); console.log\\(p.version\\)\")",
+      "Bash(CI=true npx playwright test --project=chromium --list)",
+      "Bash(CI=true npx playwright test --grep @smoke --project=chromium --list)"
     ],
     "additionalDirectories": [
       "/private/tmp",

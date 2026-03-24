@@ -11,6 +11,9 @@ const storageStatePath = fs.existsSync("auth/storageState.json")
 
 export default defineConfig({
   testDir: "./tests",
+  /* Skip visual regression on CI — snapshots are platform-specific (darwin).
+     To enable on CI: run npm run test:visual:update on Linux, commit the *-linux.png files. */
+  testIgnore: process.env.CI ? ["**/visualRegression.spec.ts"] : [],
   /* Increase per-test timeout to accommodate slower local environments */
   timeout: 120000,
   /* Run tests in files in parallel */
