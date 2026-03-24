@@ -33,6 +33,10 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
     // If a saved storage state exists, use it to run tests as an authenticated user
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE || storageStatePath,
+    // HTTP Basic Auth for staging environments (ignored when env vars are not set)
+    ...(process.env.STAGING_HTTP_USER && process.env.STAGING_HTTP_PASS
+      ? { httpCredentials: { username: process.env.STAGING_HTTP_USER, password: process.env.STAGING_HTTP_PASS } }
+      : {}),
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",

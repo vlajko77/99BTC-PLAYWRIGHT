@@ -20,6 +20,8 @@ env:
   PLAYWRIGHT_BASE_URL: ${{ secrets.PLAYWRIGHT_BASE_URL }}
   WP_USERNAME: ${{ secrets.WP_USERNAME }}
   WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
+  STAGING_HTTP_USER: ${{ secrets.STAGING_HTTP_USER }}
+  STAGING_HTTP_PASS: ${{ secrets.STAGING_HTTP_PASS }}
 
 jobs:
   smoke:
