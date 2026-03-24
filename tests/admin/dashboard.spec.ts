@@ -5,7 +5,7 @@ test.describe("WordPress Admin Dashboard", () => {
     await dashboardPage.navigateToDashboard();
   });
 
-  test.describe("Dashboard Load", { tag: "@smoke" }, () => {
+  test.describe("Dashboard Load", () => {
     test("should load dashboard and display heading", async ({
       dashboardPage,
     }) => {

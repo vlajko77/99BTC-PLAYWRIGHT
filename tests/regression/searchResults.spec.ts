@@ -1,9 +1,8 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { STAGING_URL } from "../../utils/login";
 
 test.describe("Search Results", () => {
   test("search returns results for bitcoin", async ({ header, page }) => {
-    await header.goto(STAGING_URL);
+    await header.goto("/");
     await header.search("bitcoin");
 
     await expect(page).toHaveURL(/[?&]s=bitcoin/i);
@@ -11,7 +10,7 @@ test.describe("Search Results", () => {
   });
 
   test("search results page has a content area", async ({ header, page }) => {
-    await header.goto(STAGING_URL);
+    await header.goto("/");
     await header.search("bitcoin");
 
     await expect(page).toHaveURL(/[?&]s=bitcoin/i);
@@ -22,7 +21,7 @@ test.describe("Search Results", () => {
     header,
     page,
   }) => {
-    await header.goto(STAGING_URL);
+    await header.goto("/");
     await header.search("xyznonexistent99btcabc");
 
     await expect(page).toHaveURL(/s=xyznonexistent99btcabc/i);
@@ -32,7 +31,7 @@ test.describe("Search Results", () => {
   });
 
   test("search results contain article cards", async ({ header, page }) => {
-    await header.goto(STAGING_URL);
+    await header.goto("/");
     await header.search("bitcoin");
 
     await expect(page).toHaveURL(/[?&]s=bitcoin/i);

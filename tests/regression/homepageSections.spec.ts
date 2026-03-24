@@ -1,9 +1,8 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { STAGING_URL } from "../../utils/login";
 
 test.describe("Homepage Sections", () => {
   test.beforeEach(async ({ homePage }) => {
-    await homePage.goto(STAGING_URL);
+    await homePage.goto("/");
   });
 
   test.describe("Featured Articles", { tag: "@smoke" }, () => {

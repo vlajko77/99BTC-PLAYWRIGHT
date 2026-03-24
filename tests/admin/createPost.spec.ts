@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("WordPress post creation", { tag: "@smoke" }, () => {
+test.describe("WordPress post creation", () => {
   test("Add a new post to 99bitcoins", async ({
     loginPage: _,
     postEditor,

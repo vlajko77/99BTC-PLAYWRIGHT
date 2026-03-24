@@ -1,9 +1,8 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { STAGING_URL } from "../../utils/login";
 
 test.describe("Site Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(STAGING_URL);
+    await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
   });
 

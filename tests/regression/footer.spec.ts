@@ -1,13 +1,12 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { FooterPage } from "../../pages/frontend/FooterPage";
-import { STAGING_URL } from "../../utils/login";
 
 test.describe("Footer", () => {
   let footerPage: FooterPage;
 
   test.beforeEach(async ({ page }) => {
     footerPage = new FooterPage(page);
-    await page.goto(STAGING_URL);
+    await page.goto("/");
     await footerPage.scrollToFooter();
   });
 

@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("WordPress Authentication & Authorization", () => {
-  test.describe("Unauthorized access", { tag: "@smoke" }, () => {
+  test.describe("Unauthorized access", () => {
     test("accessing wp-admin without session redirects to login page", async ({ page }) => {
       // Clear cookies to simulate logged-out state
       await page.context().clearCookies();
@@ -41,7 +41,7 @@ test.describe("WordPress Authentication & Authorization", () => {
     });
   });
 
-  test.describe("Authenticated access", { tag: "@smoke" }, () => {
+  test.describe("Authenticated access", () => {
     test("authenticated user can access wp-admin", async ({ loginPage: _, page }) => {
       await page.goto("/wp-admin/");
       await expect(page).toHaveURL(/wp-admin\/?$/);

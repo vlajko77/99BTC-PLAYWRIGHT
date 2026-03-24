@@ -4,12 +4,11 @@ import {
   SUPPORTED_LANGUAGES,
 } from "../../fixtures/test.fixture";
 
-import { STAGING_URL } from "../../utils/login";
 import { TEST_LANGUAGES } from "../../data/languages";
 
 test.describe("Header", () => {
   test.beforeEach(async ({ header }) => {
-    await header.goto(STAGING_URL);
+    await header.goto("/");
   });
 
   test.describe("Logo", { tag: "@smoke" }, () => {
