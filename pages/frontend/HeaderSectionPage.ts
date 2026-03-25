@@ -71,7 +71,8 @@ export class HeaderSectionPage extends BasePage {
     this.bitcoinSubMenuLink = this.page.locator("#menu-item-180726 a");
     this.bestWalletButton = this.page
       .locator("header")
-      .getByRole("link", { name: "Download Best Wallet!", exact: true });
+      .locator('a[href*="bestwallet"]')
+      .first();
     this.languageIcon = this.page.getByRole("img", {
       name: "99Bitcoins Languages",
     });

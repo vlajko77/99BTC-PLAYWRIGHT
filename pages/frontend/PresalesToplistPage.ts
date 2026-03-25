@@ -60,7 +60,7 @@ export class PresalesToplistPage extends BasePage {
     await this.page.goto(path);
     await this.page.waitForLoadState("domcontentloaded");
     // Wait for first offer to appear (toplist data may load after DOMContentLoaded)
-    await this.offers.first().waitFor({ state: "visible", timeout: 15000 });
+    await this.offers.first().waitFor({ state: "visible", timeout: 30000 });
   }
 
   async hoverNavPresales(): Promise<void> {
