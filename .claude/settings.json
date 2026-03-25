@@ -37,7 +37,10 @@
       "Bash(gh secret:*)",
       "Bash(grep -r \"toHaveURL\\\\|Error\\\\|failed\\\\|expect\\\\|shortcode\" /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/playwright-report/data/*.md)",
       "Bash(ls -la /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/.env*)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "Bash(find /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/playwright-report/ -name *.json)",
+      "Bash(grep -l \"lang-dropdown\\\\|language.*drop\\\\|drop.*language\" /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/playwright-report/data/*.md)",
+      "Read(//dev/**)"
     ],
     "additionalDirectories": [
       "/private/tmp",
