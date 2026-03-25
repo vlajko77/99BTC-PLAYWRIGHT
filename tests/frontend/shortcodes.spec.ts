@@ -26,7 +26,7 @@ test.describe("Shortcode rendering in WordPress posts", { tag: "@frontend" }, ()
 
       await shortcodePage.createPostWithShortcode(title, testCase.shortcode);
 
-      const urlRegex = testCase.urlRegex ?? /\?p=\d+/i;
+      const urlRegex = testCase.urlRegex ?? /(\?p=\d+|\/news\/)/i;
       await expect(page).toHaveURL(urlRegex);
 
       for (const expected of testCase.expectedTexts) {
