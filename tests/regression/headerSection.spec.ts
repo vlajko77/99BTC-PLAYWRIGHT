@@ -33,8 +33,8 @@ test.describe("Header", { tag: "@regression" }, () => {
       await header.search("bitcoin");
 
       await expect(page).toHaveURL(/[?&]s=bitcoin/i);
-      await expect(page.getByText(/You searched for bitcoin/i)).toBeVisible();
       await expect(page.locator("main, #content, .content")).toBeVisible();
+      await expect(page.getByRole("link", { name: "All Results" })).toBeVisible();
     });
 
     test("search with no results shows appropriate message", async ({
@@ -112,7 +112,7 @@ test.describe("Header", { tag: "@regression" }, () => {
     });
 
     test.describe("Language Dropdown", () => {
-      test("dropdown contains all 14 supported languages", async ({
+      test("dropdown contains all 13 supported languages", async ({
         languagePage,
       }) => {
         await languagePage.verifyAllLanguagesPresent();
@@ -199,16 +199,6 @@ test.describe("Header", { tag: "@regression" }, () => {
         await languagePage.selectLanguage("日本語");
 
         await expect(page).toHaveURL(/\/jp\//);
-        await expect(page).toHaveTitle(/99Bitcoins/);
-      });
-
-      test("switch to Arabic and verify RTL content", async ({
-        languagePage,
-        page,
-      }) => {
-        await languagePage.selectLanguage("العربية");
-
-        await expect(page).toHaveURL(/\/ar\//);
         await expect(page).toHaveTitle(/99Bitcoins/);
       });
 

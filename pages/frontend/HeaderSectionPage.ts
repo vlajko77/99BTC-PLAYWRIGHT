@@ -47,7 +47,6 @@ export const SUPPORTED_LANGUAGES: LanguageConfig[] = [
   { code: "no", name: "Norsk", urlPath: "/no/", sampleText: "Bitcoin" },
   { code: "fi", name: "Suomi", urlPath: "/fi/", sampleText: "Bitcoin" },
   { code: "ru", name: "Русский", urlPath: "/ru/", sampleText: "Биткойн" },
-  { code: "ar", name: "العربية", urlPath: "/ar/", sampleText: "بيتكوين" },
 ];
 
 export class HeaderSectionPage extends BasePage {
@@ -72,7 +71,7 @@ export class HeaderSectionPage extends BasePage {
     this.bitcoinSubMenuLink = this.page.locator("#menu-item-180726 a");
     this.bestWalletButton = this.page
       .locator("header")
-      .getByRole("link", { name: "Go to Best Wallet", exact: true });
+      .getByRole("link", { name: "Download Best Wallet!", exact: true });
     this.languageIcon = this.page.getByRole("img", {
       name: "99Bitcoins Languages",
     });

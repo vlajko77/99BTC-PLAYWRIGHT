@@ -40,7 +40,8 @@
       "Bash(npm test:*)",
       "Bash(find /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/playwright-report/ -name *.json)",
       "Bash(grep -l \"lang-dropdown\\\\|language.*drop\\\\|drop.*language\" /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/playwright-report/data/*.md)",
-      "Read(//dev/**)"
+      "Read(//dev/**)",
+      "Bash(ls /Users/vladimirsimsic/local/99BTC-PLAYWRIGHT/playwright-report/data/*.md)"
     ],
     "additionalDirectories": [
       "/private/tmp",
