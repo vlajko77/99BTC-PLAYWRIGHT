@@ -2,7 +2,7 @@ import { test, expect } from "../../fixtures/test.fixture";
 import { PluginManagementPage } from "../../pages/admin/PluginManagementPage";
 import { CLASSIC_WIDGETS, HEALTH_CHECK } from "../../data/plugins";
 
-test.describe("WordPress Plugin Management", () => {
+test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
   async function ensurePluginInstalled(
     pluginPage: PluginManagementPage,
     slug: string,

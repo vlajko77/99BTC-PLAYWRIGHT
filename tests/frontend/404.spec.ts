@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("404 Error Page", () => {
+test.describe("404 Error Page", { tag: "@frontend" }, () => {
   test("navigating to a non-existent URL returns 404 page", { tag: "@smoke" }, async ({ page }) => {
     const response = await page.goto("/this-page-definitely-does-not-exist-xyz-123");
     expect(response?.status()).toBe(404);

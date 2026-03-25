@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("Homepage Editor's Picks", () => {
+test.describe("Homepage Editor's Picks", { tag: "@regression" }, () => {
   test.beforeEach(async ({ homePage }) => {
     await homePage.goto("/");
   });

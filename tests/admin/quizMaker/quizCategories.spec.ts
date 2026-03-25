@@ -1,6 +1,6 @@
 import { test } from "../../../fixtures/test.fixture";
 
-test.describe("Quiz Maker — Quiz Categories", () => {
+test.describe("Quiz Maker — Quiz Categories", { tag: "@admin" }, () => {
   test.beforeEach(async ({ loginPage: _, quizCategoriesPage }) => {
     await quizCategoriesPage.navigate();
   });

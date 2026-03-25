@@ -24,7 +24,7 @@ import {
 
 // ─── Shortcode rendering in pages ─────────────────────────────────────────────
 
-test.describe("Shortcode rendering in WordPress pages", () => {
+test.describe("Shortcode rendering in WordPress pages", { tag: "@frontend" }, () => {
   for (const testCase of SHORTCODE_TEST_CASES) {
     test(`renders ${testCase.name} shortcode correctly`, async ({
       loginPage: _,
@@ -51,7 +51,7 @@ test.describe("Shortcode rendering in WordPress pages", () => {
 
 // ─── Aesthetic shortcodes in pages ────────────────────────────────────────────
 
-test.describe("Aesthetic Shortcodes in pages", () => {
+test.describe("Aesthetic Shortcodes in pages", { tag: "@frontend" }, () => {
   test("CTA Button shortcode renders correctly", async ({ loginPage: _, shortcodePage, page }) => {
     await shortcodePage.createPageWithShortcode("CTA Button Test " + crypto.randomUUID(), CTA_BUTTON_SHORTCODE);
 
@@ -136,7 +136,7 @@ test.describe("Aesthetic Shortcodes in pages", () => {
 
 // ─── Key Takeaways shortcode ──────────────────────────────────────────────────
 
-test.describe("Key Takeaways Shortcode", () => {
+test.describe("Key Takeaways Shortcode", { tag: "@frontend" }, () => {
   test("renders with h3 heading type", async ({ loginPage: _, shortcodePage, page }) => {
     await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Test " + Date.now(), keyTakeawaysH3);
     await shortcodePage.navigateToPublishedPage();
@@ -167,7 +167,7 @@ test.describe("Key Takeaways Shortcode", () => {
 
 // ─── Multiple shortcodes on one page ─────────────────────────────────────────
 
-test.describe("Multiple shortcodes in WordPress pages", () => {
+test.describe("Multiple shortcodes in WordPress pages", { tag: "@frontend" }, () => {
   test("Multiple shortcodes render correctly in a single page", async ({
     loginPage: _,
     shortcodePage,
@@ -210,7 +210,7 @@ ${renderKeyTakeaways(thirdBlock)}
 
 // ─── Error handling ───────────────────────────────────────────────────────────
 
-test.describe("Shortcode error handling in WordPress pages", () => {
+test.describe("Shortcode error handling in WordPress pages", { tag: "@frontend" }, () => {
   test("Page with malformed shortcode handles errors gracefully", async ({
     loginPage: _,
     shortcodePage,
@@ -259,7 +259,7 @@ test.describe("Shortcode error handling in WordPress pages", () => {
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 
-test.describe("Shortcode creation on mobile", () => {
+test.describe("Shortcode creation on mobile", { tag: ["@frontend", "@mobile"] }, () => {
   const { defaultBrowserType: _, ...iphone12 } = devices["iPhone 12"];
   test.use(iphone12);
 

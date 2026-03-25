@@ -6,7 +6,7 @@ import {
 
 import { TEST_LANGUAGES } from "../../data/languages";
 
-test.describe("Header", () => {
+test.describe("Header", { tag: "@regression" }, () => {
   test.beforeEach(async ({ header }) => {
     await header.goto("/");
   });

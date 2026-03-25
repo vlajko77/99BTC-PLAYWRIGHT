@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("Search Results", () => {
+test.describe("Search Results", { tag: "@regression" }, () => {
   test("search returns results for bitcoin", async ({ header, page }) => {
     await header.goto("/");
     await header.search("bitcoin");

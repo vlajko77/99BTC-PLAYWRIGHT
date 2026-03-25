@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { CategoriesPage } from "../../pages/admin/CategoriesPage";
 
-test.describe("WordPress Categories", () => {
+test.describe("WordPress Categories", { tag: "@admin" }, () => {
   let categoriesPage: CategoriesPage;
 
   test.beforeEach(async ({ loginPage: _, page }) => {

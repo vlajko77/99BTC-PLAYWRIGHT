@@ -4,7 +4,7 @@ import {
   PRESALES_SUBMENU_PAGES,
 } from "../../pages/frontend/PresalesToplistPage";
 
-test.describe("Crypto Presales Navigation", () => {
+test.describe("Crypto Presales Navigation", { tag: "@regression" }, () => {
   test("Crypto Presales nav item is visible", { tag: "@smoke" }, async ({ page }) => {
     const toplistPage = new PresalesToplistPage(page);
     await page.goto("/");
@@ -48,7 +48,7 @@ test.describe("Crypto Presales Navigation", () => {
   }
 });
 
-test.describe("Presales Toplist — per page", () => {
+test.describe("Presales Toplist — per page", { tag: "@regression" }, () => {
   for (const submenuPage of PRESALES_SUBMENU_PAGES) {
     test.describe(submenuPage.name, () => {
       let toplistPage: PresalesToplistPage;

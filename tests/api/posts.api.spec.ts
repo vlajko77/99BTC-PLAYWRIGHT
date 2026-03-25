@@ -7,7 +7,7 @@ import {
 
 // ─── Authentication ───────────────────────────────────────────────────────────
 
-test.describe("REST API — Authentication", () => {
+test.describe("REST API — Authentication", { tag: "@api" }, () => {
   test("session is valid and user is an administrator", async ({ api }) => {
     const user = await api.getCurrentUser();
 
@@ -19,7 +19,7 @@ test.describe("REST API — Authentication", () => {
 
 // ─── Posts — read ─────────────────────────────────────────────────────────────
 
-test.describe("REST API — Posts (read)", () => {
+test.describe("REST API — Posts (read)", { tag: "@api" }, () => {
   test("GET /posts returns published posts with required fields", async ({ api }) => {
     const posts = await api.getPosts({ status: "publish", per_page: "5" });
 
@@ -46,7 +46,7 @@ test.describe("REST API — Posts (read)", () => {
 // Category 1 (Uncategorized) is forbidden by theme — use a valid category.
 const TEST_CATEGORY_ID = 47; // "News"
 
-test.describe("REST API — Posts (write)", () => {
+test.describe("REST API — Posts (write)", { tag: "@api" }, () => {
   test("POST /posts creates a post and DELETE removes it", async ({ api }) => {
     const title = `API Test Post ${Date.now()}`;
 
@@ -72,7 +72,7 @@ test.describe("REST API — Posts (write)", () => {
 
 // ─── API setup + UI assertion (shortcode rendering) ───────────────────────────
 
-test.describe("REST API — shortcode rendering in posts", () => {
+test.describe("REST API — shortcode rendering in posts", { tag: "@api" }, () => {
   let postId: number;
 
   test.afterEach(async ({ api }) => {
@@ -142,7 +142,7 @@ test.describe("REST API — shortcode rendering in posts", () => {
 
 // ─── Pages — read ─────────────────────────────────────────────────────────────
 
-test.describe("REST API — Pages (read)", () => {
+test.describe("REST API — Pages (read)", { tag: "@api" }, () => {
   test("GET /pages returns published pages with required fields", async ({ api }) => {
     const pages = await api.getPages({ status: "publish", per_page: "5" });
 
@@ -157,7 +157,7 @@ test.describe("REST API — Pages (read)", () => {
 
 // ─── Pages — API setup + UI assertion ─────────────────────────────────────────
 
-test.describe("REST API — shortcode rendering in pages", () => {
+test.describe("REST API — shortcode rendering in pages", { tag: "@api" }, () => {
   let pageId: number;
 
   test.afterEach(async ({ api }) => {
@@ -185,7 +185,7 @@ test.describe("REST API — shortcode rendering in pages", () => {
 
 // ─── Plugins ──────────────────────────────────────────────────────────────────
 
-test.describe("REST API — Plugins", () => {
+test.describe("REST API — Plugins", { tag: "@api" }, () => {
   test("GET /plugins returns list with status for each plugin", async ({ api }) => {
     const plugins = await api.getPlugins();
 

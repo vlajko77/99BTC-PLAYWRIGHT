@@ -1,6 +1,6 @@
 import { test, expect } from "../../../fixtures/test.fixture";
 
-test.describe("Quiz Maker — Results", () => {
+test.describe("Quiz Maker — Results", { tag: "@admin" }, () => {
   test.beforeEach(async ({ loginPage: _, resultsPage }) => {
     await resultsPage.navigate();
   });

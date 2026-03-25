@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("Site Navigation", () => {
+test.describe("Site Navigation", { tag: "@regression" }, () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");

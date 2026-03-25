@@ -46,7 +46,7 @@ async function waitAndScreenshot(
 
 // ─── Tests ─────────────────────────────────────────────────────────────────────
 
-test.describe("Visual Regression", () => {
+test.describe("Visual Regression", { tag: ["@regression", "@visual"] }, () => {
   test.describe("Homepage", () => {
     test("full page matches snapshot", async ({ page }) => {
       await page.goto("/");

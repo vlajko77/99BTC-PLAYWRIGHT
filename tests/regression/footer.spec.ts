@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { FooterPage } from "../../pages/frontend/FooterPage";
 
-test.describe("Footer", () => {
+test.describe("Footer", { tag: "@regression" }, () => {
   let footerPage: FooterPage;
 
   test.beforeEach(async ({ page }) => {

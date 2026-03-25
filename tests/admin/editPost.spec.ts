@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { EditPostPage } from "../../pages/admin/EditPostPage";
 
-test.describe("WordPress Post Editing", () => {
+test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
   let editPostPage: EditPostPage;
 
   test.beforeEach(async ({ loginPage: _, page }) => {

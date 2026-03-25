@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { SiteSettingsPage } from "../../pages/admin/SiteSettingsPage";
 
-test.describe("WordPress Site Settings", () => {
+test.describe("WordPress Site Settings", { tag: "@admin" }, () => {
   let settingsPage: SiteSettingsPage;
 
   test.beforeEach(async ({ loginPage: _, page }) => {

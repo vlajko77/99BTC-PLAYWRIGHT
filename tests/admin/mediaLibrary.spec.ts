@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 import os from "os";
 
-test.describe("WordPress Media Library", () => {
+test.describe("WordPress Media Library", { tag: "@admin" }, () => {
   let mediaPage: MediaLibraryPage;
 
   test.beforeEach(async ({ loginPage: _, page }) => {

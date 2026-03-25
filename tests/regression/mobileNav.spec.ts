@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/test.fixture";
 import { MobileNavPage } from "../../pages/frontend/MobileNavPage";
 
-test.describe("Mobile Navigation", () => {
+test.describe("Mobile Navigation", { tag: ["@regression", "@mobile"] }, () => {
   let mobileNav: MobileNavPage;
 
   test.beforeEach(async ({ page }) => {

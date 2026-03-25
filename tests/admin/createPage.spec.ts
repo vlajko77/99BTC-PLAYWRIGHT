@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("WordPress page creation", () => {
+test.describe("WordPress page creation", { tag: "@admin" }, () => {
   test("Add a new page and verify it is visible", async ({
     loginPage: _,
     pageEditor,

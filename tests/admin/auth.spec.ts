@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("WordPress Authentication & Authorization", () => {
+test.describe("WordPress Authentication & Authorization", { tag: "@admin" }, () => {
   test.describe("Unauthorized access", () => {
     test("accessing wp-admin without session redirects to login page", async ({ page }) => {
       // Clear cookies to simulate logged-out state

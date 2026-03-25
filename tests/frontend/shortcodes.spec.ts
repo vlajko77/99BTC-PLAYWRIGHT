@@ -15,7 +15,7 @@ import {
 
 // ─── Shortcode rendering in posts ─────────────────────────────────────────────
 
-test.describe("Shortcode rendering in WordPress posts", () => {
+test.describe("Shortcode rendering in WordPress posts", { tag: "@frontend" }, () => {
   for (const testCase of SHORTCODE_TEST_CASES) {
     test(`renders ${testCase.name} shortcode correctly`, async ({
       loginPage: _,
@@ -42,7 +42,7 @@ test.describe("Shortcode rendering in WordPress posts", () => {
 
 // ─── Aesthetic shortcodes in posts ────────────────────────────────────────────
 
-test.describe("Aesthetic Shortcodes in posts", () => {
+test.describe("Aesthetic Shortcodes in posts", { tag: "@frontend" }, () => {
   test("CTA Button shortcode renders correctly", async ({ loginPage: _, shortcodePage, page }) => {
     await shortcodePage.createPostWithShortcode("CTA Button Test " + crypto.randomUUID(), CTA_BUTTON_SHORTCODE);
 

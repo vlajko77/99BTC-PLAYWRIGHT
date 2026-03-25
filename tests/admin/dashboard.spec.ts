@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("WordPress Admin Dashboard", () => {
+test.describe("WordPress Admin Dashboard", { tag: "@admin" }, () => {
   test.beforeEach(async ({ loginPage: _, dashboardPage }) => {
     await dashboardPage.navigateToDashboard();
   });

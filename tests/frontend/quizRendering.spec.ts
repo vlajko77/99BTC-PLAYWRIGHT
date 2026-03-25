@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
-test.describe("Frontend — Quiz Rendering", () => {
+test.describe("Frontend — Quiz Rendering", { tag: "@frontend" }, () => {
   test.describe("Quiz shortcode in a post", () => {
     test("quiz shortcode renders a quiz container on the frontend", async ({
       loginPage: _,
