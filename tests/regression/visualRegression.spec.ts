@@ -35,7 +35,8 @@ async function waitAndScreenshot(
   name: string,
   extra: ScreenshotExtra = {}
 ) {
-  await page.waitForLoadState("networkidle");
+  // Cap networkidle at 45s — pages with live ads/prices may never fully settle
+  await page.waitForLoadState("networkidle", { timeout: 45000 }).catch(() => {});
   await expect(page).toHaveScreenshot(name, {
     fullPage: true,
     mask: dynamicMasks(page),
@@ -85,6 +86,7 @@ test.describe("Visual Regression", { tag: ["@regression", "@visual"] }, () => {
   });
 
   test.describe("Category page — Bitcoin", () => {
+    test.slow(); // can be slow under concurrent screenshot load
     test("full page matches snapshot", async ({ page }) => {
       await page.goto("/category/bitcoin/");
       await waitAndScreenshot(page, "category-bitcoin-full.png");
@@ -103,6 +105,7 @@ test.describe("Visual Regression", { tag: ["@regression", "@visual"] }, () => {
   }
 
   test.describe("Crypto Presales toplist", () => {
+    test.slow();
     test("full page matches snapshot", async ({ page }) => {
       await page.goto("/cryptocurrency/crypto-presales/");
       // Wait for toplist to render before capturing
@@ -121,7 +124,7 @@ test.describe("Visual Regression", { tag: ["@regression", "@visual"] }, () => {
         state: "visible",
         timeout: 15000,
       });
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 45000 }).catch(() => {});
       const toplist = page.locator(".cbm-presale-toplist__wrapper").first();
       await expect(toplist).toHaveScreenshot("presales-toplist-widget.png", {
         animations: "disabled",
@@ -134,6 +137,7 @@ test.describe("Visual Regression", { tag: ["@regression", "@visual"] }, () => {
   });
 
   test.describe("Best Crypto to Buy", () => {
+    test.slow();
     test("full page matches snapshot", async ({ page }) => {
       await page.goto("/cryptocurrency/best-crypto-to-buy/");
       await page.locator(".cbm-presale-toplist__offer").first().waitFor({
