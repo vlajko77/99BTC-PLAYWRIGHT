@@ -6,7 +6,7 @@ test.describe("Search Results", { tag: "@regression" }, () => {
     await header.search("bitcoin");
 
     await expect(page).toHaveURL(/[?&]s=bitcoin/i);
-    await expect(page.getByText(/you searched for/i)).toBeVisible();
+    await expect(page.getByRole("link", { name: "All Results" })).toBeVisible();
   });
 
   test("search results page has a content area", async ({ header, page }) => {
