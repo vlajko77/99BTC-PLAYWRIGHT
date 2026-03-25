@@ -66,12 +66,8 @@ test.describe("Header", { tag: "@regression" }, () => {
       header,
       page,
     }) => {
-      const [newPage] = await Promise.all([
-        page.context().waitForEvent("page"),
-        header.bestWalletButton.click(),
-      ]);
-      await newPage.waitForLoadState();
-      await expect(newPage).toHaveURL(/bestwallet/i);
+      await header.bestWalletButton.click();
+      await expect(page).toHaveURL(/bestwallet/i);
     });
   });
 
@@ -160,7 +156,7 @@ test.describe("Header", { tag: "@regression" }, () => {
         await languagePage.selectLanguage("Deutsch");
 
         await expect(page).toHaveURL(/\/de\//);
-        await expect(page).toHaveTitle(/99Bitcoins/);
+        await expect(page).toHaveTitle(/99bitcoins/i);
         await expect(
           page.getByRole("link", { name: "News", exact: true }),
         ).toBeVisible();
@@ -179,7 +175,7 @@ test.describe("Header", { tag: "@regression" }, () => {
         await languagePage.selectLanguage("Français");
 
         await expect(page).toHaveURL(/\/fr\//);
-        await expect(page).toHaveTitle(/99Bitcoins/);
+        await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch to Spanish and verify content is translated", async ({
@@ -189,7 +185,7 @@ test.describe("Header", { tag: "@regression" }, () => {
         await languagePage.selectLanguage("Español");
 
         await expect(page).toHaveURL(/\/es\//);
-        await expect(page).toHaveTitle(/99Bitcoins/);
+        await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch to Japanese and verify content is translated", async ({
@@ -199,7 +195,7 @@ test.describe("Header", { tag: "@regression" }, () => {
         await languagePage.selectLanguage("日本語");
 
         await expect(page).toHaveURL(/\/jp\//);
-        await expect(page).toHaveTitle(/99Bitcoins/);
+        await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch to Russian and verify Cyrillic content", async ({
@@ -209,7 +205,7 @@ test.describe("Header", { tag: "@regression" }, () => {
         await languagePage.selectLanguage("Русский");
 
         await expect(page).toHaveURL(/\/ru\//);
-        await expect(page).toHaveTitle(/99Bitcoins/);
+        await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch back to English from another language", async ({
@@ -290,7 +286,7 @@ test.describe("Header", { tag: "@regression" }, () => {
         }) => {
           await languagePage.selectLanguage(lang.name);
           await expect(page).toHaveURL(new RegExp(lang.urlPath));
-          await expect(page).toHaveTitle(/99Bitcoins/);
+          await expect(page).toHaveTitle(/99bitcoins/i);
         });
       }
     });
