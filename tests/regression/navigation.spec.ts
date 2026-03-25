@@ -19,9 +19,9 @@ test.describe("Site Navigation", { tag: "@regression" }, () => {
     });
 
     test("clicking a nav link navigates to correct page", async ({ page }) => {
-      const newsLink = page.getByRole("link", { name: "News", exact: true }).first();
-      await newsLink.click();
-      await expect(page).toHaveURL(/news/i);
+      const navLink = page.locator("header").getByRole("link", { name: "Bitcoin Casinos", exact: true });
+      await navLink.click();
+      await expect(page).toHaveURL(/best-bitcoin-casino/i);
     });
   });
 
