@@ -59,8 +59,8 @@ export class PresalesToplistPage extends BasePage {
   async navigate(path: string): Promise<void> {
     await this.page.goto(path);
     await this.page.waitForLoadState("domcontentloaded");
-    // Wait for first offer to appear (toplist data may load after DOMContentLoaded)
-    await this.offers.first().waitFor({ state: "visible", timeout: 60000 });
+    // Wait for first offer to appear (toplist data loads asynchronously via CBM widget SDK)
+    await this.offers.first().waitFor({ state: "visible", timeout: PresalesToplistPage.TIMEOUT_WIDGET });
   }
 
   async hoverNavPresales(): Promise<void> {

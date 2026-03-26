@@ -1,8 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 import fs from "fs";
 import { config } from "dotenv";
+import { BASE_URL, stagingHttpCredentials } from "./utils/config";
 
 config();
+
+const isCi = !!process.env.CI;
 
 // Use saved storageState if present (useful for staging sites protected by Cloudflare JS challenges)
 const storageStatePath = fs.existsSync("auth/storageState.json")
@@ -13,30 +16,28 @@ export default defineConfig({
   testDir: "./tests",
   /* Skip visual regression on CI — snapshots are platform-specific (darwin).
      To enable on CI: run npm run test:visual:update on Linux, commit the *-linux.png files. */
-  testIgnore: process.env.CI ? ["**/visualRegression.spec.ts"] : [],
+  testIgnore: isCi ? ["**/visualRegression.spec.ts"] : [],
   /* Per-test timeout: 60s on CI, 120s locally */
-  timeout: process.env.CI ? 60000 : 120000,
+  timeout: isCi ? 60000 : 120000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
+  forbidOnly: isCi,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: isCi ? 2 : 0,
   /* Use 2 workers on CI (network-bound against staging; Cloudflare-safe) */
-  workers: process.env.CI ? 2 : undefined,
+  workers: isCi ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "https://99bitcoins.local",
+    baseURL: BASE_URL,
     ignoreHTTPSErrors: true,
     // If a saved storage state exists, use it to run tests as an authenticated user
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE || storageStatePath,
     // HTTP Basic Auth for staging environments (ignored when env vars are not set)
-    ...(process.env.STAGING_HTTP_USER && process.env.STAGING_HTTP_PASS
-      ? { httpCredentials: { username: process.env.STAGING_HTTP_USER, password: process.env.STAGING_HTTP_PASS } }
-      : {}),
+    ...stagingHttpCredentials,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",

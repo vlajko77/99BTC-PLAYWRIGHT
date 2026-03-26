@@ -92,25 +92,25 @@ export class HeaderSectionPage extends BasePage {
 
   async openBitcoinCasinosMenu() {
     await this.bitcoinMenuLink.hover();
-    await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: 5000 });
+    await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: HeaderSectionPage.TIMEOUT_SHORT });
   }
 
   async clickBitcoinHistoricalPrice() {
     await this.bitcoinMenuLink.hover();
-    await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: 5000 });
+    await this.bitcoinSubMenuLink.waitFor({ state: "visible", timeout: HeaderSectionPage.TIMEOUT_SHORT });
     await this.bitcoinSubMenuLink.click();
   }
 
   async search(query: string) {
     await this.searchIcon.click();
-    await this.searchInput.waitFor({ state: "visible", timeout: 5000 });
+    await this.searchInput.waitFor({ state: "visible", timeout: HeaderSectionPage.TIMEOUT_SHORT });
     await this.searchInput.fill(query);
     await this.searchInput.press("Enter");
   }
 
   async openLanguageDropdown(): Promise<void> {
     await this.languageIcon.click();
-    await this.languageDropdown.waitFor({ state: "visible", timeout: 5000 });
+    await this.languageDropdown.waitFor({ state: "visible", timeout: HeaderSectionPage.TIMEOUT_SHORT });
   }
 
   async getAvailableLanguages(): Promise<string[]> {
@@ -158,7 +158,7 @@ export class HeaderSectionPage extends BasePage {
     );
 
     await expect(this.page.getByText(language.sampleText).first()).toBeVisible({
-      timeout: 10000,
+      timeout: HeaderSectionPage.TIMEOUT_MEDIUM,
     });
   }
 

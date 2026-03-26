@@ -1,12 +1,11 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "../../BasePage";
+import { BaseQuizPage } from "./BaseQuizPage";
 
-export class QuestionsPage extends BasePage {
-  private readonly listUrl = "/wp-admin/admin.php?page=quiz-maker-questions";
+export class QuestionsPage extends BaseQuizPage {
+  protected readonly url = "/wp-admin/admin.php?page=quiz-maker-questions";
   private readonly addUrl = "/wp-admin/admin.php?page=quiz-maker-questions&action=add";
 
   // List page
-  private readonly questionsTable: Locator;
   private readonly questionTypeFilter: Locator;
   private readonly filterButton: Locator;
 
@@ -17,17 +16,11 @@ export class QuestionsPage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.questionsTable = page.locator("table.wp-list-table");
     this.questionTypeFilter = page.locator("#bulk-action-question-type-selector-top");
     this.filterButton = page.locator("#doaction-top");
 
     this.questionTitleInput = page.locator("#ays_question_title");
     this.saveButton = page.locator("#ays-button-apply");
-  }
-
-  async navigate(): Promise<void> {
-    await this.page.goto(this.listUrl);
-    await this.page.waitForLoadState("domcontentloaded");
   }
 
   async navigateToAdd(): Promise<void> {
@@ -36,14 +29,11 @@ export class QuestionsPage extends BasePage {
   }
 
   async expectPageLoaded(): Promise<void> {
-    await expect(this.page.locator("h1").filter({ hasText: /Questions/i })).toBeVisible();
+    await this.expectHeadingVisible(/Questions/i);
   }
 
   async expectColumnsVisible(): Promise<void> {
-    await expect(this.questionsTable).toBeVisible();
-    for (const col of ["Question", "Category", "Type", "Answers"]) {
-      await expect(this.questionsTable.locator("thead").getByText(col, { exact: false })).toBeVisible();
-    }
+    await this.expectTableColumnsVisible(["Question", "Category", "Type", "Answers"]);
   }
 
   async fillQuestionTitle(title: string): Promise<void> {
@@ -82,7 +72,7 @@ export class QuestionsPage extends BasePage {
 
   async expectQuestionInList(title: string): Promise<void> {
     await expect(
-      this.questionsTable.locator("tbody").getByText(title, { exact: false })
+      this.table.locator("tbody").getByText(title, { exact: false })
     ).toBeVisible();
   }
 
@@ -93,7 +83,7 @@ export class QuestionsPage extends BasePage {
   }
 
   async expectFilteredByType(typeLabel: string): Promise<void> {
-    const typeCells = this.questionsTable.locator("tbody td").filter({ hasText: typeLabel });
+    const typeCells = this.table.locator("tbody td").filter({ hasText: typeLabel });
     await expect(typeCells.first()).toBeVisible();
   }
 }

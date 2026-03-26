@@ -1,8 +1,10 @@
 import { test, expect } from "../../fixtures/test.fixture";
+import type { Page, BrowserContext } from "@playwright/test";
 import {
   PresalesToplistPage,
   PRESALES_SUBMENU_PAGES,
 } from "../../pages/frontend/PresalesToplistPage";
+import { BASE_URL, stagingHttpCredentials } from "../../utils/config";
 
 test.describe("Crypto Presales Navigation", { tag: "@regression" }, () => {
   test("Crypto Presales nav item is visible", { tag: "@smoke" }, async ({ page }) => {
@@ -49,18 +51,35 @@ test.describe("Crypto Presales Navigation", { tag: "@regression" }, () => {
 });
 
 test.describe("Presales Toplist — per page", { tag: "@regression" }, () => {
+  // Serial mode prevents 6 simultaneous beforeAll navigations from hitting the CBM
+  // widget API concurrently — rate-limiting causes timeouts when pages load in parallel
+  test.describe.configure({ mode: "serial" });
   for (const submenuPage of PRESALES_SUBMENU_PAGES) {
     test.describe(submenuPage.name, () => {
       let toplistPage: PresalesToplistPage;
+      let sharedPage: Page;
+      let sharedContext: BrowserContext;
 
-      test.beforeEach(async ({ page }) => {
-        toplistPage = new PresalesToplistPage(page);
+      // Navigate once per describe block — avoids hitting the CBM widget API
+      // multiple times for the same page (rate-limiting causes flaky timeouts)
+      test.beforeAll(async ({ browser }) => {
+        sharedContext = await browser.newContext({
+          ignoreHTTPSErrors: true,
+          baseURL: BASE_URL,
+          ...stagingHttpCredentials,
+        });
+        sharedPage = await sharedContext.newPage();
+        toplistPage = new PresalesToplistPage(sharedPage);
         await toplistPage.navigate(submenuPage.path);
       });
 
-      test("page has an H1 heading", async ({ page }) => {
+      test.afterAll(async () => {
+        await sharedContext?.close();
+      });
+
+      test("page has an H1 heading", async () => {
         await expect(
-          page.getByRole("heading", { level: 1 }).first()
+          sharedPage.getByRole("heading", { level: 1 }).first()
         ).toBeVisible();
       });
 

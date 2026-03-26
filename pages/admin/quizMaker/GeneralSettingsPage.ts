@@ -1,8 +1,8 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "../../BasePage";
+import { BaseQuizPage } from "./BaseQuizPage";
 
-export class GeneralSettingsPage extends BasePage {
-  private readonly url = "/wp-admin/admin.php?page=quiz-maker-settings";
+export class GeneralSettingsPage extends BaseQuizPage {
+  protected readonly url = "/wp-admin/admin.php?page=quiz-maker-settings";
 
   private readonly saveButton: Locator;
   private readonly contentArea: Locator;
@@ -23,11 +23,6 @@ export class GeneralSettingsPage extends BasePage {
     this.saveButton = this.contentArea.locator(
       'input[name="ays-quiz-settings-submit"], input[value="Save changes"], #ays_apply, input[name="ays_apply"]'
     ).first();
-  }
-
-  async navigate(): Promise<void> {
-    await this.page.goto(this.url);
-    await this.page.waitForLoadState("domcontentloaded");
   }
 
   async expectPageLoaded(): Promise<void> {

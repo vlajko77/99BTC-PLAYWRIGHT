@@ -5,10 +5,10 @@ export class DashboardPage extends BasePage {
   private readonly dashboardUrl = "/wp-admin/";
 
   // Admin bar elements
-  private readonly adminBar: Locator;
+  readonly adminBar: Locator;
   private readonly mySitesLink: Locator;
   private readonly newContentButton: Locator;
-  private readonly userGreeting: Locator;
+  readonly userGreeting: Locator;
 
   // Screen Options & Help
   private readonly screenOptionsButton: Locator;

@@ -1,24 +1,15 @@
-import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "../../BasePage";
+import { Page, expect } from "@playwright/test";
+import { BaseQuizPage } from "./BaseQuizPage";
 
-export class ResultsPage extends BasePage {
-  private readonly url = "/wp-admin/admin.php?page=quiz-maker-results";
-
-  private readonly resultsTable: Locator;
+export class ResultsPage extends BaseQuizPage {
+  protected readonly url = "/wp-admin/admin.php?page=quiz-maker-results";
 
   constructor(page: Page) {
     super(page);
-
-    this.resultsTable = page.locator("table.wp-list-table");
-  }
-
-  async navigate(): Promise<void> {
-    await this.page.goto(this.url);
-    await this.page.waitForLoadState("domcontentloaded");
   }
 
   async expectPageLoaded(): Promise<void> {
-    await expect(this.page.locator("h1").filter({ hasText: /Results/i })).toBeVisible();
+    await this.expectHeadingVisible(/Results/i);
   }
 
   async expectAllTabsVisible(): Promise<void> {
@@ -31,7 +22,7 @@ export class ResultsPage extends BasePage {
   }
 
   async expectResultsListVisible(): Promise<void> {
-    await expect(this.resultsTable).toBeVisible();
+    await expect(this.table).toBeVisible();
   }
 
   async clickQuizzesTab(): Promise<void> {

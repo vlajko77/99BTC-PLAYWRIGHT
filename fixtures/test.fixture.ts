@@ -5,13 +5,10 @@ import { WordPressPageEditor } from "../pages/admin/CreatePage";
 import { WordPressPostEditor } from "../pages/admin/CreatePost";
 import { ShortcodePage } from "../pages/frontend/ShortcodePage";
 import { PluginManagementPage } from "../pages/admin/PluginManagementPage";
-import {
-  HeaderSectionPage,
-  SUPPORTED_LANGUAGES,
-  LanguageConfig,
-} from "../pages/frontend/HeaderSectionPage";
+import { HeaderSectionPage } from "../pages/frontend/HeaderSectionPage";
 import { HomePageSectionsPage } from "../pages/frontend/HomePageSectionsPage";
 import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
+import { BASE_URL } from "../utils/config";
 import { WordPressAPI } from "../utils/WordPressAPI";
 import { QuizzesPage } from "../pages/admin/quizMaker/QuizzesPage";
 import { QuestionsPage } from "../pages/admin/quizMaker/QuestionsPage";
@@ -106,7 +103,7 @@ export const test = base.extend<Fixtures>({
     if (!nonce) throw new Error("Could not obtain WP REST API nonce from wp-admin — is the user logged in?");
     const storageState = await page.context().storageState();
     const apiContext = await playwright.request.newContext({
-      baseURL: process.env.PLAYWRIGHT_BASE_URL || "https://99bitcoins.local",
+      baseURL: BASE_URL,
       ignoreHTTPSErrors: true,
       storageState,
       extraHTTPHeaders: { "X-WP-Nonce": nonce },
@@ -116,5 +113,4 @@ export const test = base.extend<Fixtures>({
   },
 });
 
-export { expect, SUPPORTED_LANGUAGES };
-export type { LanguageConfig };
+export { expect };

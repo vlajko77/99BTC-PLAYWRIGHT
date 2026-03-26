@@ -3,6 +3,11 @@ import { Page, expect, Locator } from "@playwright/test";
 export class BasePage {
   readonly page: Page;
 
+  protected static readonly TIMEOUT_SHORT = 5000;
+  protected static readonly TIMEOUT_MEDIUM = 10000;
+  protected static readonly TIMEOUT_LONG = 15000;
+  protected static readonly TIMEOUT_WIDGET = 60000;
+
   constructor(page: Page) {
     this.page = page;
   }

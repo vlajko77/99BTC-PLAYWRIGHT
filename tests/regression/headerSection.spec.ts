@@ -1,10 +1,10 @@
-import {
-  test,
-  expect,
-  SUPPORTED_LANGUAGES,
-} from "../../fixtures/test.fixture";
+import { test, expect } from "../../fixtures/test.fixture";
+import { SUPPORTED_LANGUAGES } from "../../pages/frontend/HeaderSectionPage";
 
-import { TEST_LANGUAGES } from "../../data/languages";
+const TEST_LANGUAGE_CODES = ["de", "fr", "es", "it", "br"];
+const TEST_LANGUAGES = SUPPORTED_LANGUAGES.filter((lang) =>
+  TEST_LANGUAGE_CODES.includes(lang.code)
+);
 
 test.describe("Header", { tag: "@regression" }, () => {
   test.beforeEach(async ({ header }) => {

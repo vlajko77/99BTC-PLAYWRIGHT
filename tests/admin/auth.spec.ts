@@ -42,15 +42,15 @@ test.describe("WordPress Authentication & Authorization", { tag: "@admin" }, () 
   });
 
   test.describe("Authenticated access", () => {
-    test("authenticated user can access wp-admin", async ({ loginPage: _, page }) => {
+    test("authenticated user can access wp-admin", async ({ loginPage: _, dashboardPage, page }) => {
       await page.goto("/wp-admin/");
       await expect(page).toHaveURL(/wp-admin\/?$/);
-      await expect(page.locator("#wpadminbar")).toBeVisible();
+      await expect(dashboardPage.adminBar).toBeVisible();
     });
 
-    test("authenticated user sees their name in admin bar", async ({ loginPage: _, page }) => {
+    test("authenticated user sees their name in admin bar", async ({ loginPage: _, dashboardPage, page }) => {
       await page.goto("/wp-admin/");
-      await expect(page.locator("#wp-admin-bar-my-account")).toBeVisible();
+      await expect(dashboardPage.userGreeting).toBeVisible();
     });
   });
 });

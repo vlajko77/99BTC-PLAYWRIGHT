@@ -1,12 +1,11 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "../../BasePage";
+import { BaseQuizPage } from "./BaseQuizPage";
 
-export class QuizzesPage extends BasePage {
-  private readonly url = "/wp-admin/admin.php?page=quiz-maker";
+export class QuizzesPage extends BaseQuizPage {
+  protected readonly url = "/wp-admin/admin.php?page=quiz-maker";
 
   // List page
   private readonly addNewButton: Locator;
-  private readonly quizzesTable: Locator;
   private readonly searchInput: Locator;
   private readonly searchButton: Locator;
   private readonly categoryFilter: Locator;
@@ -20,7 +19,6 @@ export class QuizzesPage extends BasePage {
     super(page);
 
     this.addNewButton = page.locator("a.page-title-action").filter({ hasText: /Add New/i }).first();
-    this.quizzesTable = page.locator("table.wp-list-table");
     this.searchInput = page.locator("#quiz-maker-search-input");
     this.searchButton = page.locator("#search-submit");
     this.categoryFilter = page.locator("#bulk-action-category-selector-top");
@@ -30,20 +28,12 @@ export class QuizzesPage extends BasePage {
     this.saveButton = page.locator("#ays_apply");
   }
 
-  async navigate(): Promise<void> {
-    await this.page.goto(this.url);
-    await this.page.waitForLoadState("domcontentloaded");
-  }
-
   async expectPageLoaded(): Promise<void> {
-    await expect(this.page.locator("h1").filter({ hasText: /Quizzes/i })).toBeVisible();
+    await this.expectHeadingVisible(/Quizzes/i);
   }
 
   async expectColumnsVisible(): Promise<void> {
-    await expect(this.quizzesTable).toBeVisible();
-    for (const col of ["Title", "Category", "Shortcode", "Count", "Created"]) {
-      await expect(this.quizzesTable.locator("thead").getByText(col, { exact: false })).toBeVisible();
-    }
+    await this.expectTableColumnsVisible(["Title", "Category", "Shortcode", "Count", "Created"]);
   }
 
   async expectQuizInList(title: string): Promise<void> {
@@ -76,7 +66,7 @@ export class QuizzesPage extends BasePage {
   }
 
   async editQuiz(currentTitle: string, newTitle: string): Promise<void> {
-    const row = this.quizzesTable.locator("tbody tr")
+    const row = this.table.locator("tbody tr")
       .filter({ hasText: currentTitle })
       .first();
     await row.hover();
@@ -87,7 +77,7 @@ export class QuizzesPage extends BasePage {
   }
 
   async trashQuiz(title: string): Promise<void> {
-    const row = this.quizzesTable.locator("tbody tr")
+    const row = this.table.locator("tbody tr")
       .filter({ hasText: title })
       .first();
     if ((await row.count()) === 0) return;
@@ -101,7 +91,7 @@ export class QuizzesPage extends BasePage {
     // Navigate to trash view
     await this.page.locator("ul.subsubsub a").filter({ hasText: /Trash/i }).click();
     await this.page.waitForLoadState("domcontentloaded");
-    await expect(this.quizzesTable.locator("tbody").getByText(title, { exact: false })).toBeVisible();
+    await expect(this.table.locator("tbody").getByText(title, { exact: false })).toBeVisible();
   }
 
   async searchFor(title: string): Promise<void> {
@@ -117,7 +107,7 @@ export class QuizzesPage extends BasePage {
   }
 
   async getFirstQuizShortcode(): Promise<string | null> {
-    const shortcodeCell = this.quizzesTable.locator("tbody tr td")
+    const shortcodeCell = this.table.locator("tbody tr td")
       .filter({ hasText: /\[ays_quiz/ })
       .first();
     return await shortcodeCell.textContent();

@@ -1,12 +1,9 @@
 import { Page, expect, Locator } from "@playwright/test";
-import { BasePage } from "../../BasePage";
+import { BaseQuizPage } from "./BaseQuizPage";
 
-export class QuizCategoriesPage extends BasePage {
-  private readonly listUrl = "/wp-admin/admin.php?page=quiz-maker-quiz-categories";
+export class QuizCategoriesPage extends BaseQuizPage {
+  protected readonly url = "/wp-admin/admin.php?page=quiz-maker-quiz-categories";
   private readonly addUrl = "/wp-admin/admin.php?page=quiz-maker-quiz-categories&action=add";
-
-  // List
-  private readonly categoriesTable: Locator;
 
   // Create form (separate page at ?action=add)
   private readonly categoryTitleInput: Locator;
@@ -15,14 +12,8 @@ export class QuizCategoriesPage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.categoriesTable = page.locator("table.wp-list-table");
     this.categoryTitleInput = page.locator("#ays-title");
     this.saveCategoryButton = page.locator("#ays_apply");
-  }
-
-  async navigate(): Promise<void> {
-    await this.page.goto(this.listUrl);
-    await this.page.waitForLoadState("domcontentloaded");
   }
 
   async navigateToAdd(): Promise<void> {
@@ -31,7 +22,7 @@ export class QuizCategoriesPage extends BasePage {
   }
 
   async expectPageLoaded(): Promise<void> {
-    await expect(this.page.locator("h1").filter({ hasText: /Quiz Categories/i })).toBeVisible();
+    await this.expectHeadingVisible(/Quiz Categories/i);
   }
 
   async expectTabsVisible(): Promise<void> {
@@ -58,13 +49,13 @@ export class QuizCategoriesPage extends BasePage {
 
   async expectCategoryInList(title: string): Promise<void> {
     await expect(
-      this.categoriesTable.locator("tbody").getByText(title, { exact: false })
+      this.table.locator("tbody").getByText(title, { exact: false })
     ).toBeVisible();
   }
 
   async expectShortcodeVisible(): Promise<void> {
     // Shortcodes are stored in input[type=text] values inside table cells
-    const shortcodeInputs = this.categoriesTable.locator('tbody td input[type="text"]');
+    const shortcodeInputs = this.table.locator('tbody td input[type="text"]');
     const count = await shortcodeInputs.count();
     expect(count).toBeGreaterThan(0);
     const firstValue = await shortcodeInputs.first().inputValue();
@@ -72,7 +63,7 @@ export class QuizCategoriesPage extends BasePage {
   }
 
   async deleteCategory(title: string): Promise<void> {
-    const row = this.categoriesTable.locator("tbody tr").filter({ hasText: title }).first();
+    const row = this.table.locator("tbody tr").filter({ hasText: title }).first();
     await row.hover();
     await row.getByRole("link", { name: /Delete/i }).first().click();
     await this.page.waitForLoadState("domcontentloaded");

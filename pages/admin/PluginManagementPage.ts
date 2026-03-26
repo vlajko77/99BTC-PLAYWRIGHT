@@ -39,7 +39,7 @@ export class PluginManagementPage extends BasePage {
 
   async navigateToAddNewPlugin(): Promise<void> {
     await this.page.goto(this.addNewPluginUrl);
-    await this.searchPluginsInput.waitFor({ state: "visible", timeout: 10000 });
+    await this.searchPluginsInput.waitFor({ state: "visible", timeout: PluginManagementPage.TIMEOUT_MEDIUM });
   }
 
   // Search methods
@@ -55,7 +55,7 @@ export class PluginManagementPage extends BasePage {
     await this.page.waitForLoadState("networkidle");
     // Wait for search results to load
     await this.page.waitForSelector(".plugin-card, .no-plugin-results", {
-      timeout: 15000,
+      timeout: PluginManagementPage.TIMEOUT_LONG,
     });
   }
 
@@ -94,7 +94,7 @@ export class PluginManagementPage extends BasePage {
   // Activate plugin
   async activatePlugin(pluginSlug: string): Promise<void> {
     const row = this.getPluginRow(pluginSlug);
-    await row.waitFor({ state: "visible", timeout: 10000 });
+    await row.waitFor({ state: "visible", timeout: PluginManagementPage.TIMEOUT_MEDIUM });
     await row.hover();
     const activateLink = row.locator('a[href*="action=activate"]').first();
     await activateLink.click();
@@ -112,7 +112,7 @@ export class PluginManagementPage extends BasePage {
   // Deactivate plugin
   async deactivatePlugin(pluginSlug: string): Promise<void> {
     const row = this.getPluginRow(pluginSlug);
-    await row.waitFor({ state: "visible", timeout: 10000 });
+    await row.waitFor({ state: "visible", timeout: PluginManagementPage.TIMEOUT_MEDIUM });
     await row.hover();
     const deactivateLink = row.locator('a[href*="action=deactivate"]').first();
     
@@ -200,7 +200,7 @@ export class PluginManagementPage extends BasePage {
       .locator('input#submit, input[type="submit"]')
       .first();
     await confirmButton
-      .waitFor({ state: "visible", timeout: 5000 })
+      .waitFor({ state: "visible", timeout: PluginManagementPage.TIMEOUT_SHORT })
       .catch(() => {});
     if (await confirmButton.isVisible()) {
       await confirmButton.click();
@@ -222,7 +222,7 @@ export class PluginManagementPage extends BasePage {
       .locator('input#submit, input[type="submit"]')
       .first();
     await confirmButton
-      .waitFor({ state: "visible", timeout: 5000 })
+      .waitFor({ state: "visible", timeout: PluginManagementPage.TIMEOUT_SHORT })
       .catch(() => {});
     if (await confirmButton.isVisible()) {
       await confirmButton.click();
