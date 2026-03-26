@@ -66,8 +66,11 @@ test.describe("Header", { tag: "@regression" }, () => {
       header,
       page,
     }) => {
-      await header.bestWalletButton.click();
-      await expect(page).toHaveURL(/bestwallet/i);
+      const [newPage] = await Promise.all([
+        page.context().waitForEvent("page"),
+        header.bestWalletButton.click(),
+      ]);
+      await expect(newPage).toHaveURL(/bestwallet/i);
     });
   });
 
