@@ -22,11 +22,11 @@ test.describe("Quiz Maker — Quiz Categories", { tag: "@admin" }, () => {
   });
 
   test.describe("Create category", () => {
-    const categoryTitle = `Test Category ${Date.now()}`;
+    const categoryTitle = `Test Category ${crypto.randomUUID()}`;
 
     test.afterEach(async ({ quizCategoriesPage }) => {
       await quizCategoriesPage.navigate();
-      await quizCategoriesPage.deleteCategory(categoryTitle).catch(() => {});
+      await quizCategoriesPage.deleteCategory(categoryTitle).catch((e) => console.warn("Cleanup failed:", e));
     });
 
     test("creates a new category and it appears in the list", async ({

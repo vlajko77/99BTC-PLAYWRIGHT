@@ -16,7 +16,7 @@ test.describe("Quiz Maker — Questions", { tag: "@admin" }, () => {
   });
 
   test.describe("Create question", () => {
-    const questionTitle = `Test Radio Question ${Date.now()}`;
+    const questionTitle = `Test Radio Question ${crypto.randomUUID()}`;
     const answers = ["Answer A", "Answer B", "Answer C"];
 
     test("creates a Radio question with answers and it appears in the list", async ({

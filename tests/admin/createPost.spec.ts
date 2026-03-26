@@ -10,9 +10,9 @@ test.describe("WordPress post creation", { tag: "@admin" }, () => {
 
     await expect(page).toHaveURL(/post-new\.php/);
 
-    const randomTitle = "Test Post " + Math.floor(Math.random() * 100000);
+    const randomTitle = "Test Post " + crypto.randomUUID();
     const randomContent =
-      "This post is added by Playwright. Random value: " + Math.random();
+      "This post is added by Playwright. Random value: " + crypto.randomUUID();
 
     await postEditor.fillTitleAndContent(randomTitle, randomContent);
     await postEditor.selectCategory("News");

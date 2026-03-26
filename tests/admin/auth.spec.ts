@@ -1,4 +1,5 @@
 import { test, expect } from "../../fixtures/test.fixture";
+import { LoginPage } from "../../pages/admin/LoginPage";
 
 test.describe("WordPress Authentication & Authorization", { tag: "@admin" }, () => {
   test.describe("Unauthorized access", () => {
@@ -31,13 +32,14 @@ test.describe("WordPress Authentication & Authorization", { tag: "@admin" }, () 
     });
 
     test("invalid credentials show an error message", async ({ page }) => {
+      const loginPage = new LoginPage(page);
       await page.goto("/wp-login.php");
       await page.getByRole("textbox", { name: /username or email/i }).fill("invalid_user");
       await page.getByRole("textbox", { name: /password/i }).fill("wrong_password");
       await page.getByRole("button", { name: /log in/i }).click();
       await page.waitForLoadState("domcontentloaded");
 
-      await expect(page.locator("#login_error")).toBeVisible();
+      await loginPage.verifyLoginFailure();
     });
   });
 

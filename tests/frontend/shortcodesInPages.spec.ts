@@ -31,7 +31,7 @@ test.describe("Shortcode rendering in WordPress pages", { tag: "@frontend" }, ()
       shortcodePage,
       page,
     }) => {
-      const title = `${testCase.name} ${Date.now()}`;
+      const title = `${testCase.name} ${crypto.randomUUID()}`;
 
       await shortcodePage.createPageWithShortcode(title, testCase.shortcode);
 
@@ -138,7 +138,7 @@ test.describe("Aesthetic Shortcodes in pages", { tag: "@frontend" }, () => {
 
 test.describe("Key Takeaways Shortcode", { tag: "@frontend" }, () => {
   test("renders with h3 heading type", async ({ loginPage: _, shortcodePage, page }) => {
-    await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Test " + Date.now(), keyTakeawaysH3);
+    await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Test " + crypto.randomUUID(), keyTakeawaysH3);
     await shortcodePage.navigateToPublishedPage();
 
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
@@ -147,7 +147,7 @@ test.describe("Key Takeaways Shortcode", { tag: "@frontend" }, () => {
   });
 
   test("renders without heading type", async ({ loginPage: _, shortcodePage, page }) => {
-    await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Default " + Date.now(), keyTakeawaysDefault);
+    await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Default " + crypto.randomUUID(), keyTakeawaysDefault);
     await shortcodePage.navigateToPublishedPage();
 
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
@@ -155,7 +155,7 @@ test.describe("Key Takeaways Shortcode", { tag: "@frontend" }, () => {
   });
 
   test("renders with multiple items and h2 heading", async ({ loginPage: _, shortcodePage, page }) => {
-    await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Multi " + Date.now(), keyTakeawaysH2);
+    await shortcodePage.createPageWithKeyTakeaways("Key Takeaways Multi " + crypto.randomUUID(), keyTakeawaysH2);
     await shortcodePage.navigateToPublishedPage();
 
     await expect(page).toHaveURL(/key-takeaways|page_id=/i);
@@ -187,7 +187,7 @@ ${renderKeyTakeaways(secondBlock)}
 ${renderKeyTakeaways(thirdBlock)}
     `.trim();
 
-    await shortcodePage.createPageWithShortcode("Multiple Shortcodes Page " + Date.now(), content);
+    await shortcodePage.createPageWithShortcode("Multiple Shortcodes Page " + crypto.randomUUID(), content);
 
     await expect(page).toHaveURL(/multiple-shortcodes|page_id=/i);
 
@@ -216,7 +216,7 @@ test.describe("Shortcode error handling in WordPress pages", { tag: "@frontend" 
     shortcodePage,
     page,
   }) => {
-    const randomTitle = "Malformed Shortcode Page " + Date.now();
+    const randomTitle = "Malformed Shortcode Page " + crypto.randomUUID();
 
     await shortcodePage.createPageWithShortcode(randomTitle, MALFORMED_SHORTCODE_CONTENT);
     await page.waitForLoadState("domcontentloaded");
@@ -238,7 +238,7 @@ test.describe("Shortcode error handling in WordPress pages", { tag: "@frontend" 
     shortcodePage,
     page,
   }) => {
-    await shortcodePage.createPageWithShortcode("Missing Params Page " + Date.now(), MISSING_PARAMS_CONTENT);
+    await shortcodePage.createPageWithShortcode("Missing Params Page " + crypto.randomUUID(), MISSING_PARAMS_CONTENT);
 
     await expect(page).not.toHaveURL(/error|500/i);
 
@@ -272,7 +272,7 @@ test.describe("Shortcode creation on mobile", { tag: ["@frontend", "@mobile"] },
     expect(viewport?.width).toBeLessThan(500);
 
     await shortcodePage.createPageWithShortcode(
-      "Shortcode Page " + Date.now(),
+      "Shortcode Page " + crypto.randomUUID(),
       renderKeyTakeaways(keyTakeawaysBasic),
     );
 

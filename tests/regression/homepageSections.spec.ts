@@ -18,7 +18,7 @@ test.describe("Homepage Sections", { tag: "@regression" }, () => {
       for (let i = 0; i < count; i++) {
         const card = articles.nth(i);
         await expect(card.getByRole("img").first()).toBeVisible();
-        await expect(card.locator("p")).toBeVisible();
+        await expect(card.locator("p").first()).not.toBeEmpty();
       }
     });
   });
@@ -39,7 +39,7 @@ test.describe("Homepage Sections", { tag: "@regression" }, () => {
       for (let i = 0; i < count; i++) {
         const item = items.nth(i);
         await expect(item.getByRole("img").first()).toBeVisible();
-        await expect(item.locator("p")).toBeVisible();
+        await expect(item.locator("p").first()).not.toBeEmpty();
       }
     });
   });
@@ -105,7 +105,7 @@ test.describe("Homepage Sections", { tag: "@regression" }, () => {
       for (let i = 0; i < count; i++) {
         const card = cards.nth(i);
         await expect(card.getByRole("img").first()).toBeVisible();
-        await expect(card.locator("p").first()).toBeVisible();
+        await expect(card.locator("p").first()).not.toBeEmpty();
       }
     });
   });

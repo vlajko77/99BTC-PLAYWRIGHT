@@ -38,7 +38,7 @@ test.describe("WordPress Admin Dashboard", { tag: "@admin" }, () => {
     });
 
     test("should save a quick draft successfully", async ({ dashboardPage }) => {
-      const timestamp = Date.now();
+      const timestamp = crypto.randomUUID();
       const title = `Test Draft ${timestamp}`;
       const content = `Draft content for testing ${timestamp}`;
 

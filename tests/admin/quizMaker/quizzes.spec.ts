@@ -16,11 +16,11 @@ test.describe("Quiz Maker — Quizzes", { tag: "@admin" }, () => {
   });
 
   test.describe("Create quiz", () => {
-    const title = `Test Quiz ${Date.now()}`;
+    const title = `Test Quiz ${crypto.randomUUID()}`;
 
     test.afterEach(async ({ quizzesPage }) => {
       await quizzesPage.navigate();
-      await quizzesPage.trashQuiz(title).catch(() => {});
+      await quizzesPage.trashQuiz(title).catch((e) => console.warn("Cleanup failed:", e));
     });
 
     test("creates a new quiz and it appears in the list", async ({ quizzesPage }) => {
@@ -32,8 +32,8 @@ test.describe("Quiz Maker — Quizzes", { tag: "@admin" }, () => {
   });
 
   test.describe("Edit quiz", () => {
-    const originalTitle = `Edit Quiz ${Date.now()}`;
-    const updatedTitle = `Updated Quiz ${Date.now()}`;
+    const originalTitle = `Edit Quiz ${crypto.randomUUID()}`;
+    const updatedTitle = `Updated Quiz ${crypto.randomUUID()}`;
 
     test.beforeEach(async ({ quizzesPage }) => {
       await quizzesPage.createQuiz(originalTitle);
@@ -42,8 +42,8 @@ test.describe("Quiz Maker — Quizzes", { tag: "@admin" }, () => {
 
     test.afterEach(async ({ quizzesPage }) => {
       await quizzesPage.navigate();
-      await quizzesPage.trashQuiz(updatedTitle).catch(() => {});
-      await quizzesPage.trashQuiz(originalTitle).catch(() => {});
+      await quizzesPage.trashQuiz(updatedTitle).catch((e) => console.warn("Cleanup failed:", e));
+      await quizzesPage.trashQuiz(originalTitle).catch((e) => console.warn("Cleanup failed:", e));
     });
 
     test("edits a quiz title and updated title appears in list", async ({ quizzesPage }) => {
@@ -56,7 +56,7 @@ test.describe("Quiz Maker — Quizzes", { tag: "@admin" }, () => {
   });
 
   test.describe("Delete quiz", () => {
-    const title = `Trash Quiz ${Date.now()}`;
+    const title = `Trash Quiz ${crypto.randomUUID()}`;
 
     test.beforeEach(async ({ quizzesPage }) => {
       await quizzesPage.createQuiz(title);
@@ -74,14 +74,23 @@ test.describe("Quiz Maker — Quizzes", { tag: "@admin" }, () => {
   });
 
   test.describe("Search", () => {
-    test("searches for a quiz by title and shows correct result", async ({ quizzesPage, page }) => {
-      // Use an existing quiz known to be in the list
-      const existingTitle = "Crypto Course";
+    const searchTitle = `Search Quiz ${crypto.randomUUID()}`;
 
-      await quizzesPage.searchFor(existingTitle);
+    test.beforeEach(async ({ quizzesPage }) => {
+      await quizzesPage.createQuiz(searchTitle);
+      await quizzesPage.navigate();
+    });
+
+    test.afterEach(async ({ quizzesPage }) => {
+      await quizzesPage.navigate();
+      await quizzesPage.trashQuiz(searchTitle).catch((e) => console.warn("Cleanup failed:", e));
+    });
+
+    test("searches for a quiz by title and shows correct result", async ({ quizzesPage, page }) => {
+      await quizzesPage.searchFor(searchTitle);
 
       await expect(
-        page.locator("table.wp-list-table tbody").getByText(existingTitle, { exact: false }).first()
+        page.locator("table.wp-list-table tbody").getByText(searchTitle, { exact: false }).first()
       ).toBeVisible();
     });
   });

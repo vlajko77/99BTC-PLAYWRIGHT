@@ -1,23 +1,57 @@
 import { test, expect } from "../../fixtures/test.fixture";
+import { QuizzesPage } from "../../pages/admin/quizMaker/QuizzesPage";
+import { LoginPage } from "../../pages/admin/LoginPage";
+import { WP_USERNAME, WP_PASSWORD } from "../../utils/login";
+import { BASE_URL, stagingHttpCredentials } from "../../utils/config";
+import type { BrowserContext, Page } from "@playwright/test";
 
 test.describe("Frontend — Quiz Rendering", { tag: "@frontend" }, () => {
+  let quizShortcode: string;
+  let quizTitle: string;
+  let setupContext: BrowserContext;
+  let setupPage: Page;
+
+  test.beforeAll(async ({ browser }) => {
+    quizTitle = `Quiz Render ${crypto.randomUUID()}`;
+    setupContext = await browser.newContext({
+      ignoreHTTPSErrors: true,
+      baseURL: BASE_URL,
+      ...stagingHttpCredentials,
+    });
+    setupPage = await setupContext.newPage();
+    const loginPage = new LoginPage(setupPage);
+    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
+    const quizzesPage = new QuizzesPage(setupPage);
+    await quizzesPage.navigate();
+    await quizzesPage.createQuiz(quizTitle);
+    // After save the URL contains quiz_id — extract it to build the shortcode
+    const url = setupPage.url();
+    const match = url.match(/quiz_id=(\d+)/);
+    if (!match) throw new Error("Could not determine quiz ID after creation");
+    quizShortcode = `[ays_quiz id="${match[1]}"]`;
+  });
+
+  test.afterAll(async () => {
+    if (setupPage && quizTitle) {
+      const quizzesPage = new QuizzesPage(setupPage);
+      await quizzesPage.navigate();
+      await quizzesPage.trashQuiz(quizTitle).catch((e) => console.warn("Cleanup failed:", e));
+    }
+    await setupContext?.close();
+  });
+
   test.describe("Quiz shortcode in a post", () => {
     test("quiz shortcode renders a quiz container on the frontend", async ({
       loginPage: _,
       shortcodePage,
       page,
     }) => {
-      // Use an existing quiz (Crypto Course - Final Exam is quiz ID known to have 50 attempts)
-      // We use the first available quiz shortcode format [ays_quiz id="X"]
-      const postTitle = `Quiz Render Test ${Date.now()}`;
-      const shortcode = `[ays_quiz id="2"]`;
+      const postTitle = `Quiz Render Test ${crypto.randomUUID()}`;
 
-      await shortcodePage.createPostWithShortcode(postTitle, shortcode);
+      await shortcodePage.createPostWithShortcode(postTitle, quizShortcode);
 
-      // Should have navigated to the published post
       await expect(page).toHaveURL(/\?p=\d+|\/[^/]+\/?$/i);
 
-      // The quiz plugin renders a container with class or id containing "ays-quiz"
       const quizContainer = page.locator(
         ".ays-quiz-main-wrapper, .ays_quiz, #ays-quiz, [class*='ays-quiz'], [id*='ays-quiz']"
       ).first();
@@ -29,14 +63,12 @@ test.describe("Frontend — Quiz Rendering", { tag: "@frontend" }, () => {
       shortcodePage,
       page,
     }) => {
-      const postTitle = `Quiz Start Test ${Date.now()}`;
-      const shortcode = `[ays_quiz id="2"]`;
+      const postTitle = `Quiz Start Test ${crypto.randomUUID()}`;
 
-      await shortcodePage.createPostWithShortcode(postTitle, shortcode);
+      await shortcodePage.createPostWithShortcode(postTitle, quizShortcode);
 
       await expect(page).toHaveURL(/\?p=\d+|\/[^/]+\/?$/i);
 
-      // Quiz Maker renders either a start button or directly the first question
       const quizInteractive = page.locator(
         ".ays-quiz-main-wrapper, .ays_quiz, [class*='ays-quiz'], [id*='ays-quiz']"
       ).first();
@@ -50,10 +82,9 @@ test.describe("Frontend — Quiz Rendering", { tag: "@frontend" }, () => {
       shortcodePage,
       page,
     }) => {
-      const pageTitle = `Quiz Page Test ${Date.now()}`;
-      const shortcode = `[ays_quiz id="2"]`;
+      const pageTitle = `Quiz Page Test ${crypto.randomUUID()}`;
 
-      await shortcodePage.createPageWithShortcode(pageTitle, shortcode);
+      await shortcodePage.createPageWithShortcode(pageTitle, quizShortcode);
 
       await expect(page).toHaveURL(/page_id=\d+|\/[^/]+\/?$/i);
 

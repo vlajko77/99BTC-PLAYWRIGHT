@@ -48,7 +48,7 @@ const TEST_CATEGORY_ID = 47; // "News"
 
 test.describe("REST API — Posts (write)", { tag: "@api" }, () => {
   test("POST /posts creates a post and DELETE removes it", async ({ api }) => {
-    const title = `API Test Post ${Date.now()}`;
+    const title = `API Test Post ${crypto.randomUUID()}`;
 
     const created = await api.createPost({ title, content: "Created via REST API", categories: [TEST_CATEGORY_ID] });
     expect(created.id).toBeGreaterThan(0);
@@ -87,7 +87,7 @@ test.describe("REST API — shortcode rendering in posts", { tag: "@api" }, () =
     page,
   }) => {
     const post = await api.createPost({
-      title: `API Shortcode Test ${Date.now()}`,
+      title: `API Shortcode Test ${crypto.randomUUID()}`,
       content: KEY_TAKEAWAYS_SHORTCODE,
       categories: [TEST_CATEGORY_ID],
     });
@@ -109,7 +109,7 @@ test.describe("REST API — shortcode rendering in posts", { tag: "@api" }, () =
     page,
   }) => {
     const post = await api.createPost({
-      title: `API Checkmarks Test ${Date.now()}`,
+      title: `API Checkmarks Test ${crypto.randomUUID()}`,
       content: GREEN_CHECKMARKS_SHORTCODE,
       categories: [TEST_CATEGORY_ID],
     });
@@ -127,7 +127,7 @@ test.describe("REST API — shortcode rendering in posts", { tag: "@api" }, () =
     page,
   }) => {
     const post = await api.createPost({
-      title: `API Pros Cons Test ${Date.now()}`,
+      title: `API Pros Cons Test ${crypto.randomUUID()}`,
       content: PROS_AND_CONS_SHORTCODE,
       categories: [TEST_CATEGORY_ID],
     });
@@ -172,7 +172,7 @@ test.describe("REST API — shortcode rendering in pages", { tag: "@api" }, () =
     page,
   }) => {
     const created = await api.createPage({
-      title: `API Page Shortcode Test ${Date.now()}`,
+      title: `API Page Shortcode Test ${crypto.randomUUID()}`,
       content: KEY_TAKEAWAYS_SHORTCODE,
     });
     pageId = created.id;

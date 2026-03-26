@@ -40,7 +40,7 @@ test.describe("WordPress Media Library", { tag: "@admin" }, () => {
 
     test.beforeEach(async () => {
       // Use a unique filename each run to avoid filesystem collisions with leftover files
-      uploadName = `test-upload-${Date.now()}.png`;
+      uploadName = `test-upload-${crypto.randomUUID()}.png`;
       tempPath = path.join(os.tmpdir(), uploadName);
       fs.copyFileSync(
         path.resolve(__dirname, "../../fixtures/files/test-upload.png"),

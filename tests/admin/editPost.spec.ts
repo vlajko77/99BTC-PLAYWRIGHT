@@ -26,13 +26,13 @@ test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
   test.describe("Post editing", () => {
     test("can edit a post title and update successfully", async ({ page, api }) => {
       // Arrange — create a post via API
-      const originalTitle = `Edit Me ${Date.now()}`;
+      const originalTitle = `Edit Me ${crypto.randomUUID()}`;
       const post = await api.createPost({ title: originalTitle, content: "Original content.", status: "publish" });
       await page.goto(`/wp-admin/post.php?post=${post.id}&action=edit`);
       await page.waitForLoadState("domcontentloaded");
 
       // Act — change the title
-      const updatedTitle = `Updated ${Date.now()}`;
+      const updatedTitle = `Updated ${crypto.randomUUID()}`;
       await editPostPage.updateTitle(updatedTitle);
       await editPostPage.updatePost();
 
@@ -45,7 +45,7 @@ test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
 
   test.describe("Post status transitions", () => {
     test("newly created post appears in post list with Published status", async ({ api }) => {
-      const title = `Status Test ${Date.now()}`;
+      const title = `Status Test ${crypto.randomUUID()}`;
       const post = await api.createPost({ title, content: "Status test content.", status: "publish" });
 
       await editPostPage.navigateToPostsList();
@@ -58,7 +58,7 @@ test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
   test.describe("Post deletion", () => {
     test("can move a post to trash", async ({ page, api }) => {
       // Arrange — create a post via API
-      const title = `Trash Me ${Date.now()}`;
+      const title = `Trash Me ${crypto.randomUUID()}`;
       const post = await api.createPost({ title, content: "This will be trashed.", status: "publish" });
       await page.goto(`/wp-admin/post.php?post=${post.id}&action=edit`);
       await page.waitForLoadState("domcontentloaded");

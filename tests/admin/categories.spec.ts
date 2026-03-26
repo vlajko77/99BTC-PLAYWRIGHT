@@ -21,7 +21,7 @@ test.describe("WordPress Categories", { tag: "@admin" }, () => {
 
   test.describe("Create category", () => {
     test("can create a new category and it appears in the list", async ({ page }) => {
-      const categoryName = `Test Category ${Date.now()}`;
+      const categoryName = `Test Category ${crypto.randomUUID()}`;
 
       await categoriesPage.addCategory(categoryName);
       await categoriesPage.verifyCategoryInList(categoryName);
@@ -30,7 +30,7 @@ test.describe("WordPress Categories", { tag: "@admin" }, () => {
 
   test.describe("Delete category", () => {
     test("can delete a created category", async ({ page }) => {
-      const categoryName = `Delete Me ${Date.now()}`;
+      const categoryName = `Delete Me ${crypto.randomUUID()}`;
 
       await categoriesPage.addCategory(categoryName);
       await categoriesPage.verifyCategoryInList(categoryName);

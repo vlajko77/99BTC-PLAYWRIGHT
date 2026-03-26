@@ -22,7 +22,7 @@ test.describe("Shortcode rendering in WordPress posts", { tag: "@frontend" }, ()
       shortcodePage,
       page,
     }) => {
-      const title = `${testCase.name} ${Date.now()}`;
+      const title = `${testCase.name} ${crypto.randomUUID()}`;
 
       await shortcodePage.createPostWithShortcode(title, testCase.shortcode);
 

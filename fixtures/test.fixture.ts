@@ -34,7 +34,6 @@ type Fixtures = {
   shortcodePage: ShortcodePage;
   pluginPage: PluginManagementPage;
   header: HeaderSectionPage;
-  languagePage: HeaderSectionPage;
   homePage: HomePageSectionsPage;
   api: WordPressAPI;
   quizzesPage: QuizzesPage;
@@ -67,6 +66,7 @@ export const test = base.extend<Fixtures>({
     },
     { auto: true },
   ],
+  // Destructure as `loginPage: _` in tests that only need the side-effect (session auth) but not the page object itself.
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
@@ -78,7 +78,6 @@ export const test = base.extend<Fixtures>({
   shortcodePage: async ({ page }, use) => use(new ShortcodePage(page)),
   pluginPage: async ({ page }, use) => use(new PluginManagementPage(page)),
   header: async ({ page }, use) => use(new HeaderSectionPage(page)),
-  languagePage: async ({ page }, use) => use(new HeaderSectionPage(page)),
   homePage: async ({ page }, use) => use(new HomePageSectionsPage(page)),
   quizzesPage: async ({ page }, use) => use(new QuizzesPage(page)),
   questionsPage: async ({ page }, use) => use(new QuestionsPage(page)),

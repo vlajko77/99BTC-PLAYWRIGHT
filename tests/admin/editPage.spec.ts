@@ -27,7 +27,7 @@ test.describe("WordPress Page Editing", { tag: "@admin" }, () => {
     test("can edit a page and update it successfully", async ({ page }) => {
       // Arrange
       await page.goto("/wp-admin/post-new.php?post_type=page");
-      const originalTitle = `Edit Page ${Date.now()}`;
+      const originalTitle = `Edit Page ${crypto.randomUUID()}`;
       await editPageHelper.fillTitleAndContent(originalTitle, "Original page content.");
       await editPageHelper.publish();
 
@@ -36,7 +36,7 @@ test.describe("WordPress Page Editing", { tag: "@admin" }, () => {
       await editPageHelper.openPostForEdit(originalTitle);
 
       // Act
-      const updatedTitle = `Updated Page ${Date.now()}`;
+      const updatedTitle = `Updated Page ${crypto.randomUUID()}`;
       await editPageHelper.updateTitle(updatedTitle);
       await editPageHelper.updatePost();
 
@@ -49,7 +49,7 @@ test.describe("WordPress Page Editing", { tag: "@admin" }, () => {
     test("can trash a page", async ({ page }) => {
       // Arrange
       await page.goto("/wp-admin/post-new.php?post_type=page");
-      const title = `Trash Page ${Date.now()}`;
+      const title = `Trash Page ${crypto.randomUUID()}`;
       await editPageHelper.fillTitleAndContent(title, "Page to be trashed.");
       await editPageHelper.publish();
 

@@ -100,28 +100,28 @@ test.describe("Header", { tag: "@regression" }, () => {
   test.describe("Language Selector", () => {
     test.describe("Language Icon", () => {
       test("language selector icon is visible in header", async ({
-        languagePage,
+        header,
       }) => {
-        await languagePage.verifyLanguageIconVisible();
+        await header.verifyLanguageIconVisible();
       });
 
-      test("clicking language icon opens dropdown", async ({ languagePage }) => {
-        await languagePage.verifyLanguageDropdownVisible();
+      test("clicking language icon opens dropdown", async ({ header }) => {
+        await header.verifyLanguageDropdownVisible();
       });
     });
 
     test.describe("Language Dropdown", () => {
       test("dropdown contains all 13 supported languages", async ({
-        languagePage,
+        header,
       }) => {
-        await languagePage.verifyAllLanguagesPresent();
+        await header.verifyAllLanguagesPresent();
       });
 
       test("dropdown shows correct language names", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.openLanguageDropdown();
+        await header.openLanguageDropdown();
 
         for (const lang of SUPPORTED_LANGUAGES) {
           await expect(
@@ -131,10 +131,10 @@ test.describe("Header", { tag: "@regression" }, () => {
       });
 
       test("each language link has correct href", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.openLanguageDropdown();
+        await header.openLanguageDropdown();
 
         await expect(
           page.getByRole("link", { name: "English", exact: true }),
@@ -153,10 +153,10 @@ test.describe("Header", { tag: "@regression" }, () => {
 
     test.describe("Language Switching", () => {
       test("switch to German and verify content is translated", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Deutsch");
+        await header.selectLanguage("Deutsch");
 
         await expect(page).toHaveURL(/\/de\//);
         await expect(page).toHaveTitle(/99bitcoins/i);
@@ -172,53 +172,53 @@ test.describe("Header", { tag: "@regression" }, () => {
       });
 
       test("switch to French and verify content is translated", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Français");
+        await header.selectLanguage("Français");
 
         await expect(page).toHaveURL(/\/fr\//);
         await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch to Spanish and verify content is translated", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Español");
+        await header.selectLanguage("Español");
 
         await expect(page).toHaveURL(/\/es\//);
         await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch to Japanese and verify content is translated", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("日本語");
+        await header.selectLanguage("日本語");
 
         await expect(page).toHaveURL(/\/jp\//);
         await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch to Russian and verify Cyrillic content", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Русский");
+        await header.selectLanguage("Русский");
 
         await expect(page).toHaveURL(/\/ru\//);
         await expect(page).toHaveTitle(/99bitcoins/i);
       });
 
       test("switch back to English from another language", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Deutsch");
+        await header.selectLanguage("Deutsch");
         await expect(page).toHaveURL(/\/de\//);
 
-        await languagePage.selectLanguage("English");
+        await header.selectLanguage("English");
         await expect(page).toHaveURL(/99bitcoins\.(com|local)\/?$/);
 
         await expect(
@@ -229,10 +229,10 @@ test.describe("Header", { tag: "@regression" }, () => {
 
     test.describe("Language Persistence", () => {
       test("language selection persists in URL", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Deutsch");
+        await header.selectLanguage("Deutsch");
         await expect(page).toHaveURL(/\/de\//);
 
         await page.getByRole("link", { name: "News", exact: true }).click();
@@ -240,10 +240,10 @@ test.describe("Header", { tag: "@regression" }, () => {
       });
 
       test("logo click from translated page goes to translated homepage", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Deutsch");
+        await header.selectLanguage("Deutsch");
         await expect(page).toHaveURL(/\/de\//);
 
         await page
@@ -255,10 +255,10 @@ test.describe("Header", { tag: "@regression" }, () => {
 
     test.describe("Header Elements in Different Languages", () => {
       test("header maintains structure in German", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Deutsch");
+        await header.selectLanguage("Deutsch");
 
         await expect(
           page.getByRole("link", { name: "99Bitcoins", exact: true }),
@@ -270,10 +270,10 @@ test.describe("Header", { tag: "@regression" }, () => {
       });
 
       test("search icon is visible and clickable in translated version", async ({
-        languagePage,
+        header,
         page,
       }) => {
-        await languagePage.selectLanguage("Deutsch");
+        await header.selectLanguage("Deutsch");
 
         const searchIcon = page.getByRole("img", { name: "Search" });
         await expect(searchIcon).toBeVisible();
@@ -284,10 +284,10 @@ test.describe("Header", { tag: "@regression" }, () => {
     test.describe("Parameterized Language Switching", () => {
       for (const lang of TEST_LANGUAGES) {
         test(`switch to ${lang.name} (${lang.code}) and verify URL`, async ({
-          languagePage,
+          header,
           page,
         }) => {
-          await languagePage.selectLanguage(lang.name);
+          await header.selectLanguage(lang.name);
           await expect(page).toHaveURL(new RegExp(lang.urlPath));
           await expect(page).toHaveTitle(/99bitcoins/i);
         });
