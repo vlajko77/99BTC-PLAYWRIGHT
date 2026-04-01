@@ -18,3 +18,7 @@ auth/
 # Environment variables
 .env
 .env.local
+
+# Claude Code — machine-specific permissions (personal paths, local tool allowlists)
+.claude/settings.json
+.claude/settings.local.json
