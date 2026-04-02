@@ -1,37 +1,30 @@
 import { test, expect } from "../../fixtures/test.fixture";
 
 test.describe("Article Page", { tag: "@regression" }, () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/");
-    await page.waitForLoadState("domcontentloaded");
-    const articleLink = page.locator(".nnbtc-news a, .nnbtc-topstories a").first();
-    await articleLink.click();
-    await page.waitForLoadState("domcontentloaded");
+  test.beforeEach(async ({ articlePage }) => {
+    await articlePage.navigateToFirstArticle();
   });
 
-  test("article page has main content area", { tag: "@smoke" }, async ({ page }) => {
-    await expect(page.locator("main.site-main")).toBeVisible();
+  test("article page has main content area", { tag: "@smoke" }, async ({ articlePage }) => {
+    await expect(articlePage.articleMain).toBeVisible();
   });
 
-  test("article page has h1 title", async ({ page }) => {
-    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+  test("article page has h1 title", async ({ articlePage }) => {
+    await expect(articlePage.articleTitle).toBeVisible();
   });
 
-  test("article page has author information", async ({ page }) => {
-    const author = page.locator(".nnbtc-article-top__author-top, [class*='author']").first();
-    await expect(author).toBeVisible();
+  test("article page has author information", async ({ articlePage }) => {
+    await expect(articlePage.articleAuthor).toBeVisible();
   });
 
-  test("article page has readable content", async ({ page }) => {
-    const content = page.locator(".nnbtc-article-content, main.site-main").first();
-    await expect(content).toBeVisible();
-    const text = await content.textContent();
+  test("article page has readable content", async ({ articlePage }) => {
+    await expect(articlePage.articleContent).toBeVisible();
+    const text = await articlePage.articleContent.textContent();
     expect(text?.length).toBeGreaterThan(100);
   });
 
-  test("trust section is visible on article page", async ({ page }) => {
-    const trust = page.locator(".trust-us");
-    await trust.scrollIntoViewIfNeeded();
-    await expect(trust).toBeVisible();
+  test("trust section is visible on article page", async ({ articlePage }) => {
+    await articlePage.trustSection.scrollIntoViewIfNeeded();
+    await expect(articlePage.trustSection).toBeVisible();
   });
 });
