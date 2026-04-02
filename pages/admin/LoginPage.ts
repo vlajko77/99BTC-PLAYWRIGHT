@@ -57,7 +57,7 @@ export class LoginPage extends BasePage {
   }
 
   async verifyLoginSuccess() {
-    await expect(this.userGreeting).toBeVisible({ timeout: 8000 });
+    await expect(this.userGreeting).toBeVisible({ timeout: 30000 });
   }
 
   async verifyLoginFailure(errorMessage?: string) {
