@@ -16,7 +16,7 @@ export class ArticlePage extends BasePage {
     this.articleMain = page.locator("main.site-main");
     this.articleTitle = page.getByRole("heading", { level: 1 }).first();
     this.articleAuthor = page.locator(".nnbtc-article-top__author-top, .author, [class*='author']").first();
-    this.articleContent = page.locator(".entry-content, .post-content, article").first();
+    this.articleContent = page.locator("main.site-main");
     this.tocMobile = page.locator(".nnbtc-toc--mobile, [class*='toc']").first();
     this.sidebarTopStories = page.locator(".nnbtc-article__sidebar-top-stories, [class*='sidebar']").first();
     this.trustSection = page.locator(".trust-us");

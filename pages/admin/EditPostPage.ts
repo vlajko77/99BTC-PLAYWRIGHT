@@ -5,12 +5,16 @@ export class EditPostPage extends WordPressPostEditor {
   private readonly updateButton: Locator;
   private readonly trashLink: Locator;
   private readonly updateNotice: Locator;
+  readonly postsHeading: Locator;
+  readonly postListRows: Locator;
 
   constructor(page: Page) {
     super(page);
     this.updateButton = page.locator("#publish");
     this.trashLink = page.locator("#delete-action a");
     this.updateNotice = page.locator("#message");
+    this.postsHeading = page.getByRole("heading", { name: /posts/i }).first();
+    this.postListRows = page.locator("#the-list tr:not(.no-items)");
   }
 
   async navigateToPostsList(): Promise<void> {

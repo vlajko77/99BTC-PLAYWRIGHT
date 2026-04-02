@@ -103,9 +103,9 @@ export class BasePage {
       if (btn) btn.disabled = false;
     });
 
-    await Promise.all([
-      this.page.waitForURL(/post\.php\?post=\d+/, { timeout: 15000 }),
-      publishButton.click(),
-    ]);
+    await publishButton.click();
+    // WordPress may redirect to post.php?post=ID or stay on post-new.php (staging behaviour).
+    // Either way, a #message notice confirms the publish completed.
+    await this.page.locator("#message").waitFor({ state: "visible", timeout: 30_000 });
   }
 }

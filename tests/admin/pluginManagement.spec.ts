@@ -1,29 +1,10 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { PluginManagementPage } from "../../pages/admin/PluginManagementPage";
 import { CLASSIC_WIDGETS, HEALTH_CHECK } from "../../data/plugins";
 
 test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
-  async function ensurePluginInstalled(
-    pluginPage: PluginManagementPage,
-    slug: string,
-    name: string,
-  ) {
-    await pluginPage.navigateToPlugins();
-    if (!(await pluginPage.isPluginInstalled(slug))) {
-      await pluginPage.navigateToAddNewPlugin();
-      await pluginPage.searchPluginRepository(name);
-      await pluginPage.installPlugin(slug);
-      // After installation, navigate back and search to ensure it's visible
-      await pluginPage.navigateToPlugins();
-      // If not visible in main list, search for it to ensure it appears
-      if (!(await pluginPage.isPluginInstalled(slug))) {
-        await pluginPage.searchInstalledPlugin(name);
-      }
-    }
-  }
+  test.beforeEach(async ({ loginPage: _ }) => {});
 
   test("Navigate to plugins page and verify it loads correctly", async ({
-    loginPage: _,
     pluginPage,
     page,
   }) => {
@@ -37,8 +18,17 @@ test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
     expect(pluginCount).toBeGreaterThan(0);
   });
 
-  test("Activate a deactivated plugin", async ({ loginPage: _, pluginPage }) => {
-    await ensurePluginInstalled(pluginPage, CLASSIC_WIDGETS.slug, CLASSIC_WIDGETS.name);
+  test("Activate a deactivated plugin", async ({ pluginPage }) => {
+    await pluginPage.navigateToPlugins();
+    if (!(await pluginPage.isPluginInstalled(CLASSIC_WIDGETS.slug))) {
+      if (!(await pluginPage.canInstallPlugins())) {
+        test.skip(true, "Insufficient permissions to install plugins on this environment");
+      }
+      await pluginPage.navigateToAddNewPlugin();
+      await pluginPage.searchPluginRepository(CLASSIC_WIDGETS.name);
+      await pluginPage.installPlugin(CLASSIC_WIDGETS.slug);
+      await pluginPage.navigateToPlugins();
+    }
 
     if (await pluginPage.isPluginActive(CLASSIC_WIDGETS.slug)) {
       await pluginPage.deactivatePlugin(CLASSIC_WIDGETS.slug);
@@ -51,8 +41,17 @@ test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
     await pluginPage.expectPluginActive(CLASSIC_WIDGETS.slug);
   });
 
-  test("Deactivate an active plugin", async ({ loginPage: _, pluginPage }) => {
-    await ensurePluginInstalled(pluginPage, CLASSIC_WIDGETS.slug, CLASSIC_WIDGETS.name);
+  test("Deactivate an active plugin", async ({ pluginPage }) => {
+    await pluginPage.navigateToPlugins();
+    if (!(await pluginPage.isPluginInstalled(CLASSIC_WIDGETS.slug))) {
+      if (!(await pluginPage.canInstallPlugins())) {
+        test.skip(true, "Insufficient permissions to install plugins on this environment");
+      }
+      await pluginPage.navigateToAddNewPlugin();
+      await pluginPage.searchPluginRepository(CLASSIC_WIDGETS.name);
+      await pluginPage.installPlugin(CLASSIC_WIDGETS.slug);
+      await pluginPage.navigateToPlugins();
+    }
 
     if (!(await pluginPage.isPluginActive(CLASSIC_WIDGETS.slug))) {
       await pluginPage.activatePlugin(CLASSIC_WIDGETS.slug);
@@ -66,7 +65,6 @@ test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
   });
 
   test("Install a plugin from WordPress repository", async ({
-    loginPage: _,
     pluginPage,
     page,
   }) => {
@@ -75,6 +73,10 @@ test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
     if (await pluginPage.isPluginInstalled(HEALTH_CHECK.slug)) {
       await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
       return;
+    }
+
+    if (!(await pluginPage.canInstallPlugins())) {
+      test.skip(true, "Insufficient permissions to install plugins on this environment");
     }
 
     await pluginPage.navigateToAddNewPlugin();
@@ -87,19 +89,21 @@ test.describe("WordPress Plugin Management", { tag: "@admin" }, () => {
     await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
   });
 
-  test("Delete a plugin", async ({ loginPage: _, pluginPage }) => {
-    await ensurePluginInstalled(pluginPage, HEALTH_CHECK.slug, HEALTH_CHECK.name);
+  test("Delete a plugin", async ({ pluginPage }) => {
+    await pluginPage.navigateToPlugins();
+    if (!(await pluginPage.isPluginInstalled(HEALTH_CHECK.slug))) {
+      if (!(await pluginPage.canInstallPlugins())) {
+        test.skip(true, "Insufficient permissions to install plugins on this environment");
+      }
+      await pluginPage.navigateToAddNewPlugin();
+      await pluginPage.searchPluginRepository(HEALTH_CHECK.name);
+      await pluginPage.installPlugin(HEALTH_CHECK.slug);
+      await pluginPage.navigateToPlugins();
+    }
 
     await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
-    
-    try {
-      await pluginPage.deletePlugin(HEALTH_CHECK.slug);
-      await pluginPage.expectPluginDeletedMessage();
-      await pluginPage.expectPluginNotInList(HEALTH_CHECK.slug);
-    } catch {
-      // Deletion might not be available for all plugins/permissions
-      // Just verify the plugin is still in the list
-      await pluginPage.expectPluginInList(HEALTH_CHECK.slug);
-    }
+    await pluginPage.deletePlugin(HEALTH_CHECK.slug);
+    await pluginPage.expectPluginDeletedMessage();
+    await pluginPage.expectPluginNotInList(HEALTH_CHECK.slug);
   });
 });

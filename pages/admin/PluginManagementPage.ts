@@ -37,6 +37,13 @@ export class PluginManagementPage extends BasePage {
     await this.pluginsTable.waitFor({ state: "visible" });
   }
 
+  async canInstallPlugins(): Promise<boolean> {
+    await this.page.goto(this.addNewPluginUrl);
+    await this.page.waitForLoadState("domcontentloaded");
+    const denied = this.page.getByText(/not allowed to install plugins/i);
+    return (await denied.count()) === 0;
+  }
+
   async navigateToAddNewPlugin(): Promise<void> {
     await this.page.goto(this.addNewPluginUrl);
     await this.searchPluginsInput.waitFor({ state: "visible", timeout: PluginManagementPage.TIMEOUT_MEDIUM });

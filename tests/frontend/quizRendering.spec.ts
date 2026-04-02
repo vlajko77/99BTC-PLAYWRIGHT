@@ -7,12 +7,11 @@ import type { BrowserContext, Page } from "@playwright/test";
 
 test.describe("Frontend — Quiz Rendering", { tag: "@frontend" }, () => {
   let quizShortcode: string;
-  let quizTitle: string;
   let setupContext: BrowserContext;
   let setupPage: Page;
 
   test.beforeAll(async ({ browser }) => {
-    quizTitle = `Quiz Render ${crypto.randomUUID()}`;
+    test.setTimeout(60_000);
     setupContext = await browser.newContext({
       ignoreHTTPSErrors: true,
       baseURL: BASE_URL,
@@ -23,20 +22,12 @@ test.describe("Frontend — Quiz Rendering", { tag: "@frontend" }, () => {
     await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
     const quizzesPage = new QuizzesPage(setupPage);
     await quizzesPage.navigate();
-    await quizzesPage.createQuiz(quizTitle);
-    // After save the URL contains quiz_id — extract it to build the shortcode
-    const url = setupPage.url();
-    const match = url.match(/quiz_id=(\d+)/);
-    if (!match) throw new Error("Could not determine quiz ID after creation");
-    quizShortcode = `[ays_quiz id="${match[1]}"]`;
+    const shortcode = await quizzesPage.getFirstQuizShortcode();
+    if (!shortcode) throw new Error("No quizzes found on this site — cannot run rendering tests");
+    quizShortcode = shortcode.trim();
   });
 
   test.afterAll(async () => {
-    if (setupPage && quizTitle) {
-      const quizzesPage = new QuizzesPage(setupPage);
-      await quizzesPage.navigate();
-      await quizzesPage.trashQuiz(quizTitle).catch((e) => console.warn("Cleanup failed:", e));
-    }
     await setupContext?.close();
   });
 

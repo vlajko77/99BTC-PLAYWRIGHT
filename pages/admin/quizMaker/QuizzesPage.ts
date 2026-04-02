@@ -107,9 +107,11 @@ export class QuizzesPage extends BaseQuizPage {
   }
 
   async getFirstQuizShortcode(): Promise<string | null> {
-    const shortcodeCell = this.table.locator("tbody tr td")
-      .filter({ hasText: /\[ays_quiz/ })
+    // The shortcode is rendered inside an <input> in the Shortcode column, not as plain text
+    const shortcodeInput = this.table
+      .locator('tbody tr td input[value*="ays_quiz"]')
       .first();
-    return await shortcodeCell.textContent();
+    if ((await shortcodeInput.count()) === 0) return null;
+    return await shortcodeInput.inputValue({ timeout: 10_000 });
   }
 }

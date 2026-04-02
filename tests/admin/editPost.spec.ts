@@ -1,30 +1,24 @@
 import { test, expect } from "../../fixtures/test.fixture";
-import { EditPostPage } from "../../pages/admin/EditPostPage";
 
 test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
-  let editPostPage: EditPostPage;
-
-  test.beforeEach(async ({ loginPage: _, page }) => {
-    editPostPage = new EditPostPage(page);
-  });
+  test.beforeEach(async ({ loginPage: _ }) => {});
 
   test.describe("Post list", () => {
-    test("posts list page loads with correct heading", async ({ page }) => {
-      await page.goto("/wp-admin/edit.php");
-      await expect(page.getByRole("heading", { name: /posts/i }).first()).toBeVisible();
+    test("posts list page loads with correct heading", async ({ editPostPage, page }) => {
+      await editPostPage.navigateToPostsList();
+      await expect(editPostPage.postsHeading).toBeVisible();
       await expect(page).toHaveURL(/edit\.php/);
     });
 
-    test("posts list contains entries", async ({ page }) => {
-      await page.goto("/wp-admin/edit.php");
-      const rows = page.locator("#the-list tr:not(.no-items)");
-      const count = await rows.count();
+    test("posts list contains entries", async ({ editPostPage }) => {
+      await editPostPage.navigateToPostsList();
+      const count = await editPostPage.postListRows.count();
       expect(count).toBeGreaterThan(0);
     });
   });
 
   test.describe("Post editing", () => {
-    test("can edit a post title and update successfully", async ({ page, api }) => {
+    test("can edit a post title and update successfully", async ({ editPostPage, page, api }) => {
       // Arrange — create a post via API
       const originalTitle = `Edit Me ${crypto.randomUUID()}`;
       const post = await api.createPost({ title: originalTitle, content: "Original content.", status: "publish" });
@@ -44,7 +38,7 @@ test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
   });
 
   test.describe("Post status transitions", () => {
-    test("newly created post appears in post list with Published status", async ({ api }) => {
+    test("newly created post appears in post list with Published status", async ({ editPostPage, api }) => {
       const title = `Status Test ${crypto.randomUUID()}`;
       const post = await api.createPost({ title, content: "Status test content.", status: "publish" });
 
@@ -56,7 +50,7 @@ test.describe("WordPress Post Editing", { tag: "@admin" }, () => {
   });
 
   test.describe("Post deletion", () => {
-    test("can move a post to trash", async ({ page, api }) => {
+    test("can move a post to trash", async ({ editPostPage, page, api }) => {
       // Arrange — create a post via API
       const title = `Trash Me ${crypto.randomUUID()}`;
       const post = await api.createPost({ title, content: "This will be trashed.", status: "publish" });
