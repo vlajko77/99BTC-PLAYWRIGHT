@@ -41,6 +41,9 @@ export class LoginPage extends BasePage {
     // No valid session, perform fresh login
     await this.goto();
     await this.login(username, password);
+    // Some WP installs redirect to the frontend after login — navigate to
+    // wp-admin explicitly so verifyLoginSuccess can find the admin bar.
+    await this.page.goto("/wp-admin/");
     await this.verifyLoginSuccess();
 
     // Save session for future use
