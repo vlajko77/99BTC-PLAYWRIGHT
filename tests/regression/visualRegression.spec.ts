@@ -115,6 +115,7 @@ test.describe("Visual Regression", { tag: ["@regression", "@visual"] }, () => {
       });
       await waitAndScreenshot(page, "presales-toplist-full.png", {
         mask: presalesMasks(page),
+        maxDiffPixelRatio: 0.10, // live counters/raised amounts change constantly
       });
     });
 

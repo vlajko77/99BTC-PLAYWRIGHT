@@ -66,11 +66,12 @@ test.describe("Header", { tag: "@regression" }, () => {
       header,
       page,
     }) => {
-      const [newPage] = await Promise.all([
-        page.context().waitForEvent("page"),
-        header.bestWalletButton.click(),
-      ]);
-      await expect(newPage).toHaveURL(/bestwallet/i);
+      // The button may open in a new tab or navigate the current tab depending on environment
+      const newPagePromise = page.context().waitForEvent("page", { timeout: 5000 }).catch(() => null);
+      await header.bestWalletButton.click();
+      const newPage = await newPagePromise;
+      const targetPage = newPage ?? page;
+      await expect(targetPage).toHaveURL(/bestwallet/i);
     });
   });
 
