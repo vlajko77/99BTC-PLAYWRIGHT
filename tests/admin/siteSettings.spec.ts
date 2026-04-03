@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/test.fixture";
+import { test } from "../../fixtures/test.fixture";
 import { SiteSettingsPage } from "../../pages/admin/SiteSettingsPage";
 
 test.describe("WordPress Site Settings", { tag: "@admin" }, () => {

@@ -1,11 +1,4 @@
-/**
- * - auth.fixture.ts — authentication & screenshot on failure
- * - pages.fixture.ts — all page object fixtures
- * - api.fixture.ts — WordPress REST API client
- */
-
-import { test as base, expect } from "@playwright/test";
-import { LoginPage } from "../pages/admin/LoginPage";
+import { test as base } from "@playwright/test";
 import { DashboardPage } from "../pages/admin/DashboardPage";
 import { WordPressPageEditor } from "../pages/admin/CreatePage";
 import { WordPressPostEditor } from "../pages/admin/CreatePost";
@@ -27,13 +20,8 @@ import { ArticlePage } from "../pages/frontend/ArticlePage";
 import { SearchPage } from "../pages/frontend/SearchPage";
 import { CategoryPage } from "../pages/frontend/CategoryPage";
 import { MobileNavPage } from "../pages/frontend/MobileNavPage";
-import { WP_USERNAME, WP_PASSWORD } from "../utils/login";
-import { BASE_URL } from "../utils/config";
-import { WordPressAPI } from "../utils/WordPressAPI";
 
-type Fixtures = {
-  screenshotOnFailure: void;
-  loginPage: LoginPage;
+type PageObjectFixtures = {
   dashboardPage: DashboardPage;
   pageEditor: WordPressPageEditor;
   postEditor: WordPressPostEditor;
@@ -41,7 +29,6 @@ type Fixtures = {
   pluginPage: PluginManagementPage;
   header: HeaderSectionPage;
   homePage: HomePageSectionsPage;
-  api: WordPressAPI;
   quizzesPage: QuizzesPage;
   questionsPage: QuestionsPage;
   quizCategoriesPage: QuizCategoriesPage;
@@ -58,25 +45,7 @@ type Fixtures = {
   mobileNavPage: MobileNavPage;
 };
 
-export const test = base.extend<Fixtures>({
-  screenshotOnFailure: [
-    async ({ page }, use, testInfo) => {
-      await use();
-      if (testInfo.status !== testInfo.expectedStatus) {
-        const screenshot = await page.screenshot({ fullPage: true });
-        await testInfo.attach("screenshot", {
-          body: screenshot,
-          contentType: "image/png",
-        });
-      }
-    },
-    { auto: true },
-  ],
-  loginPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.loginWithSession(WP_USERNAME, WP_PASSWORD);
-    await use(loginPage);
-  },
+export const test = base.extend<PageObjectFixtures>({
   dashboardPage: async ({ page }, use) => use(new DashboardPage(page)),
   pageEditor: async ({ page }, use) => use(new WordPressPageEditor(page)),
   postEditor: async ({ page }, use) => use(new WordPressPostEditor(page)),
@@ -98,23 +67,4 @@ export const test = base.extend<Fixtures>({
   searchPage: async ({ page }, use) => use(new SearchPage(page)),
   categoryPage: async ({ page }, use) => use(new CategoryPage(page)),
   mobileNavPage: async ({ page }, use) => use(new MobileNavPage(page)),
-  api: async ({ page, playwright, loginPage: _ }, use) => {
-    await page.goto("/wp-admin/");
-    await page.waitForLoadState("networkidle");
-    const nonce = await page.evaluate(
-      () => (window as any).wpApiSettings?.nonce ?? "",
-    );
-    if (!nonce) throw new Error("Could not obtain WP REST API nonce from wp-admin — is the user logged in?");
-    const storageState = await page.context().storageState();
-    const apiContext = await playwright.request.newContext({
-      baseURL: BASE_URL,
-      ignoreHTTPSErrors: true,
-      storageState,
-      extraHTTPHeaders: { "X-WP-Nonce": nonce },
-    });
-    await use(new WordPressAPI(apiContext, nonce));
-    await apiContext.dispose();
-  },
 });
-
-export { expect };

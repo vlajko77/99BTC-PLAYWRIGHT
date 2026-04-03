@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/test.fixture";
+import { test } from "../../fixtures/test.fixture";
 import { CategoriesPage } from "../../pages/admin/CategoriesPage";
 
 test.describe("WordPress Categories", { tag: "@admin" }, () => {
@@ -20,7 +20,7 @@ test.describe("WordPress Categories", { tag: "@admin" }, () => {
   });
 
   test.describe("Create category", () => {
-    test("can create a new category and it appears in the list", async ({ page }) => {
+    test("can create a new category and it appears in the list", async () => {
       const categoryName = `Test Category ${crypto.randomUUID()}`;
 
       await categoriesPage.addCategory(categoryName);
@@ -29,7 +29,7 @@ test.describe("WordPress Categories", { tag: "@admin" }, () => {
   });
 
   test.describe("Delete category", () => {
-    test("can delete a created category", async ({ page }) => {
+    test("can delete a created category", async () => {
       const categoryName = `Delete Me ${crypto.randomUUID()}`;
 
       await categoriesPage.addCategory(categoryName);
